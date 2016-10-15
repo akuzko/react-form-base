@@ -1,0 +1,24 @@
+{
+  "name": "react-yet-another-form",
+  "version": "1.0.0",
+  "description": "React base Form component for flexible forms",
+  "main": "./lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/akuzko/react-yet-another-form.git"
+  },
+  "keywords": [
+    "react",
+    "reactjs",
+    "form"
+  ],
+  "author": "Artem Kuzko <a.kuzko@gmail.com> (https://github.com/akuzko)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/akuzko/react-yet-another-form/issues"
+  },
+  "homepage": "https://github.com/akuzko/react-yet-another-form#readme"
+}
