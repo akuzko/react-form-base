@@ -1,14 +1,18 @@
 {
-  "name": "react-yet-another-form",
+  "name": "react-form-base",
   "version": "1.0.0",
   "description": "React base Form component for flexible forms",
   "main": "./lib/index.js",
   "scripts": {
-    "build": "babel src --out-dir lib"
+    "build": "babel src --out-dir lib",
+    "clear": "rimraf lib",
+    "rebuild": "npm run clear && npm run build",
+    "test": "mocha --compilers js:babel-register --recursive --require ./test/setup.js",
+    "test:watch": "npm test -- --watch"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/akuzko/react-yet-another-form.git"
+    "url": "git+https://github.com/akuzko/react-form-base.git"
   },
   "files": [
     "lib",
@@ -22,9 +26,9 @@
   "author": "Artem Kuzko <a.kuzko@gmail.com> (https://github.com/akuzko)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/akuzko/react-yet-another-form/issues"
+    "url": "https://github.com/akuzko/react-form-base/issues"
   },
-  "homepage": "https://github.com/akuzko/react-yet-another-form#readme",
+  "homepage": "https://github.com/akuzko/react-form-base#readme",
   "devDependencies": {
     "babel-cli": "^6.16.0",
     "babel-core": "^6.17.0",
@@ -32,7 +36,14 @@
     "babel-preset-es2015": "^6.16.0",
     "babel-preset-react": "^6.16.0",
     "babel-preset-stage-1": "^6.16.0",
-    "react": "^15.3.2"
+    "enzyme": "^2.4.1",
+    "expect": "^1.20.2",
+    "jsdom": "^9.8.0",
+    "mocha": "^3.1.2",
+    "react": "^15.3.2",
+    "react-addons-test-utils": "^15.3.2",
+    "react-dom": "^15.3.2",
+    "rimraf": "^2.5.4"
   },
   "dependencies": {
     "lodash": "^4.16.4"
