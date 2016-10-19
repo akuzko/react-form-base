@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 
-import { handleChange, fullPath, fullName, isFormProperty } from '../utils';
+import { handleChange, fullPath, fullName } from '../utils';
 import isObject from 'lodash/isObject';
 import cloneDeep from 'lodash/cloneDeep';
 import get from 'lodash/get';
@@ -32,15 +32,14 @@ export default class Form extends Component {
     Object.assign(wrapper, {
       value: this.get(...path),
       onChange: this.changed(...path),
-      error: this.getError(...path)
+      error: this.getErr(...path)
     });
 
     return wrapper;
   }
 
   get(...path) {
-    const value = get(this.props.attrs, fullPath(path), '');
-    return isFormProperty(value) ? value.value : value;
+    return get(this.props.attrs, fullPath(path), '');
   }
 
   set(...path) {
@@ -70,9 +69,10 @@ export default class Form extends Component {
     return handleChange.bind(this, path);
   }
 
-  getError(...path) {
-    const value = get(this.props.attrs, fullPath(path));
-    return isFormProperty(value) && value.error;
+  getErr(...path) {
+    const errors = this.props.attrs.errors || {};
+    if (!path.length) return errors;
+    return errors[fullName(path)];
   }
 
   render() {

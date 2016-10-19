@@ -1,8 +1,9 @@
 import React, { PropTypes, Component } from 'react';
-import Form from '../../src';
+import Form, { addErrors } from '../../src';
 import { mount, simulate } from 'enzyme';
 import expect from 'expect';
 import range from 'lodash/range';
+import without from 'lodash/without';
 
 describe('<Form />', function() {
   let TestForm;
@@ -68,8 +69,9 @@ describe('<Form />', function() {
     });
 
     it('renders errors', function() {
-      this.wrapper.setState({ form: { foo: { value: 'bad', error: 'can\'t be bad' } } });
-      expect(this.wrapper.find('.error').get(0).innerHTML).toEqual('can\'t be bad');
+      const attrs = this.wrapper.state().form;
+      this.wrapper.setState({ form: addErrors(attrs, { foo: 'can\'t be blank' }) });
+      expect(this.wrapper.find('.error').get(0).innerHTML).toEqual('can\'t be blank');
     });
   });
 
@@ -155,9 +157,19 @@ describe('<Form />', function() {
       }
 
       TestForm = class extends Form {
+        $itemName(i, value) {
+          if (value) {
+            this.set('items', i, 'name', value)
+          } else {
+            const items = without(this.items, this.items[i]);
+            this.set('items', items);
+          }
+        }
+
         get items() {
           return this.get('items') || [];
         }
+
         render() {
           const totalItems = this.items.length + 1;
 
@@ -165,7 +177,7 @@ describe('<Form />', function() {
             <div>
               {range(totalItems + 1).map(i =>
                 <div key={i}>
-                  <Input {...this.$('items', i, 'name')} className={`item-name-${i}`} />
+                  <Input {...this.$('items', i, 'name')(this.$itemName, i)} className={`item-name-${i}`} />
                   {this.get('items', i, 'name') &&
                     <ItemForm index={i} attrs={this.get('items', i) || {}} onChange={(attrs) => this.merge('items', i, attrs)} />
                   }
@@ -197,6 +209,14 @@ describe('<Form />', function() {
         this.wrapper.find('.item-name-0').simulate('change', { target: { value: 'item 1' } });
         this.wrapper.find('.item-description-0').simulate('change', { target: { value: 'item 1 description' } });
         expect(this.wrapper.state('form')).toMatch({ items: [{ name: 'item 1', description: 'item 1 description' }] });
+      });
+
+      it('removes item when name is erased', function() {
+        this.wrapper.find('.item-name-0').simulate('change', { target: { value: 'item 1' } });
+        this.wrapper.find('.item-description-0').simulate('change', { target: { value: 'item 1 description' } });
+        this.wrapper.find('.item-name-1').simulate('change', { target: { value: 'item 2' } });
+        this.wrapper.find('.item-name-0').simulate('change', { target: { value: '' } });
+        expect(this.wrapper.state('form')).toMatch({ items: [{ name: 'item 2' }] });
       });
     });
   });

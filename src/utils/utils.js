@@ -6,15 +6,17 @@ export function handleChange(path, value) {
 }
 
 export function fullPath(path) {
-  return path.reduce(function(full, part) {
-    return `${full}${isNumber(part) ? `[${part}]` : `${full ? '.' : ''}${part}`}`;
-  }, '');
+  return path.map((part, i) => isNumber(part) ? `[${part}]` : (i > 0 ? '.' : '') + part).join('');
 }
 
 export function fullName(path) {
-  return path.join('-');
+  return path.join('.');
 }
 
-export function isFormProperty(value) {
-  return isObject(value) && value.hasOwnProperty('value') && value.hasOwnProperty('error');
+export function addErrors(attrs, errors) {
+  Object.defineProperty(attrs, 'errors', {
+    value: errors,
+    enumerable: false
+  });
+  return attrs;
 }
