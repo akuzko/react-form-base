@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import Form, { addErrors } from '../../src';
+import Form from '../../src';
 import { mount, simulate } from 'enzyme';
 import expect from 'expect';
 import range from 'lodash/range';
@@ -7,6 +7,7 @@ import without from 'lodash/without';
 
 describe('<Form />', function() {
   let TestForm;
+  let formProps = {};
 
   class Input extends Component {
     handleChange = (e) => {
@@ -30,7 +31,15 @@ describe('<Form />', function() {
     state = { form: {} };
 
     render() {
-      return <TestForm attrs={this.state.form} onChange={(form) => this.setState({ form })} />;
+      return (
+        <TestForm
+          ref="form"
+          {...formProps}
+          attrs={this.state.form}
+          errors={this.state.errors}
+          onChange={(form, errors) => this.setState({ form, errors })}
+        />
+      );
     }
   }
 
@@ -69,9 +78,8 @@ describe('<Form />', function() {
     });
 
     it('renders errors', function() {
-      const attrs = this.wrapper.state().form;
-      this.wrapper.setState({ form: addErrors(attrs, { foo: 'can\'t be blank' }) });
-      expect(this.wrapper.find('.error').get(0).innerHTML).toEqual('can\'t be blank');
+      this.wrapper.setState({ errors: { foo: 'cannot be blank' } });
+      expect(this.wrapper.find('.error').get(0).innerHTML).toEqual('cannot be blank');
     });
   });
 
@@ -217,6 +225,219 @@ describe('<Form />', function() {
         this.wrapper.find('.item-name-1').simulate('change', { target: { value: 'item 2' } });
         this.wrapper.find('.item-name-0').simulate('change', { target: { value: '' } });
         expect(this.wrapper.state('form')).toMatch({ items: [{ name: 'item 2' }] });
+      });
+    });
+  });
+
+  describe('validation', function() {
+    context('common case, default validation', function() {
+      beforeEach(function() {
+        TestForm = class extends Form {
+          validations = {
+            'foo'(value) {
+              if (!value) return 'cannot be blank';
+            }
+          };
+
+          render() {
+            return (
+              <div>
+                <Input {...this.$('foo')} className="foo" />
+              </div>
+            );
+          }
+        }
+
+        this.wrapper = mount(<Container />);
+      });
+
+      it('performs validation according to validations property', function() {
+        this.wrapper.instance().refs.form.performValidation();
+
+        expect(this.wrapper.state('errors')).toMatch({
+          'foo': 'cannot be blank'
+        });
+      });
+    });
+
+    context('common case with wildcards', function() {
+      beforeEach(function() {
+        TestForm = class extends Form {
+          validations = {
+            'foo'(value) {
+              if (!value) return 'cannot be blank';
+            },
+            'items.*.bar'(value) {
+              if (!value || isNaN(+value)) return 'should be numeric';
+            }
+          };
+
+          validate(validate) {
+            validate('foo');
+            range(2).forEach(i => validate('items', i, 'bar'));
+
+            return validate.errors;
+          }
+
+          render() {
+            return (
+              <div>
+                <Input {...this.$('foo')} className="foo" />
+
+                {range(2).map(i =>
+                  <div key={i}>
+                    <Input {...this.$('items', i, 'bar')} className={`item-bar-${i}`} />
+                  </div>
+                )}
+              </div>
+            );
+          }
+        }
+
+        this.wrapper = mount(<Container />);
+      });
+
+      it('performs validation according to validations property', function() {
+        this.wrapper.instance().refs.form.performValidation();
+
+        expect(this.wrapper.state('errors')).toMatch({
+          'foo': 'cannot be blank',
+          'items.0.bar': 'should be numeric',
+          'items.1.bar': 'should be numeric'
+        });
+      });
+    });
+
+    context('custom validation logic', function() {
+      beforeEach(function() {
+        TestForm = class extends Form {
+          static validations = {
+            presence: function(value) { if (!value) return 'cannot be blank'; },
+            numericality: function(value, { greaterThan } = {}) {
+              if (isNaN(+value)) return 'should be a number';
+              if (typeof greaterThan != undefined && +value <= greaterThan) return `should be greater than ${greaterThan}`;
+            }
+          };
+
+          validations = {
+            'foo': ['presence', 'numericality'],
+            'bar': { presence: true, numericality: { greaterThan: 5 } }
+          };
+
+          validate(validate) {
+            validate('foo');
+            validate('bar');
+            validate('baz', { with: function(_value){ return 'invalid' } });
+            range(2).forEach(i =>
+              validate('items', i, 'bar', { with: 'presence' })
+            );
+            validate.addError('bak', 'another invalid');
+
+            return validate.errors;
+          }
+
+          render() {
+            return (
+              <div>
+                <Input {...this.$('foo')} className="foo" />
+                <Input {...this.$('bar')} className="bar" />
+                <Input {...this.$('baz')} className="baz" />
+                <Input {...this.$('bak')} className="bak" />
+
+                {range(2).map(i =>
+                  <div key={i}>
+                    <Input {...this.$('items', i, 'bar')} className={`item-bar-${i}`} />
+                  </div>
+                )}
+              </div>
+            );
+          }
+        }
+
+        this.wrapper = mount(<Container />);
+      });
+
+      it('performs validation according to specified logic', function() {
+        this.wrapper.find('.bar').simulate('change', { target: { value: '4' } });
+
+        this.wrapper.instance().refs.form.performValidation();
+
+        expect(this.wrapper.state('errors')).toMatch({
+          'foo': 'cannot be blank',
+          'bar': 'should be greater than 5',
+          'baz': 'invalid',
+          'bak': 'another invalid',
+          'items.0.bar': 'cannot be blank',
+          'items.1.bar': 'cannot be blank'
+        });
+      });
+    });
+
+    describe('clearErrorsOnChange and validateOnChange properties', function() {
+      beforeEach(function() {
+        TestForm = class extends Form {
+          static validations = {
+            presence: function(value) { if (!value) return 'cannot be blank'; }
+          };
+
+          validations = {
+            'foo': 'presence',
+          };
+
+          render() {
+            return (
+              <div>
+                <Input {...this.$('foo')} className="foo" />
+              </div>
+            );
+          }
+        }
+
+        this.wrapper = mount(<Container />);
+      });
+
+      describe('clearErrorsOnChange', function() {
+        beforeEach(function() {
+          formProps = {
+            clearErrorsOnChange: true
+          };
+        });
+
+        it('clears error when input value changes', function() {
+          this.wrapper.instance().refs.form.performValidation();
+
+          expect(this.wrapper.state('errors')).toMatch({
+            'foo': 'cannot be blank'
+          });
+
+          this.wrapper.find('.foo').simulate('change', { target: { value: 'foo' } });
+
+          expect(this.wrapper.state('errors')).toMatch({
+            'foo': ''
+          });
+        });
+      });
+
+      describe('validateOnChange', function() {
+        beforeEach(function() {
+          formProps = {
+            validateOnChange: true
+          };
+        });
+
+        it('validates input when its value changes', function() {
+          this.wrapper.find('.foo').simulate('change', { target: { value: 'foo' } });
+
+          expect(this.wrapper.state('errors')).toMatch({
+            'foo': ''
+          });
+
+          this.wrapper.find('.foo').simulate('change', { target: { value: '' } });
+
+          expect(this.wrapper.state('errors')).toMatch({
+            'foo': 'cannot be blank'
+          });
+        });
       });
     });
   });
