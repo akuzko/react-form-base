@@ -2,7 +2,6 @@ import isNumber from 'lodash/isNumber';
 import isObject from 'lodash/isObject';
 import isArray from 'lodash/isArray';
 import isPlainObject from 'lodash/isPlainObject';
-import castArray from 'lodash/castArray';
 
 export function handleChange(path, value) {
   return this.set(...[...path, value]);
@@ -17,7 +16,7 @@ export function fullName(path) {
 }
 
 export function pathToName(path) {
-  return path.replace(/\[(\d+)\]/g, (_match, i) => `.${i}`)
+  return path.replace(/\[(\d+)\]/g, (_match, i) => `.${i}`);
 }
 
 function wildcard(name) {
@@ -74,7 +73,7 @@ export function buildFormValidator(form) {
     }
 
     function callObjectValidator(obj) {
-      for (let name in obj) {
+      for (const name in obj) {
         const error = callStringValidator(name, obj[name]);
         if (error) return error;
       }
@@ -83,7 +82,7 @@ export function buildFormValidator(form) {
     function callArrayValidator(ary) {
       for (let i = 0; i < ary.length; i++) {
         const error = callStringValidator(ary[i]);
-        if (error) return error
+        if (error) return error;
       }
     }
   }

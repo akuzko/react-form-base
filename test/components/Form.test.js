@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import Form from '../../src';
-import { mount, simulate } from 'enzyme';
+import { mount } from 'enzyme';
 import expect from 'expect';
 import range from 'lodash/range';
 import without from 'lodash/without';
@@ -10,6 +10,11 @@ describe('<Form />', function() {
   let formProps = {};
 
   class Input extends Component {
+    static propTypes = {
+      onChange: PropTypes.func,
+      error: PropTypes.string
+    };
+
     handleChange = (e) => {
       return this.props.onChange(e.target.value);
     };
@@ -58,7 +63,7 @@ describe('<Form />', function() {
             </div>
           );
         }
-      }
+      };
 
       this.wrapper = mount(<Container />);
     });
@@ -102,7 +107,7 @@ describe('<Form />', function() {
             </div>
           );
         }
-      }
+      };
 
       this.wrapper = mount(<Container />);
     });
@@ -140,7 +145,7 @@ describe('<Form />', function() {
             </div>
           );
         }
-      }
+      };
 
       this.wrapper = mount(<Container />);
     });
@@ -167,7 +172,7 @@ describe('<Form />', function() {
       TestForm = class extends Form {
         $itemName(i, value) {
           if (value) {
-            this.set('items', i, 'name', value)
+            this.set('items', i, 'name', value);
           } else {
             const items = without(this.items, this.items[i]);
             this.set('items', items);
@@ -194,7 +199,7 @@ describe('<Form />', function() {
             </div>
           );
         }
-      }
+      };
 
       this.wrapper = mount(<Container />);
     });
@@ -246,7 +251,7 @@ describe('<Form />', function() {
               </div>
             );
           }
-        }
+        };
 
         this.wrapper = mount(<Container />);
       });
@@ -292,7 +297,7 @@ describe('<Form />', function() {
               </div>
             );
           }
-        }
+        };
 
         this.wrapper = mount(<Container />);
       });
@@ -327,7 +332,7 @@ describe('<Form />', function() {
           validate(validate) {
             validate('foo');
             validate('bar');
-            validate('baz', { with: function(_value){ return 'invalid' } });
+            validate('baz', { with: function(){ return 'invalid'; } });
             range(2).forEach(i =>
               validate('items', i, 'bar', { with: 'presence' })
             );
@@ -352,7 +357,7 @@ describe('<Form />', function() {
               </div>
             );
           }
-        }
+        };
 
         this.wrapper = mount(<Container />);
       });
@@ -381,7 +386,7 @@ describe('<Form />', function() {
           };
 
           validations = {
-            'foo': 'presence',
+            'foo': 'presence'
           };
 
           render() {
@@ -391,7 +396,7 @@ describe('<Form />', function() {
               </div>
             );
           }
-        }
+        };
 
         this.wrapper = mount(<Container />);
       });
