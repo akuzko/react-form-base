@@ -430,17 +430,32 @@ describe('<Form />', function() {
           };
         });
 
-        it('validates input when its value changes', function() {
-          this.wrapper.find('.foo').simulate('change', { target: { value: 'foo' } });
+        context('when was not validated before', function() {
+          it('does not trigger onChange validation', function() {
+            this.wrapper.find('.foo').simulate('change', { target: { value: 'foo' } });
+            expect(this.wrapper.state('errors')).toMatch({});
 
-          expect(this.wrapper.state('errors')).toMatch({
-            'foo': ''
+            this.wrapper.find('.foo').simulate('change', { target: { value: '' } });
+            expect(this.wrapper.state('errors')).toMatch({});
           });
+        });
 
-          this.wrapper.find('.foo').simulate('change', { target: { value: '' } });
+        context('after first error-resulted validation', function() {
+          it('validates input when its value changes', function() {
+            this.wrapper.instance().refs.form.performValidation();
+            expect(this.wrapper.state('errors')).toMatch({
+              'foo': 'cannot be blank'
+            });
 
-          expect(this.wrapper.state('errors')).toMatch({
-            'foo': 'cannot be blank'
+            this.wrapper.find('.foo').simulate('change', { target: { value: 'foo' } });
+            expect(this.wrapper.state('errors')).toMatch({
+              'foo': null
+            });
+
+            this.wrapper.find('.foo').simulate('change', { target: { value: '' } });
+            expect(this.wrapper.state('errors')).toMatch({
+              'foo': 'cannot be blank'
+            });
           });
         });
       });

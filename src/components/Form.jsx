@@ -58,6 +58,10 @@ export default class Form extends Component {
     return wrapper;
   }
 
+  input(...path) {
+    return this.$(...path);
+  }
+
   get(...path) {
     return this._get(fullPath(path));
   }
@@ -77,8 +81,8 @@ export default class Form extends Component {
 
         set(newAttrs, key, path[0][key]);
 
-        if (clearErrorsOnChange) {
-          newErrors = { ...newErrors, [name]: '' };
+        if (this.shouldClearError(name)) {
+          newErrors = { ...newErrors, [name]: null };
         }
 
         if (this.shouldValidateOnChange()) {
@@ -92,8 +96,8 @@ export default class Form extends Component {
 
       set(newAttrs, fpath, value);
 
-      if (clearErrorsOnChange) {
-        newErrors = { ...newErrors, [fname]: '' };
+      if (this.shouldClearError(fname)) {
+        newErrors = { ...newErrors, [fname]: null };
       }
 
       if (this.shouldValidateOnChange()) {
@@ -102,6 +106,11 @@ export default class Form extends Component {
     }
 
     return this.props.onChange(newAttrs, newErrors);
+  }
+
+  shouldClearError(fullName) {
+    const { clearErrorsOnChange, errors } = this.props;
+    return clearErrorsOnChange && errors[fullName];
   }
 
   shouldValidateOnChange() {
