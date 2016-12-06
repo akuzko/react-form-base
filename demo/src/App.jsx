@@ -15,6 +15,8 @@ export default class App extends Component {
 
     return (
       <div>
+        <pre>{JSON.stringify(form)}</pre>
+        <pre>{JSON.stringify(errors)}</pre>
         <DemoForm
           ref="form"
           attrs={form}

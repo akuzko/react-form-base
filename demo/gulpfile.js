@@ -27,7 +27,7 @@ gulp.task('browserify', function () {
 
   bundler.on('update', bundle);
 
-  gutil.log(gutil.colors.green('Bundling. Please wait...'));
+  gutil.log(gutil.colors.yellow('Bundling. Please wait...'));
 
   bundle();
 
@@ -56,7 +56,7 @@ gulp.task('browserify', function () {
 
   function bundled() {
     var prettyTime = prettyHrtime(process.hrtime(startTime));
-    gutil.log('Bundled in ' + gutil.colors.magenta(prettyTime));
+    gutil.log(gutil.colors.yellow('Bundled in ') + gutil.colors.magenta(prettyTime));
   }
 });
 

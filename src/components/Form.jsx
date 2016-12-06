@@ -118,6 +118,7 @@ export default class Form extends Component {
   }
 
   performValidation() {
+    this.validator.clearErrors();
     this.setErrors(this.validate(this.validator));
   }
 

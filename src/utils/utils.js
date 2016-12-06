@@ -89,6 +89,9 @@ export function buildFormValidator(form) {
 
   Object.assign(validate, {
     errors: {},
+    clearErrors() {
+      this.errors = {};
+    },
     addError(key, message) {
       this.errors[key] = message;
       return message;
