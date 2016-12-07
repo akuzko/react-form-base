@@ -92,7 +92,7 @@ describe('<Form />', function() {
     beforeEach(function() {
       TestForm = class extends Form {
         $itemBar(i, value) {
-          return this.set(['items', i, 'bar'], value.toUpperCase());
+          return this.set(`items.${i}.bar`, value.toUpperCase());
         }
 
         render() {
@@ -100,8 +100,8 @@ describe('<Form />', function() {
             <div>
               {range(3).map(i =>
                 <div key={i}>
-                  <Input {...this.$(['items', i, 'foo'])} className={`item-foo-${i}`} />
-                  <Input {...this.$(['items', i, 'bar'])(this.$itemBar, i)} className={`item-bar-${i}`} />
+                  <Input {...this.$(`items.${i}.foo`)} className={`item-foo-${i}`} />
+                  <Input {...this.$(`items.${i}.bar`)(this.$itemBar, i)} className={`item-bar-${i}`} />
                 </div>
               )}
             </div>
@@ -172,9 +172,10 @@ describe('<Form />', function() {
       TestForm = class extends Form {
         $itemName(i, value) {
           if (value) {
-            this.set(['items', i, 'name'], value);
+            this.set(`items.${i}.name`, value);
           } else {
             const items = without(this.items, this.items[i]);
+
             this.set('items', items);
           }
         }
@@ -190,9 +191,10 @@ describe('<Form />', function() {
             <div>
               {range(totalItems + 1).map(i =>
                 <div key={i}>
-                  <Input {...this.$('items', i, 'name')(this.$itemName, i)} className={`item-name-${i}`} />
-                  {this.get(['items', i, 'name']) &&
-                    <ItemForm index={i} attrs={this.get(['items', i]) || {}} onChange={(attrs) => this.merge(['items', i], attrs)} />
+                  <Input {...this.$(`items.${i}.name`)(this.$itemName, i)} className={`item-name-${i}`} />
+
+                  {this.get(`items.${i}.name`) &&
+                    <ItemForm index={i} attrs={this.get(`items.${i}`) || {}} onChange={(attrs) => this.merge(`items.${i}`, attrs)} />
                   }
                 </div>
               )}

@@ -66,22 +66,13 @@ export default class Form extends Component {
   }
 
   get(name) {
-    if (isString(name)) return this._get(nameToPath(name));
-    if (isArray(name)) return this._get(fullPath(name));
-
-    throw new Error(`${name.toString()} is not a valid input name` );
-  }
-
-  _get(path) {
-    return get(this.props.attrs, path, '');
+    return get(this.props.attrs, nameToPath(name), '');
   }
 
   set(name, value) {
     if (isPlainObject(name)) return this._setObject(name);
-    if (isString(name)) return this._setAttr(name, value);
-    if (isArray(name)) return this._setAttr(fullName(name), value);
 
-    throw new Error(`${name.toString()} is not a valid input name or value object`);
+    return this._setAttr(name, value);
   }
 
   _setObject(obj) {

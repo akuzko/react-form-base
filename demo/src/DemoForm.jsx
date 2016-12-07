@@ -17,7 +17,7 @@ export default class DemoForm extends Form {
       <div>
         <Input {...this.$('foo')} />
         {this.mapExtraIn('bars', (i) =>
-          <Input key={i} {...this.$(['bars', i, 'baz'])} />
+          <Input key={i} {...this.$(`bars.${i}.baz`)} />
         )}
       </div>
     );
