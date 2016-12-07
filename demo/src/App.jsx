@@ -3,7 +3,8 @@ import DemoForm from './DemoForm';
 
 export default class App extends Component {
   state = {
-    form: {}
+    form: {},
+    errors: {}
   };
 
   validate = () => {

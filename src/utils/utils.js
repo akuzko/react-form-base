@@ -3,10 +3,6 @@ import isObject from 'lodash/isObject';
 import isArray from 'lodash/isArray';
 import isPlainObject from 'lodash/isPlainObject';
 
-export function handleChange(path, value) {
-  return this.set(...[...path, value]);
-}
-
 export function fullPath(path) {
   return path.map((part, i) => isNumber(part) ? `[${part}]` : (i > 0 ? '.' : '') + part).join('');
 }
@@ -17,6 +13,10 @@ export function fullName(path) {
 
 export function pathToName(path) {
   return path.replace(/\[(\d+)\]/g, (_match, i) => `.${i}`);
+}
+
+export function nameToPath(name) {
+  return name.replace(/\.(\d+)(\.)?/g, (_match, i, dot) => `[${i}]` + (dot ? '.' : ''));
 }
 
 function wildcard(name) {

@@ -1,11 +1,14 @@
 import React, { PropTypes, Component } from 'react';
 
-import { handleChange, fullPath, fullName, pathToName, buildFormValidator } from '../utils';
-import isObject from 'lodash/isObject';
+import { fullPath, fullName, pathToName, nameToPath, buildFormValidator } from '../utils';
+import isPlainObject from 'lodash/isPlainObject';
+import isArray from 'lodash/isArray';
 import isEmpty from 'lodash/isEmpty';
+import isString from 'lodash/isString';
 import cloneDeep from 'lodash/cloneDeep';
 import get from 'lodash/get';
 import set from 'lodash/set';
+import range from 'lodash/range';
 import noop from 'lodash/noop';
 
 export default class Form extends Component {
@@ -43,77 +46,86 @@ export default class Form extends Component {
     return this.props.onRequestSave(this.get(), this);
   }
 
-  $(...path) {
+  $(name) {
     const wrapper = (handler, ...bindings) => {
       wrapper.onChange = handler.hasOwnProperty('prototype') ? handler.bind(this, ...bindings) : handler;
       return wrapper;
     }
-    Object.defineProperty(wrapper, 'name', { value: fullName(path), enumerable: true });
+    Object.defineProperty(wrapper, 'name', { value: isString(name) ? name : fullName(name), enumerable: true });
     Object.assign(wrapper, {
-      value: this.get(...path),
-      onChange: this.changed(...path),
-      error: this.getErr(...path)
+      value: this.get(name),
+      onChange: this.set.bind(this, name),
+      error: this.getErr(name)
     });
 
     return wrapper;
   }
 
-  input(...path) {
-    return this.$(...path);
+  input(name) {
+    return this.$(name);
   }
 
-  get(...path) {
-    return this._get(fullPath(path));
+  get(name) {
+    if (isString(name)) return this._get(nameToPath(name));
+    if (isArray(name)) return this._get(fullPath(name));
+
+    throw new Error(`${name.toString()} is not a valid input name` );
   }
 
-  _get(fullPath) {
-    return get(this.props.attrs, fullPath, '');
+  _get(path) {
+    return get(this.props.attrs, path, '');
   }
 
-  set(...path) {
-    const { attrs, errors, clearErrorsOnChange } = this.props;
-    const newAttrs = cloneDeep(this.props.attrs);
-    let newErrors = errors;
+  set(name, value) {
+    if (isPlainObject(name)) return this._setObject(name);
+    if (isString(name)) return this._setAttr(name, value);
+    if (isArray(name)) return this._setAttr(fullName(name), value);
 
-    if (isObject(path[0])) {
-      for (const key of path[0]) {
-        const name = pathToName(key);
+    throw new Error(`${name.toString()} is not a valid input name or value object`);
+  }
 
-        set(newAttrs, key, path[0][key]);
-
-        if (this.shouldClearError(name)) {
-          newErrors = { ...newErrors, [name]: null };
-        }
-
-        if (this.shouldValidateOnChange()) {
-          newErrors = { ...newErrors, [name]: this.validator(name, { value: value }) };
-        }
+  _setObject(obj) {
+    return this._set((attrs, errors) => {
+      for (const name of obj) {
+        set(attrs, nameToPath(name), obj[name]);
+        this._updateErrors(errors, name, obj[name]);
       }
-    } else {
-      const value = path.pop();
-      const fpath = fullPath(path);
-      const fname = fullName(path);
+    });
+  }
 
-      set(newAttrs, fpath, value);
+  _setAttr(name, value) {
+    return this._set((attrs, errors) => {
+      set(attrs, nameToPath(name), value);
+      this._updateErrors(errors, name, value);
+    });
+  }
 
-      if (this.shouldClearError(fname)) {
-        newErrors = { ...newErrors, [fname]: null };
-      }
-
-      if (this.shouldValidateOnChange()) {
-        newErrors = { ...newErrors, [fname]: this.validator(fname, { value: value }) };
-      }
+  _updateErrors(errors, name, value) {
+    if (this._shouldClearError(name)) {
+      errors[name] = null;
     }
 
-    return this.props.onChange(newAttrs, newErrors);
+    if (this._shouldValidateOnChange()) {
+      errors[name] = this.validator(name, { value });
+    }
   }
 
-  shouldClearError(fullName) {
+  _set(updater) {
+    const { attrs, errors, clearErrorsOnChange, onChange } = this.props;
+    const newAttrs = cloneDeep(this.props.attrs);
+    const newErrors = { ...errors };
+
+    updater(newAttrs, newErrors);
+
+    return onChange(newAttrs, newErrors);
+  }
+
+  _shouldClearError(name) {
     const { clearErrorsOnChange, errors } = this.props;
-    return clearErrorsOnChange && errors[fullName];
+    return clearErrorsOnChange && errors[name];
   }
 
-  shouldValidateOnChange() {
+  _shouldValidateOnChange() {
     return this.props.validateOnChange && this.state.hadErrors;
   }
 
@@ -130,26 +142,29 @@ export default class Form extends Component {
     return validate.errors;
   }
 
-  merge(...path) {
-    const obj = path.pop();
-    const current = this.get(...path) || {};
+  merge(name, value) {
+    const current = this.get(name) || {};
 
-    return this.set(...[...path, { ...current, ...obj }]);
+    return this.set(name, { ...current, ...value });
   }
 
-  changed(...path) {
-    return handleChange.bind(this, path);
-  }
+  getErr(name) {
+    if (name === undefined) return this.props.errors;
+    if (isArray(name)) return this.getErr(fullName(name))
 
-  getErr(...path) {
-    if (!path.length) return this.props.errors;
-
-    return this.props.errors[fullName(path)];
+    return this.props.errors[name];
   }
 
   setErrors(errs) {
     const { onChange, attrs, errors } = this.props;
+
     onChange(attrs, { ...errors, ...errs });
+  }
+
+  mapExtraIn(path, iteratee) {
+    const value = this.get(path) || [];
+
+    return range(value.length + 1).map(iteratee);
   }
 
   render() {
