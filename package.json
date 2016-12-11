@@ -9,7 +9,7 @@
     "rebuild": "npm run clear && npm run build",
     "test": "mocha --compilers js:babel-register --recursive --require ./test/setup.js",
     "test:watch": "npm test -- --watch",
-    "lint": "eslint src test"
+    "lint": "./node_modules/.bin/eslint src test demo/src --ext .js --ext .jsx"
   },
   "repository": {
     "type": "git",

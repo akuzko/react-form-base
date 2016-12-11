@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 
-import { fullPath, fullName, pathToName, nameToPath, buildFormValidator } from '../utils';
+import { fullName, nameToPath, buildFormValidator } from '../utils';
 import isPlainObject from 'lodash/isPlainObject';
 import isArray from 'lodash/isArray';
 import isString from 'lodash/isString';
@@ -47,7 +47,7 @@ export default class Form extends Component {
     const wrapper = (handler, ...bindings) => {
       wrapper.onChange = handler.hasOwnProperty('prototype') ? handler.bind(this, ...bindings) : handler;
       return wrapper;
-    }
+    };
     Object.defineProperty(wrapper, 'name', { value: isString(name) ? name : fullName(name), enumerable: true });
     Object.assign(wrapper, {
       value: this.get(name),
@@ -99,8 +99,8 @@ export default class Form extends Component {
   }
 
   _set(updater) {
-    const { attrs, errors, clearErrorsOnChange, onChange } = this.props;
-    const newAttrs = cloneDeep(this.props.attrs);
+    const { attrs, errors, onChange } = this.props;
+    const newAttrs = cloneDeep(attrs);
     const newErrors = { ...errors };
 
     updater(newAttrs, newErrors);
@@ -123,7 +123,7 @@ export default class Form extends Component {
   }
 
   validate(validate) {
-    for (let name in this.validations) {
+    for (const name in this.validations) {
       validate(name);
     }
 
@@ -138,7 +138,7 @@ export default class Form extends Component {
 
   getErr(name) {
     if (name === undefined) return this.props.errors;
-    if (isArray(name)) return this.getErr(fullName(name))
+    if (isArray(name)) return this.getErr(fullName(name));
 
     return this.props.errors[name];
   }

@@ -24,7 +24,7 @@ export default class Select extends Component {
   };
 
   render() {
-    const { value, error, onChange, options, includeBlank, ...rest } = this.props;
+    const { value, error, onChange, options, includeBlank, ...rest } = this.props; // eslint-disable-line no-unused-vars
 
     return (
       <div>

@@ -12,7 +12,7 @@ export default class Input extends Component {
   };
 
   render() {
-    const { value, error, onChange, ...rest } = this.props;
+    const { value, error, onChange, ...rest } = this.props; // eslint-disable-line no-unused-vars
 
     return (
       <div>

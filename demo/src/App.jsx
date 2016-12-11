@@ -5,7 +5,7 @@ export default class App extends Component {
   state = { forms: {} };
 
   formProps(name) {
-    const props = this.state.forms[name] || {}
+    const props = this.state.forms[name] || {};
 
     return {
       attrs: props.attrs || {},
@@ -13,12 +13,10 @@ export default class App extends Component {
       onChange: (attrs, errors) => this.setState({
         forms: { ...this.state.forms, [name]: { attrs, errors } }
       })
-    }
+    };
   }
 
   render() {
-    const { form, errors } = this.state;
-
     return (
       <div>
         <Forms.Form1 {...this.formProps('form1')} validateOnChange />
