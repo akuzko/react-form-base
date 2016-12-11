@@ -3,7 +3,6 @@ import React, { PropTypes, Component } from 'react';
 import { fullPath, fullName, pathToName, nameToPath, buildFormValidator } from '../utils';
 import isPlainObject from 'lodash/isPlainObject';
 import isArray from 'lodash/isArray';
-import isEmpty from 'lodash/isEmpty';
 import isString from 'lodash/isString';
 import cloneDeep from 'lodash/cloneDeep';
 import get from 'lodash/get';
@@ -37,9 +36,7 @@ export default class Form extends Component {
   validator = buildFormValidator(this);
 
   componentWillReceiveProps(nextProps) {
-    if (!isEmpty(nextProps.errors)) {
-      this.setState({ hadErrors: true });
-    }
+    this.setState({ hadErrors: Object.getOwnPropertyNames(nextProps.errors).length > 0 });
   }
 
   save() {
@@ -77,7 +74,7 @@ export default class Form extends Component {
 
   _setObject(obj) {
     return this._set((attrs, errors) => {
-      for (const name of obj) {
+      for (const name in obj) {
         set(attrs, nameToPath(name), obj[name]);
         this._updateErrors(errors, name, obj[name]);
       }
@@ -146,10 +143,10 @@ export default class Form extends Component {
     return this.props.errors[name];
   }
 
-  setErrors(errs) {
-    const { onChange, attrs, errors } = this.props;
+  setErrors(errors) {
+    const { onChange, attrs } = this.props;
 
-    onChange(attrs, { ...errors, ...errs });
+    onChange(attrs, errors);
   }
 
   mapExtraIn(path, iteratee) {
