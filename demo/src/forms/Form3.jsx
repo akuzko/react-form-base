@@ -1,41 +1,56 @@
 import React from 'react';
 import Form from './ApplicationForm';
-import Input from '../inputs/Input';
 import Select from '../inputs/Select';
 
-export default class Form2 extends Form {
-  render() {
-    const { attrs, errors } = this.props;
+const items = [1, 2, 3].map(i => ({ value: i, label: `Item ${i}` }));
+const amounts = [10, 50, 100];
 
-    return (
-      <div>
-        <pre>{JSON.stringify(attrs)}</pre>
-        <pre>{JSON.stringify(errors)}</pre>
+export default class Form3 extends Form {
+  static title = 'Changing several fields at once';
+  static description = `This form has two 'Select' inputs for 'items' and
+    'amount' fields and custom onChange handler that drops 'amount' value
+    whenever 'item' value is changed
+  `;
+  static source = `
+    // read about those setup components at the beginning of README
+    import Form, { Select } from 'form';
 
-        <Input {...this.$('foo')} />
-        {this.mapExtraIn('items', (i) =>
-          <div key={i}>
-            <Input {...this.$(`items.${i}.name`)} />
-            {this.get(`items.${i}.name`) &&
-              <ItemForm attrs={this.get(`items.${i}`)} onChange={(attrs) => this.merge(`items.${i}`, attrs)} />
-            }
+    const items = [1, 2, 3].map(i => ({ value: i, label: \`Item \${i}\` }));
+    const amounts = [10, 50, 100];
+
+    class Form3 extends Form {
+      $item(value) {
+        return this.set({
+          item: value,
+          amount: null
+        });
+      }
+
+      render() {
+        return (
+          <div>
+            <Select {...this.$('item')(this.$item)} options={items} includeBlank />
+            <Select {...this.$('amount')} options={amounts} includeBlank />
           </div>
-        )}
-      </div>
-    );
-  }
-}
+        );
+      }
+    }
+  `;
 
-class ItemForm extends Form {
-  validatations = {
-    description: 'presence'
-  };
+  $item(value) {
+    return this.set({
+      item: value,
+      amount: null
+    });
+  }
 
   render() {
     return (
       <div>
-        <Input {...this.$('description')} />
-        <Select {...this.$('amount')} options={[10, 50, 100]} includeBlank />
+        {this.renderExample()}
+
+        <Select {...this.$('item')(this.$item)} options={items} includeBlank />
+        <Select {...this.$('amount')} options={amounts} includeBlank />
       </div>
     );
   }

@@ -81,7 +81,7 @@ export function buildFormValidator(form) {
 
     function callArrayValidator(ary) {
       for (let i = 0; i < ary.length; i++) {
-        const error = callStringValidator(ary[i]);
+        const error = callValidator(ary[i]);
         if (error) return error;
       }
     }

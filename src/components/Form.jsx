@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 
-import { fullName, nameToPath, buildFormValidator } from '../utils';
+import { nameToPath, buildFormValidator } from '../utils';
 import isPlainObject from 'lodash/isPlainObject';
 import isArray from 'lodash/isArray';
 import isString from 'lodash/isString';
@@ -48,7 +48,7 @@ export default class Form extends Component {
       wrapper.onChange = handler.hasOwnProperty('prototype') ? handler.bind(this, ...bindings) : handler;
       return wrapper;
     };
-    Object.defineProperty(wrapper, 'name', { value: isString(name) ? name : fullName(name), enumerable: true });
+    Object.defineProperty(wrapper, 'name', { value: name, enumerable: true });
     Object.assign(wrapper, {
       value: this.get(name),
       onChange: this.set.bind(this, name),
@@ -119,7 +119,12 @@ export default class Form extends Component {
 
   performValidation() {
     this.validator.clearErrors();
-    this.setErrors(this.validate(this.validator));
+    this.setErrors(this.getValidationErrors());
+  }
+
+  getValidationErrors() {
+    this.validator.clearErrors();
+    return this.validate(this.validator)
   }
 
   validate(validate) {
@@ -130,15 +135,36 @@ export default class Form extends Component {
     return validate.errors;
   }
 
-  merge(name, value) {
+  merge(name, value, errors) {
     const current = this.get(name) || {};
+    const attrs = cloneDeep(this.props.attrs)
 
-    return this.set(name, { ...current, ...value });
+    set(attrs, name, { ...current, ...value });
+    this.props.onChange(attrs, { ...this.props.errors, [name]: errors });
+  }
+
+  spliceIn(name, i) {
+    const ary = this.get(name);
+
+    return this.set(name, [...ary.slice(0, i), ...ary.slice(i + 1)]);
+  }
+
+  mapExtraIn(path, iteratee) {
+    const value = this.get(path) || [];
+
+    return range(value.length + 1).map(iteratee);
+  }
+
+  eachIndexIn(path, iteratee) {
+    const value = this.get(path) || [];
+
+    for (let i = 0; i < value.length; i++) {
+      iteratee(i);
+    }
   }
 
   getErr(name) {
     if (name === undefined) return this.props.errors;
-    if (isArray(name)) return this.getErr(fullName(name));
 
     return this.props.errors[name];
   }
@@ -147,12 +173,6 @@ export default class Form extends Component {
     const { onChange, attrs } = this.props;
 
     onChange(attrs, errors);
-  }
-
-  mapExtraIn(path, iteratee) {
-    const value = this.get(path) || [];
-
-    return range(value.length + 1).map(iteratee);
   }
 
   render() {

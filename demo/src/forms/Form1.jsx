@@ -1,28 +1,35 @@
 import React from 'react';
 import Form from './ApplicationForm';
-import Select from '../inputs/Select';
+import { Input, Select } from '../inputs';
 
-const items = [1, 2, 3].map(i => ({ value: i, label: `Item ${i}` }));
-const amounts = [10, 50, 100];
+export default class Form1 extends Form {
+  static title = 'Basic example';
+  static description = 'Simplest example: a set of 3 simple form fields.';
+  static source = `
+    // read about those setup components at the beginning of README
+    import Form, { Input, Select } from 'form';
 
-export default class Form0 extends Form {
-  changeItem(value) {
-    return this.set({
-      item: value,
-      amount: null
-    });
-  }
+    class Form1 extends Form {
+      render() {
+        return (
+          <div>
+            <Input {...this.$('firstName')} />
+            <Input {...this.$('lastName')} />
+            <Select {...this.$('role')} options={['admin', 'employee']} includeBlank />
+          </div>
+        );
+      }
+    }
+  `;
 
   render() {
-    const { attrs, errors } = this.props;
-
     return (
       <div>
-        <pre>{JSON.stringify(attrs)}</pre>
-        <pre>{JSON.stringify(errors)}</pre>
+        {this.renderExample()}
 
-        <Select {...this.$('item')(this.changeItem)} options={items} includeBlank />
-        <Select {...this.$('amount')} options={amounts} includeBlank />
+        <Input {...this.$('firstName')} placeholder="First Name" />
+        <Input {...this.$('lastName')} placeholder="Last Name" />
+        <Select {...this.$('role')} options={['admin', 'employee']} includeBlank />
       </div>
     );
   }
