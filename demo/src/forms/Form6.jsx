@@ -1,6 +1,5 @@
 import React from 'react';
-import Form from './ApplicationForm';
-import Input from '../inputs/Input';
+import Form, { TextField } from '../form';
 
 export default class Form6 extends Form {
   static title = 'Generic Validation';
@@ -16,8 +15,8 @@ export default class Form6 extends Form {
       it doesn't start with 'A'
   `;
   static source = `
-    // read about those setup components at the beginning of README
-    import Form, { Input } from 'form';
+    // read about those setup components at the beginning of examples
+    import Form, { TextField } from 'form';
 
     class Form6 extends Form {
       validate() {
@@ -41,9 +40,9 @@ export default class Form6 extends Form {
 
         return (
           <div>
-            <Input {...this.input('firstName')} placeholder="First Name" />
-            <Input {...this.input('lastName')} placeholder="Last Name" />
-            <Input {...this.input('address.street')} placeholder="Street (nested field)" />
+            <TextField {...this.input('firstName')} placeholder="First Name" />
+            <TextField {...this.input('lastName')} placeholder="Last Name" />
+            <TextField {...this.input('address.street')} placeholder="Street (nested field)" />
 
             <button onClick={this.performValidation.bind(this)}>Validate</button>
           </div>
@@ -91,9 +90,9 @@ export default class Form6 extends Form {
       <div>
         {this.renderExample()}
 
-        <Input {...this.input('firstName')} placeholder="First Name" />
-        <Input {...this.input('lastName')} placeholder="Last Name" />
-        <Input {...this.input('address.street')} placeholder="Street (nested field)" />
+        <TextField {...this.input('firstName')} placeholder="First Name" />
+        <TextField {...this.input('lastName')} placeholder="Last Name" />
+        <TextField {...this.input('address.street')} placeholder="Street (nested field)" />
 
         <button onClick={this.performValidation.bind(this)}>Validate</button>
       </div>

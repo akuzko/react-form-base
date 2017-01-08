@@ -1,6 +1,5 @@
 import React from 'react';
-import Form from './ApplicationForm';
-import Select from '../inputs/Select';
+import Form, { Select } from '../form';
 
 const items = [1, 2, 3].map(i => ({ value: i, label: `Item ${i}` }));
 const amounts = [10, 50, 100];
@@ -12,7 +11,7 @@ export default class Form3 extends Form {
     whenever 'item' value is changed
   `;
   static source = `
-    // read about those setup components at the beginning of README
+    // read about those setup components at the beginning of examples
     import Form, { Select } from 'form';
 
     const items = [1, 2, 3].map(i => ({ value: i, label: \`Item \${i}\` }));

@@ -1,6 +1,5 @@
 import React from 'react';
-import Form from './ApplicationForm';
-import Input from '../inputs/Input';
+import Form, { TextField } from '../form';
 
 export default class Form2 extends Form {
   static title = 'Usage of custom onChange handler';
@@ -8,8 +7,8 @@ export default class Form2 extends Form {
     for 'lastName' field changes.
   `;
   static source = `
-    // read about those setup components at the beginning of README
-    import Form, { Input } from 'form';
+    // read about those setup components at the beginning of examples
+    import Form, { TextField } from 'form';
 
     class Form2 extends Form {
       $lastName(value) {
@@ -19,8 +18,8 @@ export default class Form2 extends Form {
       render() {
         return (
           <div>
-            <Input {...this.$('firstName')} />
-            <Input {...this.$('lastName')(this.$lastName)} />
+            <TextField {...this.$('firstName')} />
+            <TextField {...this.$('lastName')(this.$lastName)} />
           </div>
         );
       }
@@ -36,8 +35,8 @@ export default class Form2 extends Form {
       <div>
         {this.renderExample()}
 
-        <Input {...this.$('firstName')} placeholder="First Name" />
-        <Input {...this.$('lastName')(this.$lastName)} placeholder="Last Name" />
+        <TextField {...this.$('firstName')} placeholder="First Name" />
+        <TextField {...this.$('lastName')(this.$lastName)} placeholder="Last Name" />
       </div>
     );
   }

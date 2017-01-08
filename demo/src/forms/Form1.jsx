@@ -1,20 +1,19 @@
 import React from 'react';
-import Form from './ApplicationForm';
-import { Input, Select } from '../inputs';
+import Form, { TextField, Select } from '../form';
 
 export default class Form1 extends Form {
   static title = 'Basic example';
   static description = 'Simplest example: a set of 3 simple form fields.';
   static source = `
-    // read about those setup components at the beginning of README
-    import Form, { Input, Select } from 'form';
+    // read about those setup components at the beginning of examples
+    import Form, { TextField, Select } from 'form';
 
     class Form1 extends Form {
       render() {
         return (
           <div>
-            <Input {...this.$('firstName')} />
-            <Input {...this.$('lastName')} />
+            <TextField {...this.$('firstName')} />
+            <TextField {...this.$('lastName')} />
             <Select {...this.$('role')} options={['admin', 'employee']} includeBlank />
           </div>
         );
@@ -27,8 +26,8 @@ export default class Form1 extends Form {
       <div>
         {this.renderExample()}
 
-        <Input {...this.$('firstName')} placeholder="First Name" />
-        <Input {...this.$('lastName')} placeholder="Last Name" />
+        <TextField {...this.$('firstName')} placeholder="First Name" />
+        <TextField {...this.$('lastName')} placeholder="Last Name" />
         <Select {...this.$('role')} options={['admin', 'employee']} includeBlank />
       </div>
     );

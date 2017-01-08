@@ -1,6 +1,5 @@
 import React from 'react';
-import Form from './ApplicationForm';
-import Input from '../inputs/Input';
+import Form, { TextField } from '../form';
 
 export default class Form4 extends Form {
   static title = 'Auto-add and auto-remove inputs on value change';
@@ -12,7 +11,7 @@ export default class Form4 extends Form {
     in onChange handler.
   `;
   static source = `
-    import Form, { Input } from 'form';
+    import Form, { TextField } from 'form';
 
     class Form4 extends Form {
       $language(i, value) {
@@ -26,9 +25,9 @@ export default class Form4 extends Form {
       render() {
         return (
           <div>
-            <Input {...this.input('fullName')} placeholder="Full Name" />
+            <TextField {...this.input('fullName')} placeholder="Full Name" />
             {this.mapExtraIn('favoriteLanguages', i =>
-              <Input key={i} {...this.input(\`favoriteLanguages.\${i}\`)(this.$language, i)} placeholder={ \`Language \${i + 1}\` } />
+              <TextField key={i} {...this.input(\`favoriteLanguages.\${i}\`)(this.$language, i)} placeholder={ \`Language \${i + 1}\` } />
             )}
           </div>
         );
@@ -49,9 +48,9 @@ export default class Form4 extends Form {
       <div>
         {this.renderExample()}
 
-        <Input {...this.input('fullName')} placeholder="Full Name" />
+        <TextField {...this.input('fullName')} placeholder="Full Name" />
         {this.mapExtraIn('favoriteLanguages', i =>
-          <Input key={i} {...this.input(`favoriteLanguages.${i}`)(this.$language, i)} placeholder={ `Language ${i + 1}` } />
+          <TextField key={i} {...this.input(`favoriteLanguages.${i}`)(this.$language, i)} placeholder={ `Language ${i + 1}` } />
         )}
       </div>
     );

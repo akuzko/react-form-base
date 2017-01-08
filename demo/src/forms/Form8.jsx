@@ -1,6 +1,5 @@
 import React from 'react';
-import Form from './ApplicationForm';
-import Input from '../inputs/Input';
+import Form, { TextField } from '../form';
 
 class BaseForm extends Form {
   static validations = {
@@ -30,8 +29,8 @@ export default class Form8 extends BaseForm {
     whish should be a return value of your #validate method.
   `;
   static source = `
-    // read about those setup components at the beginning of README
-    import Form, { Input, Select } from 'form';
+    // read about those setup components at the beginning of examples
+    import Form, { TextField, Select } from 'form';
 
     class ItemForm extends BaseForm {
       validations = {
@@ -49,8 +48,8 @@ export default class Form8 extends BaseForm {
       render() {
         return (
           <div>
-            <Input {...this.$('description')} placeholder="Description" />
-            <Input {...this.$('amount')} placeholder="Amount" />
+            <TextField {...this.$('description')} placeholder="Description" />
+            <TextField {...this.$('amount')} placeholder="Amount" />
           </div>
         );
       }
@@ -81,11 +80,11 @@ export default class Form8 extends BaseForm {
           <div>
             {this.renderExample()}
 
-            <Input {...this.input('email')} placeholder="Email" />
+            <TextField {...this.input('email')} placeholder="Email" />
 
             {this.mapExtraIn('items', (i) =>
               <div key={i}>
-                <Input {...this.$(\`items.\${i}.name\`)} placeholder="Name" />
+                <TextField {...this.$(\`items.\${i}.name\`)} placeholder="Name" />
 
                 {this.get(\`items.\${i}.name\`) &&
                   <ItemForm
@@ -148,11 +147,11 @@ export default class Form8 extends BaseForm {
       <div>
         {this.renderExample()}
 
-        <Input {...this.input('email')} placeholder="Email" />
+        <TextField {...this.input('email')} placeholder="Email" />
 
         {this.mapExtraIn('items', (i) =>
           <div key={i}>
-            <Input {...this.$(`items.${i}.name`)} placeholder="Name" />
+            <TextField {...this.$(`items.${i}.name`)} placeholder="Name" />
 
             {this.get(`items.${i}.name`) &&
               <ItemForm
@@ -188,8 +187,8 @@ class ItemForm extends BaseForm {
   render() {
     return (
       <div>
-        <Input {...this.$('description')} placeholder="Description" />
-        <Input {...this.$('amount')} placeholder="Amount" />
+        <TextField {...this.$('description')} placeholder="Description" />
+        <TextField {...this.$('amount')} placeholder="Amount" />
       </div>
     );
   }
