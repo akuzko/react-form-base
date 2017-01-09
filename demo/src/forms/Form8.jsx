@@ -134,7 +134,8 @@ export default class Form8 extends BaseForm {
     this.eachIndexIn('items', (i) => {
       validate(`items.${i}.name`);
       // ^- uses wildcard defined in form
-      validate.addError(`items.${i}`, this.refs[`itemForm${i}`].getValidationErrors());
+
+      this.refs[`itemForm${i}`].performValidation());
     });
 
     return validate.errors;
@@ -157,8 +158,7 @@ export default class Form8 extends BaseForm {
               <ItemForm
                 ref={`itemForm${i}`}
                 attrs={this.get(`items.${i}`)}
-                errors={this.getErr(`items.${i}`)}
-                onChange={(attrs, errs) => this.merge(`items.${i}`, attrs, errs)}
+                onChange={(attrs) => this.merge(`items.${i}`, attrs)}
                 validateOnChange
               />
             }

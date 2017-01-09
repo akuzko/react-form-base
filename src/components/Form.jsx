@@ -13,7 +13,6 @@ import noop from 'lodash/noop';
 export default class Form extends Component {
   static propTypes = {
     attrs: PropTypes.object.isRequired,
-    errors: PropTypes.object,
     onChange: PropTypes.func,
     clearErrorsOnChange: PropTypes.bool,
     validateOnChange: PropTypes.bool,
@@ -21,23 +20,19 @@ export default class Form extends Component {
   };
 
   static defaultProps = {
-    errors: {},
     onChange: noop,
     clearErrorsOnChange: true,
     validateOnChange: false,
     onRequestSave: noop
   };
 
-  state = {
-    hadErrors: false
-  };
-
+  state = { errors: {} };
   validations = {};
   validator = buildFormValidator(this);
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({ hadErrors: Object.getOwnPropertyNames(nextProps.errors).length > 0 });
-  }
+  // componentWillReceiveProps(nextProps) {
+  //   this.setState({ hadErrors: Object.getOwnPropertyNames(nextProps.errors).length > 0 });
+  // }
 
   save() {
     return this.props.onRequestSave(this.get(), this);
@@ -99,13 +94,13 @@ export default class Form extends Component {
   }
 
   _set(updater) {
-    const { attrs, errors, onChange } = this.props;
+    const { attrs, onChange } = this.props;
     const newAttrs = cloneDeep(attrs);
-    const newErrors = { ...errors };
+    const newErrors = { ...this.state.errors };
 
     updater(newAttrs, newErrors);
 
-    return onChange(newAttrs, newErrors);
+    return this.setState({ errors }, () => onChange(newAttrs));
   }
 
   _shouldClearError(name) {
@@ -117,14 +112,23 @@ export default class Form extends Component {
     return this.props.validateOnChange && this.state.hadErrors;
   }
 
+  ifValid(callback) {
+    const errors = this.getValidationErrors();
+
+    this.setErrors(errors, function() {
+      if (callback && Object.getOwnPropertyNames(errors).length === 0) {
+        callback();
+      }
+    });
+  }
+
   performValidation() {
-    this.validator.clearErrors();
-    this.setErrors(this.getValidationErrors());
+    this.ifValid();
   }
 
   getValidationErrors() {
     this.validator.clearErrors();
-    return this.validate(this.validator)
+    return this.validate(this.validator);
   }
 
   validate(validate) {
@@ -135,12 +139,12 @@ export default class Form extends Component {
     return validate.errors;
   }
 
-  merge(name, value, errors) {
+  merge(name, value) {
     const current = this.get(name) || {};
     const attrs = cloneDeep(this.props.attrs)
 
     set(attrs, name, { ...current, ...value });
-    this.props.onChange(attrs, { ...this.props.errors, [name]: errors });
+    this.props.onChange(attrs);
   }
 
   spliceIn(name, i) {
@@ -164,15 +168,15 @@ export default class Form extends Component {
   }
 
   getErr(name) {
-    if (name === undefined) return this.props.errors;
+    if (name === undefined) return this.state.errors;
 
-    return this.props.errors[name];
+    return this.state.errors[name];
   }
 
   setErrors(errors) {
-    const { onChange, attrs } = this.props;
+    const hadErrors = Object.getOwnPropertyNames(errors).length > 0;
 
-    onChange(attrs, errors);
+    this.setState({ hadErrors, errors });
   }
 
   render() {

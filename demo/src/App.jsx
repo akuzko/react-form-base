@@ -9,7 +9,6 @@ export default class App extends Component {
 
     return {
       attrs: props.attrs || {},
-      errors: props.errors || {},
       onChange: (attrs, errors) => this.setState({
         forms: { ...this.state.forms, [name]: { attrs, errors } }
       })
