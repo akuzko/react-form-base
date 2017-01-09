@@ -1,4 +1,5 @@
 import React from 'react';
+import dedent from 'dedent-js';
 import Form, { TextField, Select } from '../form';
 
 class ItemForm extends Form {
@@ -14,7 +15,7 @@ class ItemForm extends Form {
 
 export default class Form5 extends Form {
   static title = 'Nested Forms';
-  static description = `
+  static description = dedent`
     This example shows how top-level form can use nested forms to render and
     manipulate single set of attributes.
 

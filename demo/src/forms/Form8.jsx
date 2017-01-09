@@ -1,4 +1,5 @@
 import React from 'react';
+import dedent from 'dedent-js';
 import Form, { TextField } from '../form';
 
 class BaseForm extends Form {
@@ -14,19 +15,19 @@ class BaseForm extends Form {
 
 export default class Form8 extends BaseForm {
   static title = 'Complex Validation Example';
-  static description = `
+  static description = dedent`
     This example shows complex validation usage example which includes
     special input validator function (described bellow), nested form validation,
     usage of wildcards, special form handlers and case-specific validation that
     is too case-specific to be defined as generic validation rule.
 
-    Form's #validate method accepts a special input validator function
+    Form's \`#validate\` method accepts a special input validator function
     that can be used to iterate over arbitrary amount of inputs and
     validate them according to validation rules. It's first argument is a
     full name of the input being validated. The second optional argument
-    should be an object that has a 'with' property with a value of validation
-    rule (string, function or array). This function has an 'errors' property
-    whish should be a return value of your #validate method.
+    should be an object that has a \`'with'\` property with a value of validation
+    rule (string, function or array). This function has an \`'errors'\` property
+    whish should be a return value of your \`#validate\` method.
   `;
   static source = `
     // read about those setup components at the beginning of examples

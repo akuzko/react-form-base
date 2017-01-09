@@ -1,4 +1,5 @@
 import React from 'react';
+import marked from 'marked';
 import Form from '../../../src';
 
 export default class DemoForm extends Form {
@@ -8,7 +9,7 @@ export default class DemoForm extends Form {
     return (
       <div>
         <div><strong>{title}</strong></div>
-        <div>{description}</div>
+        <div dangerouslySetInnerHTML={{ __html: marked(description) }} />
         <pre>{source}</pre>
         <pre>{JSON.stringify(this.props.attrs)}</pre>
         <pre>{JSON.stringify(this.state.errors)}</pre>

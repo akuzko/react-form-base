@@ -3,6 +3,8 @@
   "author": "Artem Kuzko <a.kuzko@gmail.com> (https://github.com/akuzko)",
   "license": "MIT",
   "dependencies": {
+    "dedent-js": "^1.0.1",
+    "marked": "^0.3.6",
     "react": "^15.3.2",
     "react-dom": "^15.4.1"
   },

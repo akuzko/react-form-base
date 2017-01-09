@@ -1,17 +1,18 @@
 import React from 'react';
+import dedent from 'dedent-js';
 import Form, { TextField } from '../form';
 
 export default class Form6 extends Form {
   static title = 'Generic Validation';
-  static description = `
-    With no predefined validations, form's #performValidation method calls
-    #validate method and uses it's return value to set form errors that
+  static description = dedent`
+    With no predefined validations, form's \`#performValidation\` method calls
+    \`#validate\` method and uses it's return value to set form errors that
     will be passed to inputs on next rendering.
 
     In this example form validates it's inputs in following way:
-    - firstName is always invalid
-    - lastName is invalid in 50% of validations being run
-    - street, which is nested under 'address' property is invalid if
+    - \`firstName\` is always invalid
+    - \`lastName\` is invalid in 50% of validations being run
+    - \`street\`, which is nested under \`'address'\` property is invalid if
       it doesn't start with 'A'
   `;
   static source = `

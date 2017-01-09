@@ -1,10 +1,12 @@
 import React from 'react';
+import dedent from 'dedent-js';
 import Form, { TextField } from '../form';
 
 export default class Form2 extends Form {
   static title = 'Usage of custom onChange handler';
-  static description = `This form uses custom onChange handler (named $lastName)
-    for 'lastName' field changes.
+  static description = dedent`
+    This form uses custom onChange handler (named \`$lastName\`) for 'lastName'
+    field changes.
   `;
   static source = `
     // read about those setup components at the beginning of examples

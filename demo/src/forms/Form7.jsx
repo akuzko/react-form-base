@@ -1,9 +1,10 @@
 import React from 'react';
+import dedent from 'dedent-js';
 import Form, { TextField } from '../form';
 
 export default class Form7 extends Form {
   static title = 'Predefined Validation';
-  static description = `
+  static description = dedent`
     In this example form defines simple validation rules as Form's static
     'validatations' property which are used in instance-specific 'validations'
     property defined on form's prototype. Note that validation rules (static
@@ -15,7 +16,7 @@ export default class Form7 extends Form {
     numericality validation defined for 'amount' input. The later shows
     how you can pass custom options to validation rules.
 
-    Also note that with predefined validations 'validateOnChange' property may
+    Also note that with predefined validations \`'validateOnChange'\` property may
     take place, which is enabled for the form in this example.
   `;
   static source = `

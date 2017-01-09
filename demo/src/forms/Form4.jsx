@@ -1,14 +1,15 @@
 import React from 'react';
+import dedent from 'dedent-js';
 import Form, { TextField } from '../form';
 
 export default class Form4 extends Form {
   static title = 'Auto-add and auto-remove inputs on value change';
-  static description = `This form has a standard 'fullName' input for a
-    person's name and a number (at least one) of inputs for 'favoriteLanguages'
-    values. Whenever new value is entered, additional input will appear. Also,
-    whenever value is erased, it's input gets removed. To achieve this behavior
-    two helper methods were used: \`mapExtraIn\` when rendering, and \`spliceIn\`
-    in onChange handler.
+  static description = dedent`
+    This form has a standard 'fullName' input for a person's name and a number
+    (at least one) of inputs for 'favoriteLanguages' values. Whenever new value
+    is entered, additional input will appear. Also, whenever value is erased,
+    it's input gets removed. To achieve this behavior two helper methods were
+    used: \`mapExtraIn\` when rendering, and \`spliceIn\` in onChange handler.
   `;
   static source = `
     import Form, { TextField } from 'form';
