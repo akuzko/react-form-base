@@ -41,8 +41,7 @@ describe('<Form />', function() {
           ref="form"
           {...formProps}
           attrs={this.state.form}
-          errors={this.state.errors}
-          onChange={(form, errors) => this.setState({ form, errors })}
+          onChange={(form) => this.setState({ form })}
         />
       );
     }
@@ -83,7 +82,7 @@ describe('<Form />', function() {
     });
 
     it('renders errors', function() {
-      this.wrapper.setState({ errors: { foo: 'cannot be blank' } });
+      this.wrapper.instance().refs.form.setState({ errors: { foo: 'cannot be blank' } });
       expect(this.wrapper.find('.error').get(0).innerHTML).toEqual('cannot be blank');
     });
   });
@@ -261,7 +260,7 @@ describe('<Form />', function() {
       it('performs validation according to validations property', function() {
         this.wrapper.instance().refs.form.performValidation();
 
-        expect(this.wrapper.state('errors')).toMatch({
+        expect(this.wrapper.instance().refs.form.state.errors).toMatch({
           'foo': 'cannot be blank'
         });
       });
@@ -307,7 +306,7 @@ describe('<Form />', function() {
       it('performs validation according to validations property', function() {
         this.wrapper.instance().refs.form.performValidation();
 
-        expect(this.wrapper.state('errors')).toMatch({
+        expect(this.wrapper.instance().refs.form.state.errors).toMatch({
           'foo': 'cannot be blank',
           'items.0.bar': 'should be numeric',
           'items.1.bar': 'should be numeric'
@@ -369,7 +368,7 @@ describe('<Form />', function() {
 
         this.wrapper.instance().refs.form.performValidation();
 
-        expect(this.wrapper.state('errors')).toMatch({
+        expect(this.wrapper.instance().refs.form.state.errors).toMatch({
           'foo': 'cannot be blank',
           'bar': 'should be greater than 5',
           'baz': 'invalid',
@@ -413,13 +412,13 @@ describe('<Form />', function() {
         it('clears error when input value changes', function() {
           this.wrapper.instance().refs.form.performValidation();
 
-          expect(this.wrapper.state('errors')).toMatch({
+          expect(this.wrapper.instance().refs.form.state.errors).toMatch({
             'foo': 'cannot be blank'
           });
 
           this.wrapper.find('.foo').simulate('change', { target: { value: 'foo' } });
 
-          expect(this.wrapper.state('errors')).toMatch({
+          expect(this.wrapper.instance().refs.form.state.errors).toMatch({
             'foo': null
           });
         });
@@ -435,27 +434,27 @@ describe('<Form />', function() {
         context('when was not validated before', function() {
           it('does not trigger onChange validation', function() {
             this.wrapper.find('.foo').simulate('change', { target: { value: 'foo' } });
-            expect(this.wrapper.state('errors')).toMatch({});
+            expect(this.wrapper.instance().refs.form.state.errors).toMatch({});
 
             this.wrapper.find('.foo').simulate('change', { target: { value: '' } });
-            expect(this.wrapper.state('errors')).toMatch({});
+            expect(this.wrapper.instance().refs.form.state.errors).toMatch({});
           });
         });
 
         context('after first error-resulted validation', function() {
           it('validates input when its value changes', function() {
             this.wrapper.instance().refs.form.performValidation();
-            expect(this.wrapper.state('errors')).toMatch({
+            expect(this.wrapper.instance().refs.form.state.errors).toMatch({
               'foo': 'cannot be blank'
             });
 
             this.wrapper.find('.foo').simulate('change', { target: { value: 'foo' } });
-            expect(this.wrapper.state('errors')).toMatch({
+            expect(this.wrapper.instance().refs.form.state.errors).toMatch({
               'foo': null
             });
 
             this.wrapper.find('.foo').simulate('change', { target: { value: '' } });
-            expect(this.wrapper.state('errors')).toMatch({
+            expect(this.wrapper.instance().refs.form.state.errors).toMatch({
               'foo': 'cannot be blank'
             });
           });

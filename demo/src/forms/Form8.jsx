@@ -67,7 +67,8 @@ export default class Form8 extends BaseForm {
         this.eachIndexIn('items', (i) => {
           validate(\`items.\${i}.name\`);
           // ^- uses wildcard defined in form
-          validate.addError(\`items.\${i}\`, this.refs[\`itemForm\${i}\`].getValidationErrors());
+
+          validate.nested(\`itemForm\${i}\`);
         });
 
         return validate.errors;
@@ -82,18 +83,20 @@ export default class Form8 extends BaseForm {
 
             <TextField {...this.input('email')} placeholder="Email" />
 
-            {this.mapExtraIn('items', (i) =>
+            {this.mapExtraIn('items', (item, i) =>
               <div key={i}>
                 <TextField {...this.$(\`items.\${i}.name\`)} placeholder="Name" />
 
                 {this.get(\`items.\${i}.name\`) &&
-                  <ItemForm
-                    ref={\itemForm\${i}\`}
-                    attrs={this.get(\`items.\${i}\`)}
-                    errors={this.getErr(\`items.\${i}\`)}
-                    onChange={(attrs, errs) => this.merge(\`items.\${i}\`, attrs, errs)}
-                    validateOnChange
-                  />
+                  <div>
+                    <ItemForm
+                      ref={\`itemForm\${i}\`}
+                      attrs={item}
+                      onChange={(item) => this.merge(\`items.\${i}\`, item)}
+                      validateOnChange
+                    />
+                    <button onClick={() => this.spliceIn('items', i)}>X</button>
+                  </div>
                 }
               </div>
             )}
@@ -135,7 +138,7 @@ export default class Form8 extends BaseForm {
       validate(`items.${i}.name`);
       // ^- uses wildcard defined in form
 
-      this.refs[`itemForm${i}`].performValidation());
+      validate.nested(`itemForm${i}`);
     });
 
     return validate.errors;
@@ -150,17 +153,20 @@ export default class Form8 extends BaseForm {
 
         <TextField {...this.input('email')} placeholder="Email" />
 
-        {this.mapExtraIn('items', (i) =>
+        {this.mapExtraIn('items', (item, i) =>
           <div key={i}>
             <TextField {...this.$(`items.${i}.name`)} placeholder="Name" />
 
             {this.get(`items.${i}.name`) &&
-              <ItemForm
-                ref={`itemForm${i}`}
-                attrs={this.get(`items.${i}`)}
-                onChange={(attrs) => this.merge(`items.${i}`, attrs)}
-                validateOnChange
-              />
+              <div>
+                <ItemForm
+                  ref={`itemForm${i}`}
+                  attrs={item}
+                  onChange={(item) => this.merge(`items.${i}`, item)}
+                  validateOnChange
+                />
+                <button onClick={() => this.spliceIn('items', i)}>X</button>
+              </div>
             }
           </div>
         )}

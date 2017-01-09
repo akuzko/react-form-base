@@ -14,7 +14,14 @@ class ItemForm extends Form {
 
 export default class Form5 extends Form {
   static title = 'Nested Forms';
-  static description = `In this example main form`;
+  static description = `
+    This example shows how top-level form can use nested forms to render and
+    manipulate single set of attributes.
+
+    In this example, top-level form uses \`mapIn\`, \`pushIn\` and \`spliceIn\`
+    helper methods to iterate over it's items for rendering subforms, dynamically
+    add and remove items.
+  `;
   static source = `
     // read about those setup components at the beginning of examples
     import Form, { TextField, Select } from 'form';
@@ -36,17 +43,14 @@ export default class Form5 extends Form {
           <div>
             <TextField {...this.$('firstName')} placeholder="Full Name" />
 
-            {this.mapExtraIn('items', i =>
+            {this.mapIn('items', (item, i) =>
               <div key={i}>
-                <TextField {...this.input(\`items.\${i}.name\`)} placeholder={ \`Item \${i + 1}\` } />
-                {this.get(\`items.\${i}\`) &&
-                  <div>
-                    <ItemForm attrs={this.get(\`items.\${i}\`)} onChange={(form) => this.merge(\`items.\${i}\`, form)} />
-                    <button onClick={() => this.spliceIn('items', i)}>X</button>
-                  </div>
-                }
+                <ItemForm attrs={item} onChange={(form) => this.merge(\`items.\${i}\`, form)} />
+                <button onClick={() => this.spliceIn('items', i)}>X</button>
               </div>
             )}
+
+            <button onClick={() => this.pushIn('items', {})}>Add Item</button>
           </div>
         );
       }
@@ -60,17 +64,14 @@ export default class Form5 extends Form {
 
         <TextField {...this.$('fullName')} placeholder="Full Name" />
 
-        {this.mapExtraIn('items', i =>
+        {this.mapIn('items', (item, i) =>
           <div key={i}>
-            <TextField {...this.input(`items.${i}.name`)} placeholder={ `Item ${i + 1}` } />
-            {this.get(`items.${i}`) &&
-              <div>
-                <ItemForm attrs={this.get(`items.${i}`)} onChange={(form) => this.merge(`items.${i}`, form)} />
-                <button onClick={() => this.spliceIn('items', i)}>X</button>
-              </div>
-            }
+            <ItemForm attrs={item} onChange={(form) => this.merge(`items.${i}`, form)} />
+            <button onClick={() => this.spliceIn('items', i)}>X</button>
           </div>
         )}
+
+        <button onClick={() => this.pushIn('items', {})}>Add Item</button>
       </div>
     );
   }

@@ -26,7 +26,7 @@ export default class Form4 extends Form {
         return (
           <div>
             <TextField {...this.input('fullName')} placeholder="Full Name" />
-            {this.mapExtraIn('favoriteLanguages', i =>
+            {this.mapExtraIn('favoriteLanguages', (_value, i) =>
               <TextField key={i} {...this.input(\`favoriteLanguages.\${i}\`)(this.$language, i)} placeholder={ \`Language \${i + 1}\` } />
             )}
           </div>
@@ -49,7 +49,7 @@ export default class Form4 extends Form {
         {this.renderExample()}
 
         <TextField {...this.input('fullName')} placeholder="Full Name" />
-        {this.mapExtraIn('favoriteLanguages', i =>
+        {this.mapExtraIn('favoriteLanguages', (_value, i) =>
           <TextField key={i} {...this.input(`favoriteLanguages.${i}`)(this.$language, i)} placeholder={ `Language ${i + 1}` } />
         )}
       </div>

@@ -95,6 +95,13 @@ export function buildFormValidator(form) {
     addError(key, message) {
       this.errors[key] = message;
       return message;
+    },
+    nested(ref) {
+      const errors = form.refs[ref].performValidation();
+
+      if (Object.getOwnPropertyNames(errors).length === 0) {
+        this.addError(ref, 'invalid');
+      }
     }
   });
 

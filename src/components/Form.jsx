@@ -30,10 +30,6 @@ export default class Form extends Component {
   validations = {};
   validator = buildFormValidator(this);
 
-  // componentWillReceiveProps(nextProps) {
-  //   this.setState({ hadErrors: Object.getOwnPropertyNames(nextProps.errors).length > 0 });
-  // }
-
   save() {
     return this.props.onRequestSave(this.get(), this);
   }
@@ -100,12 +96,11 @@ export default class Form extends Component {
 
     updater(newAttrs, newErrors);
 
-    return this.setState({ errors }, () => onChange(newAttrs));
+    return this.setState({ errors: newErrors }, () => onChange(newAttrs));
   }
 
   _shouldClearError(name) {
-    const { clearErrorsOnChange, errors } = this.props;
-    return clearErrorsOnChange && errors[name];
+    return this.props.clearErrorsOnChange && this.state.errors[name];
   }
 
   _shouldValidateOnChange() {
@@ -120,10 +115,12 @@ export default class Form extends Component {
         callback();
       }
     });
+
+    return errors;
   }
 
   performValidation() {
-    this.ifValid();
+    return this.ifValid();
   }
 
   getValidationErrors() {
@@ -147,16 +144,16 @@ export default class Form extends Component {
     this.props.onChange(attrs);
   }
 
+  pushIn(name, value) {
+    const ary = this.get(name) || [];
+
+    return this.set(name, [...ary, value]);
+  }
+
   spliceIn(name, i) {
     const ary = this.get(name);
 
     return this.set(name, [...ary.slice(0, i), ...ary.slice(i + 1)]);
-  }
-
-  mapExtraIn(path, iteratee) {
-    const value = this.get(path) || [];
-
-    return range(value.length + 1).map(iteratee);
   }
 
   eachIndexIn(path, iteratee) {
@@ -165,6 +162,18 @@ export default class Form extends Component {
     for (let i = 0; i < value.length; i++) {
       iteratee(i);
     }
+  }
+
+  mapIn(path, iteratee) {
+    const value = this.get(path) || [];
+
+    return value.map(iteratee);
+  }
+
+  mapExtraIn(path, iteratee) {
+    const value = this.get(path) || [];
+
+    return [...value, null].map(iteratee);
   }
 
   getErr(name) {
