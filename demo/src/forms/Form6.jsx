@@ -37,8 +37,6 @@ export default class Form6 extends Form {
       }
 
       render() {
-        const { attrs, errors } = this.props;
-
         return (
           <div>
             <TextField {...this.input('firstName')} placeholder="First Name" />
@@ -85,8 +83,6 @@ export default class Form6 extends Form {
   }
 
   render() {
-    const { attrs, errors } = this.props;
-
     return (
       <div>
         {this.renderExample()}

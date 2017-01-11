@@ -46,8 +46,6 @@ export default class Form7 extends Form {
       };
 
       render() {
-        const { attrs, errors } = this.props;
-
         return (
           <div>
             <TextField {...this.input('email')} placeholder="Email" />
@@ -98,8 +96,6 @@ export default class Form7 extends Form {
   };
 
   render() {
-    const { attrs, errors } = this.props;
-
     return (
       <div>
         {this.renderExample()}

@@ -1,11 +1,11 @@
 import React, { PropTypes } from 'react';
 
 export default function Select(props) {
-  const { value, error, onChange, options, includeBlank, ...rest } = props; // eslint-disable-line no-unused-vars
+  const { value, error, onChange, options, includeBlank, ...rest } = props;
 
   return (
     <div>
-      <select value={value || ''} onChange={onSelectChange} {...rest}>
+      <select value={value || ''} onChange={(e) => onChange(e.target.value)} {...rest}>
         {includeBlank &&
           <option value="">None</option>
         }
@@ -20,10 +20,6 @@ export default function Select(props) {
       }
     </div>
   );
-
-  function onSelectChange(e) {
-    return onChange(e.target.value);
-  };
 }
 
 Select.propTypes = {

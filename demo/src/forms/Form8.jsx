@@ -33,6 +33,17 @@ export default class Form8 extends BaseForm {
     // read about those setup components at the beginning of examples
     import Form, { TextField, Select } from 'form';
 
+    class BaseForm extends Form {
+      static validations = {
+        presence(value) { if (!value) return 'cannot be blank'; },
+        email(value) {
+          if (value && !/^[\w\d\.]+@[\w\d]+\.[\w\d]{2,}$/.test(value)) {
+            return 'should be email';
+          }
+        }
+      };
+    }
+
     class ItemForm extends BaseForm {
       validations = {
         description: 'presence',
@@ -54,6 +65,7 @@ export default class Form8 extends BaseForm {
           </div>
         );
       }
+    }
 
     class Form8 extends Form {
       validations = {
@@ -76,8 +88,6 @@ export default class Form8 extends BaseForm {
       }
 
       render() {
-        const { attrs, errors } = this.props;
-
         return (
           <div>
             {this.renderExample()}
@@ -146,8 +156,6 @@ export default class Form8 extends BaseForm {
   }
 
   render() {
-    const { attrs, errors } = this.props;
-
     return (
       <div>
         {this.renderExample()}

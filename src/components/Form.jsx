@@ -2,12 +2,9 @@ import React, { PropTypes, Component } from 'react';
 
 import { nameToPath, buildFormValidator } from '../utils';
 import isPlainObject from 'lodash/isPlainObject';
-import isArray from 'lodash/isArray';
-import isString from 'lodash/isString';
 import cloneDeep from 'lodash/cloneDeep';
 import get from 'lodash/get';
 import set from 'lodash/set';
-import range from 'lodash/range';
 import noop from 'lodash/noop';
 
 export default class Form extends Component {
@@ -138,7 +135,7 @@ export default class Form extends Component {
 
   merge(name, value) {
     const current = this.get(name) || {};
-    const attrs = cloneDeep(this.props.attrs)
+    const attrs = cloneDeep(this.props.attrs);
 
     set(attrs, name, { ...current, ...value });
     this.props.onChange(attrs);
