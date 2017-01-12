@@ -1,7 +1,7 @@
 React Form Base
 ===============
 
-Base Form component for building convenient forms for [Redux](https://github.com/reactjs/redux).
+Base Form component for building convenient forms for [React](https://facebook.github.io/react/).
 
 ## Installation
 
