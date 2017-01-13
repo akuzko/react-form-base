@@ -2,7 +2,65 @@ import React from 'react';
 import dedent from 'dedent-js';
 import Form, { TextField } from '../form';
 
+const SOURCE = [['Form7.jsx', `
+  // read about those setup components at the beginning of examples
+  import Form, { TextField } from 'form';
+
+  class Form7 extends Form {
+    static validations = {
+      presence(value) { if (!value) return 'cannot be blank'; },
+      email(value) {
+        if (value && !/^[\w\d\.]+@[\w\d]+\.[\w\d]{2,}$/.test(value)) {
+          return 'should be email';
+        }
+      },
+      numericality(value, options = {}) {
+        const { greaterThan } = options;
+
+        if (!value) return null;
+        if (isNaN(+value)) return 'should be a number';
+        if (typeof greaterThan != undefined && +value <= greaterThan) return \`should be greater than \${greaterThan}\`;
+      }
+    };
+
+    validations = {
+      email: ['presence', 'email'],
+      amount: { presence: true, numericality: { greaterThan: 10 } }
+    };
+
+    render() {
+      return (
+        <div>
+          <TextField {...this.input('email')} placeholder="Email" />
+          <TextField {...this.input('amount')} placeholder="Amount" />
+          <button onClick={this.performValidation.bind(this)}>Validate</button>
+        </div>
+      );
+    }
+  }
+`], ['Page.jsx', `
+  import React, { Component } from 'react';
+  import Form7 from './Form7';
+
+  class Page extends Component {
+    state = {
+      form: {}
+    };
+
+    render() {
+      return (
+        <Form7
+          attrs={this.state.form}
+          onChange={(form) => this.setState({ form })}
+          validateOnChange
+        />
+      );
+    }
+  }
+`]];
+
 export default class Form7 extends Form {
+  static showErrors = true;
   static title = 'Predefined Validation';
   static description = dedent`
     In this example form defines simple validation rules as Form's static
@@ -19,60 +77,7 @@ export default class Form7 extends Form {
     Also note that with predefined validations \`'validateOnChange'\` property may
     take place, which is enabled for the form in this example.
   `;
-  static source = `
-    // read about those setup components at the beginning of examples
-    import Form, { TextField, Select } from 'form';
-
-    class Form7 extends Form {
-      static validations = {
-        presence(value) { if (!value) return 'cannot be blank'; },
-        email(value) {
-          if (value && !/^[\w\d\.]+@[\w\d]+\.[\w\d]{2,}$/.test(value)) {
-            return 'should be email';
-          }
-        },
-        numericality(value, options = {}) {
-          const { greaterThan } = options;
-
-          if (!value) return null;
-          if (isNaN(+value)) return 'should be a number';
-          if (typeof greaterThan != undefined && +value <= greaterThan) return \`should be greater than \${greaterThan}\`;
-        }
-      };
-
-      validations = {
-        email: ['presence', 'email'],
-        amount: { presence: true, numericality: { greaterThan: 10 } }
-      };
-
-      render() {
-        return (
-          <div>
-            <TextField {...this.input('email')} placeholder="Email" />
-            <TextField {...this.input('amount')} placeholder="Amount" />
-            <button onClick={this.performValidation.bind(this)}>Validate</button>
-          </div>
-        );
-      }
-    }
-
-    class Container extends Component {
-      state = {
-        form: {}
-      };
-
-      render() {
-        return (
-          <Form7
-            attrs={this.state.form}
-            errors={this.state.errors}
-            onChange={(form, errors) => this.setState({ form, errors })}
-            validateOnChange
-          />
-        );
-      }
-    }
-  `;
+  static source = SOURCE;
 
   static validations = {
     presence(value) { if (!value) return 'cannot be blank'; },
@@ -96,10 +101,8 @@ export default class Form7 extends Form {
   };
 
   render() {
-    return (
+    return super.render(
       <div>
-        {this.renderExample()}
-
         <TextField {...this.input('email')} placeholder="Email" />
         <TextField {...this.input('amount')} placeholder="Amount" />
         <button onClick={this.performValidation.bind(this)}>Validate</button>

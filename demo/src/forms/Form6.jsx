@@ -2,7 +2,62 @@ import React from 'react';
 import dedent from 'dedent-js';
 import Form, { TextField } from '../form';
 
+const SOURCE = [['Form6.jsx', `
+  // read about those setup components at the beginning of examples
+  import Form, { TextField } from 'form';
+
+  class Form6 extends Form {
+    validate() {
+      const errors = {
+        firstName: 'is always invalid'
+      };
+
+      if (Math.random() < 0.5) {
+        errors.lastName = 'is invalid this time';
+      }
+
+      if (!/^A/.test(this.get('address.street'))) {
+        errors['address.street'] = 'should begin with A';
+      }
+
+      return errors;
+    }
+
+    render() {
+      return (
+        <div>
+          <TextField {...this.input('firstName')} placeholder="First Name" />
+          <TextField {...this.input('lastName')} placeholder="Last Name" />
+          <TextField {...this.input('address.street')} placeholder="Street (nested field)" />
+
+          <button onClick={this.performValidation.bind(this)}>Validate</button>
+        </div>
+      );
+    }
+  }
+`], ['Page.jsx', `
+  import React, { Component } from 'react';
+  import Form6 from './Form6';
+
+  class Page extends Component {
+    state = {
+      form: {}
+    };
+
+    render() {
+      return (
+        <Form6
+          attrs={this.state.form}
+          errors={this.state.errors}
+          onChange={(form, errors) => this.setState({ form, errors })}
+        />
+      );
+    }
+  }
+`]];
+
 export default class Form6 extends Form {
+  static showErrors = true;
   static title = 'Generic Validation';
   static description = dedent`
     With no predefined validations, form's \`#performValidation\` method calls
@@ -15,56 +70,7 @@ export default class Form6 extends Form {
     - \`street\`, which is nested under \`'address'\` property is invalid if
       it doesn't start with 'A'
   `;
-  static source = `
-    // read about those setup components at the beginning of examples
-    import Form, { TextField } from 'form';
-
-    class Form6 extends Form {
-      validate() {
-        const errors = {
-          firstName: 'is always invalid'
-        };
-
-        if (Math.random() < 0.5) {
-          errors.lastName = 'is invalid this time';
-        }
-
-        if (!/^A/.test(this.get('address.street'))) {
-          errors['address.street'] = 'should begin with A';
-        }
-
-        return errors;
-      }
-
-      render() {
-        return (
-          <div>
-            <TextField {...this.input('firstName')} placeholder="First Name" />
-            <TextField {...this.input('lastName')} placeholder="Last Name" />
-            <TextField {...this.input('address.street')} placeholder="Street (nested field)" />
-
-            <button onClick={this.performValidation.bind(this)}>Validate</button>
-          </div>
-        );
-      }
-    }
-
-    class Container extends Component {
-      state = {
-        form: {}
-      };
-
-      render() {
-        return (
-          <Form6
-            attrs={this.state.form}
-            errors={this.state.errors}
-            onChange={(form, errors) => this.setState({ form, errors })}
-          />
-        );
-      }
-    }
-  `;
+  static source = SOURCE;
 
   validate() {
     const errors = {
@@ -83,10 +89,8 @@ export default class Form6 extends Form {
   }
 
   render() {
-    return (
+    return super.render(
       <div>
-        {this.renderExample()}
-
         <TextField {...this.input('firstName')} placeholder="First Name" />
         <TextField {...this.input('lastName')} placeholder="Last Name" />
         <TextField {...this.input('address.street')} placeholder="Street (nested field)" />

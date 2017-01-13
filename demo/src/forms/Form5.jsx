@@ -2,6 +2,45 @@ import React from 'react';
 import dedent from 'dedent-js';
 import Form, { TextField, Select } from '../form';
 
+const SOURCE = [['ItemForm.jsx', `
+  // read about those setup components at the beginning of examples
+  import Form, { TextField, Select } from 'form';
+
+  class ItemForm extends Form {
+    render() {
+      return (
+        <div>
+          <Select {...this.input('amount')} options={[10, 50, 100]} includeBlank />
+          <TextField {...this.input('comment')} placeholder="Comment" />
+        </div>
+      );
+    }
+  }
+`], ['Form5.jsx', `
+  // read about those setup components at the beginning of examples
+  import Form, { TextField } from 'form';
+  import ItemForm from './ItemForm';
+
+  class Form5 extends Form {
+    render() {
+      return (
+        <div>
+          <TextField {...this.$('firstName')} placeholder="Full Name" />
+
+          {this.mapIn('items', (item, i) =>
+            <div key={i}>
+              <ItemForm attrs={item} onChange={(form) => this.merge(\`items.\${i}\`, form)} />
+              <button onClick={() => this.spliceIn('items', i)}>X</button>
+            </div>
+          )}
+
+          <button onClick={() => this.pushIn('items', {})}>Add Item</button>
+        </div>
+      );
+    }
+  }
+`]];
+
 class ItemForm extends Form {
   render() {
     return (
@@ -23,46 +62,11 @@ export default class Form5 extends Form {
     helper methods to iterate over it's items for rendering subforms, dynamically
     add and remove items.
   `;
-  static source = `
-    // read about those setup components at the beginning of examples
-    import Form, { TextField, Select } from 'form';
-
-    class ItemForm extends Form {
-      render() {
-        return (
-          <div>
-            <Select {...this.input('amount')} options={[10, 50, 100]} includeBlank />
-            <TextField {...this.input('comment')} placeholder="Comment" />
-          </div>
-        );
-      }
-    }
-
-    class Form5 extends Form {
-      render() {
-        return (
-          <div>
-            <TextField {...this.$('firstName')} placeholder="Full Name" />
-
-            {this.mapIn('items', (item, i) =>
-              <div key={i}>
-                <ItemForm attrs={item} onChange={(form) => this.merge(\`items.\${i}\`, form)} />
-                <button onClick={() => this.spliceIn('items', i)}>X</button>
-              </div>
-            )}
-
-            <button onClick={() => this.pushIn('items', {})}>Add Item</button>
-          </div>
-        );
-      }
-    }
-  `;
+  static source = SOURCE;
 
   render() {
-    return (
+    return super.render(
       <div>
-        {this.renderExample()}
-
         <TextField {...this.$('fullName')} placeholder="Full Name" />
 
         {this.mapIn('items', (item, i) =>
