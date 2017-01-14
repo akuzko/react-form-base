@@ -51,5 +51,8 @@
   },
   "dependencies": {
     "lodash": "^4.16.4"
+  },
+  "peerDependencies": {
+    "react": ">= 15.0.0"
   }
 }

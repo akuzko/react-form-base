@@ -6,7 +6,8 @@
     "dedent-js": "^1.0.1",
     "marked": "^0.3.6",
     "react": "^15.3.2",
-    "react-dom": "^15.4.1"
+    "react-dom": "^15.4.1",
+    "react-syntax-highlighter": "^4.0.1"
   },
   "devDependencies": {
     "autoprefixer": "^6.6.1",

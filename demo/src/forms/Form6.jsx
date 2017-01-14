@@ -46,11 +46,7 @@ const SOURCE = [['Form6.jsx', `
 
     render() {
       return (
-        <Form6
-          attrs={this.state.form}
-          errors={this.state.errors}
-          onChange={(form, errors) => this.setState({ form, errors })}
-        />
+        <Form6 attrs={this.state.form} onChange={(form) => this.setState({ form })} />
       );
     }
   }

@@ -1,4 +1,6 @@
 import React, { PropTypes, Component } from 'react';
+import SyntaxHighlighter from 'react-syntax-highlighter';
+import { docco } from 'react-syntax-highlighter/dist/styles';
 
 export default class Source extends Component {
   static propTypes = {
@@ -24,7 +26,7 @@ export default class Source extends Component {
           <div>{ title }</div>
         </div>
         <div style={{ maxHeight: 400, overflow: 'auto' }} hidden={!this.state.open}>
-          <pre>{ children }</pre>
+          <SyntaxHighlighter language='javascript' style={docco}>{ children }</SyntaxHighlighter>
         </div>
       </div>
     );

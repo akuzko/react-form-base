@@ -41,16 +41,6 @@ TextField.propTypes = {
 };
 ```
 
-#### Form's props
-
-| Prop Name             | Spec                                  | Description |
-|-----------------------|---------------------------------------|-------------|
-| `attrs`               | `PropTypes.object.isRequired`         | Form's attributes - the values of form's inputs |
-| `onChange`            | `PropTypes.func`                      | A callback that is called whenever form's input changes it's value. Form's `attrs` are passed to it. Typically has a form of `(formAttrs) => this.setState({ formAttrs })` |
-| `clearErrorsOnChange` | `PropTypes.bool`, defaults to `true`  | If input has an error on it and this property is enabled, error will be cleared when input changes its value |
-| `validateOnChange`    | `PropTypes.bool`, defaults to `false` | If form has input validations defined, and validation routines were called with unsuccessful result, enabling this property will re-validate input when its value changes |
-| `onRequestSave`       | `PropTypes.func`                      | This callback is called in `Form#save` method, passing form's `attrs` and form object itself to it |
-
 ### Form Usage
 
 Most of form use-cases with examples are revealed in **Demo Application** (currently
@@ -194,6 +184,16 @@ class MyForm extends Form {
 - `getErr(name)` - returns an error for an input with a given `name`.
 - `setErrors(errors)` - sets `errors` (object) as form's errors.
 - `save()` - calls `this.props.onRequestSave(this.get(), this);`
+
+#### Form's props
+
+| Prop Name             | Spec                                  | Description |
+|-----------------------|---------------------------------------|-------------|
+| `attrs`               | `PropTypes.object.isRequired`         | Form's attributes - the values of form's inputs |
+| `onChange`            | `PropTypes.func`                      | A callback that is called whenever form's input changes it's value. Form's `attrs` are passed to it. Typically has a form of `(formAttrs) => this.setState({ formAttrs })` |
+| `clearErrorsOnChange` | `PropTypes.bool`, defaults to `true`  | If input has an error on it and this property is enabled, error will be cleared when input changes its value |
+| `validateOnChange`    | `PropTypes.bool`, defaults to `false` | If form has input validations defined, and validation routines were called with unsuccessful result, enabling this property will re-validate input when its value changes |
+| `onRequestSave`       | `PropTypes.func`                      | This callback is called in `Form#save` method, passing form's `attrs` and form object itself to it |
 
 ### Form Container
 
