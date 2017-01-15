@@ -1,0 +1,40 @@
+.form-control {
+  width: 100%;
+  min-height: 40px;
+  border: 1px solid #bbb;
+  font-size: 16px;
+  line-height: 1;
+  padding: 12px 15px;
+  background: #fff;
+  box-shadow: none;
+}
+
+.btn {
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 16px;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  text-align: center;
+  border-radius: 2px;
+
+  &:focus {
+    outline: none;
+  }
+
+  &.green {
+    background: #1e824c
+  }
+}
+
+.error {
+  position: absolute;
+  font-size: 14px;
+  color: #db0a5b;
+}
+
+.bordered-form-item {
+  border-left: 4px solid #3a539b;
+  padding-left: 20px;
+}

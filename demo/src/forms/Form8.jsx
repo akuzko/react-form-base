@@ -131,9 +131,11 @@ class ItemForm extends BaseForm {
 
   render() {
     return (
-      <div>
-        <TextField {...this.$('description')} placeholder="Description" />
-        <TextField {...this.$('amount')} placeholder="Amount" />
+      <div className='flex-item mr-20'>
+        <div className='mb-20'>
+          <TextField className='form-control' {...this.$('description')} placeholder="Description" />
+        </div>
+        <TextField className='form-control' {...this.$('amount')} placeholder="Amount" />
       </div>
     );
   }
@@ -178,29 +180,45 @@ export default class Form8 extends BaseForm {
   }
 
   render() {
+    const deleteIcon = (
+      <svg className='delete-icon' viewBox="0 0 44.2 44.2">
+        <path d="M15.5 29.5c-0.2 0-0.4-0.1-0.5-0.2 -0.3-0.3-0.3-0.8 0-1.1l13.2-13.2c0.3-0.3 0.8-0.3 1.1 0s0.3 0.8 0 1.1L16.1 29.2C15.9 29.4 15.7 29.5 15.5 29.5z"/>
+        <path d="M28.7 29.5c-0.2 0-0.4-0.1-0.5-0.2L15 16.1c-0.3-0.3-0.3-0.8 0-1.1s0.8-0.3 1.1 0l13.2 13.2c0.3 0.3 0.3 0.8 0 1.1C29.1 29.4 28.9 29.5 28.7 29.5z"/>
+        <path d="M22.1 44.2C9.9 44.2 0 34.3 0 22.1 0 9.9 9.9 0 22.1 0S44.2 9.9 44.2 22.1 34.3 44.2 22.1 44.2zM22.1 1.5C10.8 1.5 1.5 10.8 1.5 22.1s9.3 20.6 20.6 20.6 20.6-9.2 20.6-20.6S33.5 1.5 22.1 1.5z"/>
+      </svg>
+    );
+
     return super.render(
       <div>
-        <TextField {...this.input('email')} placeholder="Email" />
+        <div className='mb-20'>
+          <TextField className='form-control' {...this.input('email')} placeholder="Email" />
+        </div>
 
         {this.mapExtraIn('items', (item, i) =>
           <div key={i}>
-            <TextField {...this.$(`items.${i}.name`)} placeholder="Name" />
+            <div className='mb-20'>
+              <TextField className='form-control' {...this.$(`items.${i}.name`)} placeholder="Name" />
+            </div>
 
             {this.get(`items.${i}.name`) &&
-              <div>
+              <div className='horizontal-container center bordered-form-item mb-20'>
                 <ItemForm
                   ref={`itemForm${i}`}
                   attrs={item}
                   onChange={(item) => this.merge(`items.${i}`, item)}
                   validateOnChange
                 />
-                <button onClick={() => this.spliceIn('items', i)}>X</button>
+                <div className='pointer' onClick={() => this.spliceIn('items', i)}>
+                  { deleteIcon }
+                </div>
               </div>
             }
           </div>
         )}
 
-        <button onClick={this.performValidation.bind(this)}>Validate</button>
+        <div className='text-right'>
+          <button className='btn green' onClick={this.performValidation.bind(this)}>Validate</button>
+        </div>
       </div>
     );
   }

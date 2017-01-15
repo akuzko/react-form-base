@@ -1,0 +1,13 @@
+.horizontal-container {
+  display: flex;
+  flex-direction: row;
+
+  &.center {
+    align-items: center;
+  }
+}
+
+.flex-item {
+  flex: 1;
+  min-width: 0;
+}

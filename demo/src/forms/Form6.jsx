@@ -87,11 +87,19 @@ export default class Form6 extends Form {
   render() {
     return super.render(
       <div>
-        <TextField {...this.input('firstName')} placeholder="First Name" />
-        <TextField {...this.input('lastName')} placeholder="Last Name" />
-        <TextField {...this.input('address.street')} placeholder="Street (nested field)" />
+        <div className='mb-20'>
+          <TextField className='form-control' {...this.input('firstName')} placeholder="First Name" />
+        </div>
+        <div className='mb-20'>
+          <TextField className='form-control' {...this.input('lastName')} placeholder="Last Name" />
+        </div>
+        <div className='mb-20'>
+          <TextField className='form-control' {...this.input('address.street')} placeholder="Street (nested field)" />
+        </div>
 
-        <button onClick={this.performValidation.bind(this)}>Validate</button>
+        <div className='text-right'>
+          <button className='btn green' onClick={this.performValidation.bind(this)}>Validate</button>
+        </div>
       </div>
     );
   }

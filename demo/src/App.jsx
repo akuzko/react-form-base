@@ -17,35 +17,29 @@ export default class App extends Component {
 
   render() {
     return (
-      <div>
-        <div style={{ float: 'left', width: '25%' }}>
-          <div><a href="#form1">{Forms.Form1.title}</a></div>
-          <div><a href="#form2">{Forms.Form2.title}</a></div>
-          <div><a href="#form3">{Forms.Form3.title}</a></div>
-          <div><a href="#form4">{Forms.Form4.title}</a></div>
-          <div><a href="#form5">{Forms.Form5.title}</a></div>
-          <div><a href="#form6">{Forms.Form6.title}</a></div>
-          <div><a href="#form7">{Forms.Form7.title}</a></div>
-          <div><a href="#form8">{Forms.Form8.title}</a></div>
+      <div className="container mt-20 mb-20">
+        <div className="horizontal-container">
+          <div className="navbar">
+            <a href="#form1">{Forms.Form1.title}</a>
+            <a className="active" href="#form2">{Forms.Form2.title}</a>
+            <a href="#form3">{Forms.Form3.title}</a>
+            <a href="#form4">{Forms.Form4.title}</a>
+            <a href="#form5">{Forms.Form5.title}</a>
+            <a href="#form6">{Forms.Form6.title}</a>
+            <a href="#form7">{Forms.Form7.title}</a>
+            <a href="#form8">{Forms.Form8.title}</a>
+          </div>
+          <div className="content paper flex-item p-20">
+            <div id="form1"><Forms.Form1 {...this.formProps('form1')} /></div>
+            <div id="form2"><Forms.Form2 {...this.formProps('form2')} /></div>
+            <div id="form3"><Forms.Form3 {...this.formProps('form3')} /></div>
+            <div id="form4"><Forms.Form4 {...this.formProps('form4')} /></div>
+            <div id="form5"><Forms.Form5 {...this.formProps('form5')} /></div>
+            <div id="form6"><Forms.Form6 {...this.formProps('form6')} /></div>
+            <div id="form7"><Forms.Form7 {...this.formProps('form7')} validateOnChange /></div>
+            <div id="form8"><Forms.Form8 {...this.formProps('form8')} validateOnChange /></div>
+          </div>
         </div>
-        <div style={{ float: 'right', width: '75%' }}>
-          <div id="form1"><Forms.Form1 {...this.formProps('form1')} /></div>
-          <hr />
-          <div id="form2"><Forms.Form2 {...this.formProps('form2')} /></div>
-          <hr />
-          <div id="form3"><Forms.Form3 {...this.formProps('form3')} /></div>
-          <hr />
-          <div id="form4"><Forms.Form4 {...this.formProps('form4')} /></div>
-          <hr />
-          <div id="form5"><Forms.Form5 {...this.formProps('form5')} /></div>
-          <hr />
-          <div id="form6"><Forms.Form6 {...this.formProps('form6')} /></div>
-          <hr />
-          <div id="form7"><Forms.Form7 {...this.formProps('form7')} validateOnChange /></div>
-          <hr />
-          <div id="form8"><Forms.Form8 {...this.formProps('form8')} validateOnChange /></div>
-        </div>
-        <div style={{ clear: 'both' }} />
       </div>
     );
   }

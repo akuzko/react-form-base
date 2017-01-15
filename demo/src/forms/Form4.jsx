@@ -49,9 +49,9 @@ export default class Form4 extends Form {
   render() {
     return super.render(
       <div>
-        <TextField {...this.input('fullName')} placeholder="Full Name" />
+        <TextField className='form-control mb-20' {...this.input('fullName')} placeholder="Full Name" />
         {this.mapExtraIn('favoriteLanguages', (_value, i) =>
-          <TextField key={i} {...this.input(`favoriteLanguages.${i}`)(this.$language, i)} placeholder={ `Language ${i + 1}` } />
+          <TextField className='form-control mb-20' key={i} {...this.input(`favoriteLanguages.${i}`)(this.$language, i)} placeholder={ `Language ${i + 1}` } />
         )}
       </div>
     );

@@ -49,8 +49,8 @@ export default class Form3 extends Form {
   render() {
     return super.render(
       <div>
-        <Select {...this.$('item')(this.$item)} options={items} includeBlank />
-        <Select {...this.$('amount')} options={amounts} includeBlank />
+        <Select className='form-control mb-20' {...this.$('item')(this.$item)} options={items} includeBlank />
+        <Select className='form-control mb-20' {...this.$('amount')} options={amounts} includeBlank />
       </div>
     );
   }

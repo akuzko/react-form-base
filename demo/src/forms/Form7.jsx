@@ -103,9 +103,15 @@ export default class Form7 extends Form {
   render() {
     return super.render(
       <div>
-        <TextField {...this.input('email')} placeholder="Email" />
-        <TextField {...this.input('amount')} placeholder="Amount" />
-        <button onClick={this.performValidation.bind(this)}>Validate</button>
+        <div className='mb-20'>
+          <TextField className='form-control' {...this.input('email')} placeholder="Email" />
+        </div>
+        <div className='mb-20'>
+          <TextField className='form-control' {...this.input('amount')} placeholder="Amount" />
+        </div>
+        <div className='text-right'>
+          <button className='btn green' onClick={this.performValidation.bind(this)}>Validate</button>
+        </div>
       </div>
     );
   }
