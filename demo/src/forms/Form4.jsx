@@ -14,12 +14,12 @@ const SOURCE = [['Form4.jsx', `
       }
     }
 
-    render() {
+    $render($) {
       return (
         <div>
-          <TextField {...this.input('fullName')} placeholder="Full Name" />
+          <TextField {...$('fullName')} placeholder="Full Name" />
           {this.mapExtraIn('favoriteLanguages', (_value, i) =>
-            <TextField key={i} {...this.input(\`favoriteLanguages.\${i}\`)(this.$language, i)} placeholder={ \`Language \${i + 1}\` } />
+            <TextField key={i} {...$(\`favoriteLanguages.\${i}\`)(this.$language, i)} placeholder={ \`Language \${i + 1}\` } />
           )}
         </div>
       );
@@ -46,12 +46,12 @@ export default class Form4 extends Form {
     }
   }
 
-  render() {
-    return super.render(
+  $render($) {
+    return (
       <div>
-        <TextField className='form-control mb-20' {...this.input('fullName')} placeholder="Full Name" />
+        <TextField className='form-control mb-20' {...$('fullName')} placeholder="Full Name" />
         {this.mapExtraIn('favoriteLanguages', (_value, i) =>
-          <TextField className='form-control mb-20' key={i} {...this.input(`favoriteLanguages.${i}`)(this.$language, i)} placeholder={ `Language ${i + 1}` } />
+          <TextField className='form-control mb-20' key={i} {...$(`favoriteLanguages.${i}`)(this.$language, i)} placeholder={ `Language ${i + 1}` } />
         )}
       </div>
     );

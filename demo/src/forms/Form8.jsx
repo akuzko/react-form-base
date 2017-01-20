@@ -27,11 +27,11 @@ const SOURCE = [['BaseForm.jsx', `
       }]
     };
 
-    render() {
+    $render($) {
       return (
         <div>
-          <TextField {...this.$('description')} placeholder="Description" />
-          <TextField {...this.$('amount')} placeholder="Amount" />
+          <TextField {...$('description')} placeholder="Description" />
+          <TextField {...$('amount')} placeholder="Amount" />
         </div>
       );
     }
@@ -61,12 +61,12 @@ const SOURCE = [['BaseForm.jsx', `
       return validate.errors;
     }
 
-    render() {
+    $render($) {
       return (
         <div>
           <TextField {...this.input('email')} placeholder="Email" />
 
-          {this.mapExtraIn('items', (item, i) =>
+          {this.mapExtraIn('items', (_item, i) =>
             <div key={i}>
               <TextField {...this.$(\`items.\${i}.name\`)} placeholder="Name" />
 
@@ -74,8 +74,7 @@ const SOURCE = [['BaseForm.jsx', `
                 <div>
                   <ItemForm
                     ref={\`itemForm\${i}\`}
-                    attrs={item}
-                    onChange={(item) => this.merge(\`items.\${i}\`, item)}
+                    {...$.nested(\`items.\${i}\`)}
                     validateOnChange
                   />
                   <button onClick={() => this.spliceIn('items', i)}>X</button>
@@ -129,13 +128,13 @@ class ItemForm extends BaseForm {
     }]
   };
 
-  render() {
+  $render($) {
     return (
       <div className='flex-item mr-20'>
         <div className='mb-20'>
-          <TextField className='form-control' {...this.$('description')} placeholder="Description" />
+          <TextField className='form-control' {...$('description')} placeholder="Description" />
         </div>
-        <TextField className='form-control' {...this.$('amount')} placeholder="Amount" />
+        <TextField className='form-control' {...$('amount')} placeholder="Amount" />
       </div>
     );
   }
@@ -179,7 +178,7 @@ export default class Form8 extends BaseForm {
     return validate.errors;
   }
 
-  render() {
+  $render($) {
     const deleteIcon = (
       <svg className='delete-icon' viewBox="0 0 44.2 44.2">
         <path d="M15.5 29.5c-0.2 0-0.4-0.1-0.5-0.2 -0.3-0.3-0.3-0.8 0-1.1l13.2-13.2c0.3-0.3 0.8-0.3 1.1 0s0.3 0.8 0 1.1L16.1 29.2C15.9 29.4 15.7 29.5 15.5 29.5z"/>
@@ -188,24 +187,23 @@ export default class Form8 extends BaseForm {
       </svg>
     );
 
-    return super.render(
+    return (
       <div>
         <div className='mb-20'>
-          <TextField className='form-control' {...this.input('email')} placeholder="Email" />
+          <TextField className='form-control' {...$('email')} placeholder="Email" />
         </div>
 
-        {this.mapExtraIn('items', (item, i) =>
+        {this.mapExtraIn('items', (_item, i) =>
           <div key={i}>
             <div className='mb-20'>
-              <TextField className='form-control' {...this.$(`items.${i}.name`)} placeholder="Name" />
+              <TextField className='form-control' {...$(`items.${i}.name`)} placeholder="Name" />
             </div>
 
             {this.get(`items.${i}.name`) &&
               <div className='horizontal-container center bordered-form-item mb-20'>
                 <ItemForm
                   ref={`itemForm${i}`}
-                  attrs={item}
-                  onChange={(item) => this.merge(`items.${i}`, item)}
+                  {...$.nested(`items.${i}`)}
                   validateOnChange
                 />
                 <div className='pointer' onClick={() => this.spliceIn('items', i)}>

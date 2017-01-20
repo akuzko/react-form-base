@@ -28,11 +28,12 @@ const SOURCE = [['Form7.jsx', `
       amount: { presence: true, numericality: { greaterThan: 10 } }
     };
 
-    render() {
+    $render($) {
       return (
         <div>
-          <TextField {...this.input('email')} placeholder="Email" />
-          <TextField {...this.input('amount')} placeholder="Amount" />
+          <TextField {...$('email')} placeholder="Email" />
+          <TextField {...$('amount')} placeholder="Amount" />
+
           <button onClick={this.performValidation.bind(this)}>Validate</button>
         </div>
       );
@@ -100,14 +101,14 @@ export default class Form7 extends Form {
     amount: { presence: true, numericality: { greaterThan: 10 } }
   };
 
-  render() {
-    return super.render(
+  $render($) {
+    return (
       <div>
         <div className='mb-20'>
-          <TextField className='form-control' {...this.input('email')} placeholder="Email" />
+          <TextField className='form-control' {...$('email')} placeholder="Email" />
         </div>
         <div className='mb-20'>
-          <TextField className='form-control' {...this.input('amount')} placeholder="Amount" />
+          <TextField className='form-control' {...$('amount')} placeholder="Amount" />
         </div>
         <div className='text-right'>
           <button className='btn green' onClick={this.performValidation.bind(this)}>Validate</button>

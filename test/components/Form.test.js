@@ -462,4 +462,21 @@ describe('<Form />', function() {
       });
     });
   });
+
+  describe('$render', function() {
+    beforeEach(function() {
+      TestForm = class extends Form {
+        $render($) {
+          return <Input {...$('foo')} className="foo" />;
+        }
+      };
+
+      this.wrapper = mount(<Container />);
+    });
+
+    it('works just like usual rendering', function() {
+      this.wrapper.find('.foo').simulate('change', { target: { value: 'new value' } });
+      expect(this.wrapper.state('form').foo).toEqual('new value');
+    });
+  });
 });

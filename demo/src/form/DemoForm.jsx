@@ -4,8 +4,10 @@ import Form from '../../../src';
 import { Source } from '../components';
 
 export default class DemoForm extends Form {
-  render(content) {
-    const { name, title, description, source, showErrors } = this.constructor;
+  render() {
+    const { title, description, source, showErrors } = this.constructor;
+
+    if (!title) return super.render();
 
     return (
       <div className='pb-20 mb-20 border-bottom'>
@@ -18,9 +20,9 @@ export default class DemoForm extends Form {
             )}
           </div>
           <div className='flex-item'>
-            <div>{content}</div>
+            <div>{super.render()}</div>
             <pre>Attrs: {JSON.stringify(this.props.attrs)}</pre>
-            { showErrors &&
+            {showErrors &&
               <pre>Errors: {JSON.stringify(this.state.errors)}</pre>
             }
           </div>

@@ -23,12 +23,12 @@ const SOURCE = [['Form6.jsx', `
       return errors;
     }
 
-    render() {
+    $render($) {
       return (
         <div>
-          <TextField {...this.input('firstName')} placeholder="First Name" />
-          <TextField {...this.input('lastName')} placeholder="Last Name" />
-          <TextField {...this.input('address.street')} placeholder="Street (nested field)" />
+          <TextField {...$('firstName')} placeholder="First Name" />
+          <TextField {...$('lastName')} placeholder="Last Name" />
+          <TextField {...$('address.street')} placeholder="Street (nested field)" />
 
           <button onClick={this.performValidation.bind(this)}>Validate</button>
         </div>
@@ -84,17 +84,17 @@ export default class Form6 extends Form {
     return errors;
   }
 
-  render() {
-    return super.render(
+  $render($) {
+    return (
       <div>
         <div className='mb-20'>
-          <TextField className='form-control' {...this.input('firstName')} placeholder="First Name" />
+          <TextField className='form-control' {...$('firstName')} placeholder="First Name" />
         </div>
         <div className='mb-20'>
-          <TextField className='form-control' {...this.input('lastName')} placeholder="Last Name" />
+          <TextField className='form-control' {...$('lastName')} placeholder="Last Name" />
         </div>
         <div className='mb-20'>
-          <TextField className='form-control' {...this.input('address.street')} placeholder="Street (nested field)" />
+          <TextField className='form-control' {...$('address.street')} placeholder="Street (nested field)" />
         </div>
 
         <div className='text-right'>

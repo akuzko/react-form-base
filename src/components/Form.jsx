@@ -186,6 +186,23 @@ export default class Form extends Component {
   }
 
   render() {
+    const $bound = this.$.bind(this);
+
+    Object.defineProperty($bound, 'nested', {
+      value: (name) => {
+        const result = {
+          attrs: this.get(name),
+          onChange: (form) => this.merge(name, form)
+        };
+        return result;
+      },
+      enumerable: false
+    });
+
+    return this.$render($bound);
+  }
+
+  $render() {
     return null;
   }
 };

@@ -32,7 +32,7 @@ export default class Source extends Component {
           { codeIcon }
         </div>
         <div className='source-code' hidden={!this.state.open}>
-          <SyntaxHighlighter language='javascript' style={docco}>{ children }</SyntaxHighlighter>
+          <SyntaxHighlighter language='javascript' style={docco}>{children}</SyntaxHighlighter>
         </div>
       </div>
     );

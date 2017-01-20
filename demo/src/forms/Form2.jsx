@@ -11,11 +11,11 @@ const SOURCE = [['Form2.jsx', `
       return this.set('lastName', value.toUpperCase());
     }
 
-    render() {
+    $render($) {
       return (
         <div>
-          <TextField {...this.$('firstName')} />
-          <TextField {...this.$('lastName')(this.$lastName)} />
+          <TextField {...$('firstName')} />
+          <TextField {...$('lastName')(this.$lastName)} />
         </div>
       );
     }
@@ -34,11 +34,11 @@ export default class Form2 extends Form {
     return this.set('lastName', value.toUpperCase());
   }
 
-  render() {
-    return super.render(
+  $render($) {
+    return (
       <div>
-        <TextField className='form-control mb-20' {...this.$('firstName')} placeholder="First Name" />
-        <TextField className='form-control mb-20' {...this.$('lastName')(this.$lastName)} placeholder="Last Name" />
+        <TextField className='form-control mb-20' {...$('firstName')} placeholder="First Name" />
+        <TextField className='form-control mb-20' {...$('lastName')(this.$lastName)} placeholder="Last Name" />
       </div>
     );
   }

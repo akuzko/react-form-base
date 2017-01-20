@@ -53,6 +53,7 @@
     "lodash": "^4.16.4"
   },
   "peerDependencies": {
-    "react": ">= 15.0.0"
+    "react": ">= 15.0.0",
+    "react-dom": ">= 15.0.0"
   }
 }

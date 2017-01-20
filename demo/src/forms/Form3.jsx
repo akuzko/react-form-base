@@ -17,11 +17,11 @@ const SOURCE = [['Form3.jsx', `
       });
     }
 
-    render() {
+    $render($) {
       return (
         <div>
-          <Select {...this.$('item')(this.$item)} options={items} includeBlank />
-          <Select {...this.$('amount')} options={amounts} includeBlank />
+          <Select {...$('item')(this.$item)} options={items} includeBlank />
+          <Select {...$('amount')} options={amounts} includeBlank />
         </div>
       );
     }
@@ -46,11 +46,11 @@ export default class Form3 extends Form {
     });
   }
 
-  render() {
-    return super.render(
+  $render($) {
+    return (
       <div>
-        <Select className='form-control mb-20' {...this.$('item')(this.$item)} options={items} includeBlank />
-        <Select className='form-control mb-20' {...this.$('amount')} options={amounts} includeBlank />
+        <Select className='form-control mb-20' {...$('item')(this.$item)} options={items} includeBlank />
+        <Select className='form-control mb-20' {...$('amount')} options={amounts} includeBlank />
       </div>
     );
   }

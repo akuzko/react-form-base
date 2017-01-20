@@ -7,11 +7,11 @@ const SOURCE = [['ItemForm.jsx', `
   import Form, { TextField, Select } from 'form';
 
   class ItemForm extends Form {
-    render() {
+    $render($) {
       return (
         <div>
-          <Select {...this.input('amount')} options={[10, 50, 100]} includeBlank />
-          <TextField {...this.input('comment')} placeholder="Comment" />
+          <Select {...$('amount')} options={[10, 50, 100]} includeBlank />
+          <TextField {...$('comment')} placeholder="Comment" />
         </div>
       );
     }
@@ -22,10 +22,10 @@ const SOURCE = [['ItemForm.jsx', `
   import ItemForm from './ItemForm';
 
   class Form5 extends Form {
-    render() {
+    $render($) {
       return (
         <div>
-          <TextField {...this.$('firstName')} placeholder="Full Name" />
+          <TextField {...$('firstName')} placeholder="Full Name" />
 
           {this.mapIn('items', (item, i) =>
             <div key={i}>
@@ -42,11 +42,11 @@ const SOURCE = [['ItemForm.jsx', `
 `]];
 
 class ItemForm extends Form {
-  render() {
+  $render($) {
     return (
       <div className='flex-item mr-20'>
-        <Select className='form-control mb-20' {...this.input('amount')} options={[10, 50, 100]} includeBlank />
-        <TextField className='form-control' {...this.input('comment')} placeholder="Comment" />
+        <Select className='form-control mb-20' {...$('amount')} options={[10, 50, 100]} includeBlank />
+        <TextField className='form-control' {...$('comment')} placeholder="Comment" />
       </div>
     );
   }
@@ -64,7 +64,7 @@ export default class Form5 extends Form {
   `;
   static source = SOURCE;
 
-  render() {
+  $render($) {
     const deleteIcon = (
       <svg className='delete-icon' viewBox="0 0 44.2 44.2">
         <path d="M15.5 29.5c-0.2 0-0.4-0.1-0.5-0.2 -0.3-0.3-0.3-0.8 0-1.1l13.2-13.2c0.3-0.3 0.8-0.3 1.1 0s0.3 0.8 0 1.1L16.1 29.2C15.9 29.4 15.7 29.5 15.5 29.5z"/>
@@ -73,13 +73,18 @@ export default class Form5 extends Form {
       </svg>
     );
 
-    return super.render(
+    return (
       <div>
-        <TextField className='form-control mb-20' className='form-control mb-20' {...this.$('fullName')} placeholder="Full Name" />
+        <TextField className='form-control mb-20' className='form-control mb-20' {...$('fullName')} placeholder="Full Name" />
 
-        {this.mapIn('items', (item, i) =>
+        {this.mapIn('items', (_item, i) =>
           <div className='horizontal-container center mb-20 bordered-form-item' key={i}>
-            <ItemForm attrs={item} onChange={(form) => this.merge(`items.${i}`, form)} />
+            <ItemForm {...$.nested(`items.${i}`)} />
+            {/*
+              This is the same as:
+              <ItemForm attrs={_item} onChange={(form) => this.merge(`items.${i}`, form)} />
+            */}
+
             <div className='pointer' onClick={() => this.spliceIn('items', i)}>
               { deleteIcon }
             </div>

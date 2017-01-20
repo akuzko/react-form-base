@@ -46,8 +46,8 @@ TextField.propTypes = {
 Most of form use-cases with examples are revealed in **Demo Application** (currently
 _IN PROGRESS_). Details on how to run it locally are at the end of README.
 
-Bellow you can take a glance on three main aspects of form usage: general API,
-custom on-change handlers and validation.
+Bellow you can take a glance on main aspects of form usage: general API,
+custom on-change handlers, validation and `$render` helper function.
 
 #### Basic example
 
@@ -61,6 +61,30 @@ class MyForm extends Form {
       <div>
         <TextField {...this.$('firstName')} />
         <TextField {...this.$('lastName')} />
+
+        <button onClick={this.save.bind(this)}>Save</button>
+      </div>
+    );
+  }
+}
+```
+
+#### Nested fields example
+
+```js
+import Form from 'react-form-base';
+import { TextField } from 'your-inputs'; // read on inputs in the beginning of README
+import countries from 'utils/countries'; // it's just a stub
+
+class MyForm extends Form {
+  render() {
+    return (
+      <div>
+        <TextField {...this.$('email')} />
+
+        <Select {...this.$('address.country')} options={countries} />
+        <TextField {...this.$('address.city')} />
+        <TextField {...this.$('address.streetLine')} />
 
         <button onClick={this.save.bind(this)}>Save</button>
       </div>
@@ -148,6 +172,41 @@ class MyForm extends Form {
   }
 }
 ```
+
+#### $render($) method
+
+If you don't have extra logic based on render method (such as implementing
+rendering in base form and calling `super.render(someContent)` from child
+forms), and you want to make things a little bit more DRY, you may declare
+your form's rendering using `$render` method that accepts input-generation
+function as argument. Thus, removing the `this.` prefix in inputs:
+
+```js
+class MyForm extends Form {
+  $render($) {
+    return (
+      <div>
+        <TextField {...$('firstName')} />
+        <TextField {...$('lastName')} />
+        <TextField {...$('email')} />
+      </div>
+    );
+  }
+}
+```
+
+This form of rendering declaration is also very useful when working with
+nested forms, since it has a special `nested` method that will generate
+onChange handler for nested form for you:
+
+```js
+{this.mapIn('items', (item, i) =>
+  <ItemForm key={i} {...$.nested(`items.${i}`)} />
+)}
+```
+
+Of course, since `$` is argument in this method, you may use any name for
+this variable that you find suitable.
 
 #### API and helper methods
 
