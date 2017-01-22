@@ -1,3 +1,123 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
 body {
-  background-color: white;
+  background-color: #ececec;
+  color: #000;
+  font-family: 'Lato', sans-serif;
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+ul {
+  padding-left: 40px;
+}
+
+p {
+  margin-bottom: 20px;
+
+  code {
+    font-family: monospace;
+    color: #db05ab;
+    background: #e4f1fe;
+    padding: 2px 4px;
+  }
+}
+
+.container {
+  padding: 0 15px;
+}
+
+.relative {
+  position: relative;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.paper {
+  background: #fff;
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12);
+}
+
+.navbar {
+  width: 250px;
+  position: fixed;
+
+  a {
+    position: relative;
+    display: block;
+    padding: 6px 0 6px 15px;
+    color: rgba(0, 0, 0, .6);
+    text-decoration: none;
+    transition: all .3s;
+
+    &:hover, &:focus, &.active {
+      color: #000;
+      text-decoration: none;
+    }
+
+    &.active:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      display: block;
+      height: 100%;
+      width: 4px;
+      background: #3a539b;
+    }
+  }
+}
+
+.content {
+  margin-left: 270px;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.bold-text {
+  font-weight: 600;
+}
+
+.border-bottom {
+  border-bottom: 1px solid #bdc3c7;
+}
+
+.source {
+  border: 1px solid #3a539b;
+  border-radius: 2px;
+}
+
+.source-panel {
+  line-height: 1;
+  height: 30px;
+  background: #3a539b;
+  color: #fff;
+  cursor: pointer;
+  padding: 0 15px;
+
+  .code-icon {
+    width: 24px;
+    height: 24px;
+    fill: #fff;
+  }
+}
+
+.source-code {
+  max-height: 400px;
+  overflow: auto;
+}
+
+.delete-icon {
+  width: 40px;
+  height: 40px;
+  fill: #db0a5b;
 }

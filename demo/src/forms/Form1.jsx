@@ -26,9 +26,9 @@ export default class Form1 extends Form {
   render() {
     return super.render(
       <div>
-        <TextField {...this.$('firstName')} placeholder="First Name" />
-        <TextField {...this.$('lastName')} placeholder="Last Name" />
-        <Select {...this.$('role')} options={['admin', 'employee']} includeBlank />
+        <TextField className='form-control mb-20' {...this.$('firstName')} placeholder="First Name" />
+        <TextField className='form-control mb-20' {...this.$('lastName')} placeholder="Last Name" />
+        <Select className='form-control mb-20' {...this.$('role')} options={['admin', 'employee']} includeBlank />
       </div>
     );
   }

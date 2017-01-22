@@ -37,8 +37,8 @@ export default class Form2 extends Form {
   render() {
     return super.render(
       <div>
-        <TextField {...this.$('firstName')} placeholder="First Name" />
-        <TextField {...this.$('lastName')(this.$lastName)} placeholder="Last Name" />
+        <TextField className='form-control mb-20' {...this.$('firstName')} placeholder="First Name" />
+        <TextField className='form-control mb-20' {...this.$('lastName')(this.$lastName)} placeholder="Last Name" />
       </div>
     );
   }
