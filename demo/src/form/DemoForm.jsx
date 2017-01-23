@@ -10,16 +10,16 @@ export default class DemoForm extends Form {
     if (!title) return super.render();
 
     return (
-      <div className='pb-20 mb-20 border-bottom'>
-        <div className='mb-10 bold-text'>{title}</div>
-        <div className='mb-20' dangerouslySetInnerHTML={{ __html: marked(description) }} />
-        <div className='horizontal-container'>
-          <div className='flex-item mr-20'>
-            { source.map(([title, code]) =>
+      <div className="pb-20 mb-20 border-bottom">
+        <div className="mb-10 bold-text">{title}</div>
+        <div className="mb-20" dangerouslySetInnerHTML={{ __html: marked(description) }} />
+        <div className="horizontal-container">
+          <div className="flex-item mr-20">
+            {source.map(([title, code]) =>
               <Source key={title} title={title}>{code}</Source>
             )}
           </div>
-          <div className='flex-item'>
+          <div className="flex-item">
             <div>{super.render()}</div>
             <pre>Attrs: {JSON.stringify(this.props.attrs)}</pre>
             {showErrors &&

@@ -1,104 +1,98 @@
 import React from 'react';
 import dedent from 'dedent-js';
-import Form, { TextField } from '../form';
+import Form, { TextField, Select } from '../form';
 
-const SOURCE = [['Form6.jsx', `
+const SOURCE = [['ItemForm.jsx', `
   // read about those setup components at the beginning of examples
-  import Form, { TextField } from 'form';
+  import Form, { TextField, Select } from 'form';
 
-  class Form6 extends Form {
-    validate() {
-      const errors = {
-        firstName: 'is always invalid'
-      };
-
-      if (Math.random() < 0.5) {
-        errors.lastName = 'is invalid this time';
-      }
-
-      if (!/^A/.test(this.get('address.street'))) {
-        errors['address.street'] = 'should begin with A';
-      }
-
-      return errors;
-    }
-
+  class ItemForm extends Form {
     $render($) {
       return (
         <div>
-          <TextField {...$('firstName')} placeholder="First Name" />
-          <TextField {...$('lastName')} placeholder="Last Name" />
-          <TextField {...$('address.street')} placeholder="Street (nested field)" />
-
-          <button onClick={this.performValidation.bind(this)}>Validate</button>
+          <Select {...$('amount')} options={[10, 50, 100]} includeBlank />
+          <TextField {...$('comment')} placeholder="Comment" />
         </div>
       );
     }
   }
-`], ['Page.jsx', `
-  import React, { Component } from 'react';
-  import Form6 from './Form6';
+`], ['Form6.jsx', `
+  // read about those setup components at the beginning of examples
+  import Form, { TextField } from 'form';
+  import ItemForm from './ItemForm';
 
-  class Page extends Component {
-    state = {
-      form: {}
-    };
-
-    render() {
+  class Form6 extends Form {
+    $render($) {
       return (
-        <Form6 attrs={this.state.form} onChange={(form) => this.setState({ form })} />
+        <div>
+          <TextField {...$('firstName')} placeholder="Full Name" />
+
+          {this.mapIn('items', (item, i) =>
+            <div key={i}>
+              <ItemForm attrs={item} onChange={(form) => this.merge(\`items.\${i}\`, form)} />
+              <button onClick={() => this.spliceIn('items', i)}>X</button>
+            </div>
+          )}
+
+          <button onClick={() => this.pushIn('items', {})}>Add Item</button>
+        </div>
       );
     }
   }
 `]];
 
-export default class Form6 extends Form {
-  static showErrors = true;
-  static title = 'Generic Validation';
-  static description = dedent`
-    With no predefined validations, form's \`#performValidation\` method calls
-    \`#validate\` method and uses it's return value to set form errors that
-    will be passed to inputs on next rendering.
+class ItemForm extends Form {
+  $render($) {
+    return (
+      <div className='flex-item mr-20'>
+        <Select className='form-control mb-20' {...$('amount')} options={[10, 50, 100]} includeBlank />
+        <TextField className='form-control' {...$('comment')} placeholder="Comment" />
+      </div>
+    );
+  }
+}
 
-    In this example form validates it's inputs in following way:
-    - \`firstName\` is always invalid
-    - \`lastName\` is invalid in 50% of validations being run
-    - \`street\`, which is nested under \`'address'\` property is invalid if
-      it doesn't start with 'A'
+export default class Form6 extends Form {
+  static title = 'Nested Forms';
+  static description = dedent`
+    This example shows how top-level form can use nested forms to render and
+    manipulate single set of attributes.
+
+    In this example, top-level form uses \`mapIn\`, \`pushIn\` and \`spliceIn\`
+    helper methods to iterate over it's items for rendering subforms, dynamically
+    add and remove items.
   `;
   static source = SOURCE;
 
-  validate() {
-    const errors = {
-      firstName: 'is always invalid'
-    };
-
-    if (Math.random() < 0.5) {
-      errors['lastName'] = 'is invalid this time';
-    }
-
-    if (!/^A/.test(this.get('address.street'))) {
-      errors['address.street'] = 'should begin with A';
-    }
-
-    return errors;
-  }
-
   $render($) {
+    const deleteIcon = (
+      <svg className='delete-icon' viewBox="0 0 44.2 44.2">
+        <path d="M15.5 29.5c-0.2 0-0.4-0.1-0.5-0.2 -0.3-0.3-0.3-0.8 0-1.1l13.2-13.2c0.3-0.3 0.8-0.3 1.1 0s0.3 0.8 0 1.1L16.1 29.2C15.9 29.4 15.7 29.5 15.5 29.5z"/>
+        <path d="M28.7 29.5c-0.2 0-0.4-0.1-0.5-0.2L15 16.1c-0.3-0.3-0.3-0.8 0-1.1s0.8-0.3 1.1 0l13.2 13.2c0.3 0.3 0.3 0.8 0 1.1C29.1 29.4 28.9 29.5 28.7 29.5z"/>
+        <path d="M22.1 44.2C9.9 44.2 0 34.3 0 22.1 0 9.9 9.9 0 22.1 0S44.2 9.9 44.2 22.1 34.3 44.2 22.1 44.2zM22.1 1.5C10.8 1.5 1.5 10.8 1.5 22.1s9.3 20.6 20.6 20.6 20.6-9.2 20.6-20.6S33.5 1.5 22.1 1.5z"/>
+      </svg>
+    );
+
     return (
       <div>
-        <div className='mb-20'>
-          <TextField className='form-control' {...$('firstName')} placeholder="First Name" />
-        </div>
-        <div className='mb-20'>
-          <TextField className='form-control' {...$('lastName')} placeholder="Last Name" />
-        </div>
-        <div className='mb-20'>
-          <TextField className='form-control' {...$('address.street')} placeholder="Street (nested field)" />
-        </div>
+        <TextField className='form-control mb-20' className='form-control mb-20' {...$('fullName')} placeholder="Full Name" />
+
+        {this.mapIn('items', (_item, i) =>
+          <div className='horizontal-container center mb-20 bordered-form-item' key={i}>
+            <ItemForm {...$.nested(`items.${i}`)} />
+            {/*
+              This is the same as:
+              <ItemForm attrs={_item} onChange={(form) => this.merge(`items.${i}`, form)} />
+            */}
+
+            <div className='pointer' onClick={() => this.spliceIn('items', i)}>
+              { deleteIcon }
+            </div>
+          </div>
+        )}
 
         <div className='text-right'>
-          <button className='btn green' onClick={this.performValidation.bind(this)}>Validate</button>
+          <button className='btn green mb-20' onClick={() => this.pushIn('items', {})}>Add Item</button>
         </div>
       </div>
     );

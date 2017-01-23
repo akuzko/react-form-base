@@ -1,21 +1,21 @@
 import React from 'react';
 import dedent from 'dedent-js';
-import Form, { TextField } from '../form';
+import Form, { TextField, Select } from '../form';
 
 const SOURCE = [['Form2.jsx', `
   // read about those setup components at the beginning of examples
-  import Form, { TextField } from 'form';
+  import Form, { TextField, Select } from 'form';
 
   class Form2 extends Form {
-    $lastName(value) {
-      return this.set('lastName', value.toUpperCase());
-    }
-
     $render($) {
       return (
         <div>
-          <TextField {...$('firstName')} />
-          <TextField {...$('lastName')(this.$lastName)} />
+          <TextField {...$('email')} placeholder="Email" />
+
+          <Select {...$('address.country')} options={['Country 1', 'Country 2']} />
+          <TextField {...$('address.city')} placeholder="City" />
+          <TextField {...$('address.streetLine')} placeholder="Street Line" />
+          <TextField {...$('address.zip')} placeholder="Zip" />
         </div>
       );
     }
@@ -23,22 +23,22 @@ const SOURCE = [['Form2.jsx', `
 `]];
 
 export default class Form2 extends Form {
-  static title = 'Usage of custom onChange handler';
+  static title = 'Nested Attributes';
   static description = dedent`
-    This form uses custom onChange handler (named \`$lastName\`) for 'lastName'
-    field changes.
+    In this form our working object has \`email\` string property and \`address\`
+    object with it's own properties all handled in one form.
   `;
   static source = SOURCE;
-
-  $lastName(value) {
-    return this.set('lastName', value.toUpperCase());
-  }
 
   $render($) {
     return (
       <div>
-        <TextField className='form-control mb-20' {...$('firstName')} placeholder="First Name" />
-        <TextField className='form-control mb-20' {...$('lastName')(this.$lastName)} placeholder="Last Name" />
+        <TextField {...$('email')} className="form-control mb-20" placeholder="Email" />
+
+        <Select {...$('address.country')} className="form-control mb-20" options={['Country 1', 'Country 2']} includeBlank="Select Country..." />
+        <TextField {...$('address.city')} className="form-control mb-20" placeholder="City" />
+        <TextField {...$('address.streetLine')} className="form-control mb-20" placeholder="Street Line" />
+        <TextField {...$('address.zip')} className="form-control mb-20" placeholder="Zip" />
       </div>
     );
   }

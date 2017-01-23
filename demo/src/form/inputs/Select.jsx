@@ -7,7 +7,7 @@ export default function Select(props) {
     <div>
       <select value={value || ''} onChange={(e) => onChange(e.target.value)} {...rest}>
         {includeBlank &&
-          <option value="">None</option>
+          <option value="">{typeof includeBlank === 'string' ? includeBlank : 'None'}</option>
         }
         {options.map((option, i) => {
           const { value, label } = typeof option === 'object' ? option : { value: option, label: option };
@@ -33,7 +33,7 @@ Select.propTypes = {
       value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
       label: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     })])).isRequired,
-  includeBlank: PropTypes.bool
+  includeBlank: PropTypes.oneOfType([PropTypes.bool, PropTypes.string])
 };
 
 Select.defaultProps = {

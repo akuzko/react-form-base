@@ -7,32 +7,28 @@ const SOURCE = [['Form7.jsx', `
   import Form, { TextField } from 'form';
 
   class Form7 extends Form {
-    static validations = {
-      presence(value) { if (!value) return 'cannot be blank'; },
-      email(value) {
-        if (value && !/^[\w\d\.]+@[\w\d]+\.[\w\d]{2,}$/.test(value)) {
-          return 'should be email';
-        }
-      },
-      numericality(value, options = {}) {
-        const { greaterThan } = options;
+    validate() {
+      const errors = {
+        firstName: 'is always invalid'
+      };
 
-        if (!value) return null;
-        if (isNaN(+value)) return 'should be a number';
-        if (typeof greaterThan != undefined && +value <= greaterThan) return \`should be greater than \${greaterThan}\`;
+      if (Math.random() < 0.5) {
+        errors.lastName = 'is invalid this time';
       }
-    };
 
-    validations = {
-      email: ['presence', 'email'],
-      amount: { presence: true, numericality: { greaterThan: 10 } }
-    };
+      if (!/^A/.test(this.get('address.street'))) {
+        errors['address.street'] = 'should begin with A';
+      }
+
+      return errors;
+    }
 
     $render($) {
       return (
         <div>
-          <TextField {...$('email')} placeholder="Email" />
-          <TextField {...$('amount')} placeholder="Amount" />
+          <TextField {...$('firstName')} placeholder="First Name" />
+          <TextField {...$('lastName')} placeholder="Last Name" />
+          <TextField {...$('address.street')} placeholder="Street (nested field)" />
 
           <button onClick={this.performValidation.bind(this)}>Validate</button>
         </div>
@@ -50,11 +46,7 @@ const SOURCE = [['Form7.jsx', `
 
     render() {
       return (
-        <Form7
-          attrs={this.state.form}
-          onChange={(form) => this.setState({ form })}
-          validateOnChange
-        />
+        <Form7 attrs={this.state.form} onChange={(form) => this.setState({ form })} />
       );
     }
   }
@@ -62,54 +54,49 @@ const SOURCE = [['Form7.jsx', `
 
 export default class Form7 extends Form {
   static showErrors = true;
-  static title = 'Predefined Validation';
+  static title = 'Generic Validation';
   static description = dedent`
-    In this example form defines simple validation rules as Form's static
-    'validatations' property which are used in instance-specific 'validations'
-    property defined on form's prototype. Note that validation rules (static
-    validations property) is intended to be defined only once in your top-level
-    application form.
+    With no predefined validations, form's \`#performValidation\` method calls
+    \`#validate\` method and uses it's return value to set form errors that
+    will be passed to inputs on next rendering.
 
-    This example uses 'presence' and 'email' (defined very simply for demonstration
-    purposes) validations to validate it's 'email' input. Also, there is
-    numericality validation defined for 'amount' input. The later shows
-    how you can pass custom options to validation rules.
-
-    Also note that with predefined validations \`'validateOnChange'\` property may
-    take place, which is enabled for the form in this example.
+    In this example form validates it's inputs in following way:
+    - \`firstName\` is always invalid
+    - \`lastName\` is invalid in 50% of validations being run
+    - \`street\`, which is nested under \`'address'\` property is invalid if
+      it doesn't start with 'A'
   `;
   static source = SOURCE;
 
-  static validations = {
-    presence(value) { if (!value) return 'cannot be blank'; },
-    email(value) {
-      if (value && !/^[\w\d\.]+@[\w\d]+\.[\w\d]{2,}$/.test(value)) {
-        return 'should be email';
-      }
-    },
-    numericality(value, options = {}) {
-      const { greaterThan } = options;
+  validate() {
+    const errors = {
+      firstName: 'is always invalid'
+    };
 
-      if (!value) return null;
-      if (isNaN(+value)) return 'should be a number';
-      if (typeof greaterThan != undefined && +value <= greaterThan) return `should be greater than ${greaterThan}`;
+    if (Math.random() < 0.5) {
+      errors['lastName'] = 'is invalid this time';
     }
-  };
 
-  validations = {
-    email: ['presence', 'email'],
-    amount: { presence: true, numericality: { greaterThan: 10 } }
-  };
+    if (!/^A/.test(this.get('address.street'))) {
+      errors['address.street'] = 'should begin with A';
+    }
+
+    return errors;
+  }
 
   $render($) {
     return (
       <div>
         <div className='mb-20'>
-          <TextField className='form-control' {...$('email')} placeholder="Email" />
+          <TextField className='form-control' {...$('firstName')} placeholder="First Name" />
         </div>
         <div className='mb-20'>
-          <TextField className='form-control' {...$('amount')} placeholder="Amount" />
+          <TextField className='form-control' {...$('lastName')} placeholder="Last Name" />
         </div>
+        <div className='mb-20'>
+          <TextField className='form-control' {...$('address.street')} placeholder="Street (nested field)" />
+        </div>
+
         <div className='text-right'>
           <button className='btn green' onClick={this.performValidation.bind(this)}>Validate</button>
         </div>

@@ -200,7 +200,7 @@ nested forms, since it has a special `nested` method that will generate
 onChange handler for nested form for you:
 
 ```js
-{this.mapIn('items', (item, i) =>
+{this.mapIndexIn('items', (i) =>
   <ItemForm key={i} {...$.nested(`items.${i}`)} />
 )}
 ```
@@ -231,6 +231,10 @@ this variable that you find suitable.
   with a given `name` at index `index`.
 - `eachIndexIn(name, iteratee)` - iterates with `iteratee` over items in an
   input with a given `name`, passing item index to `iteratee`.
+- `mapIndexIn(name, iteratee)` - maps over indices of array under `name` with
+  `iteratee` function. Use in cases when you need to render a set of nested
+  items, but you don't need item object themselves, but just indices to
+  generate names.
 - `mapIn(name, iteratee)` - maps with `iteratee` over items in an
   input with a given `name`, passing item and index to `iteratee`.
 - `mapExtraIn(path, iteratee)` - maps with `iteratee` over items in an

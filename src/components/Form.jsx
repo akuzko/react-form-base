@@ -161,6 +161,17 @@ export default class Form extends Component {
     }
   }
 
+  mapIndexIn(path, iteratee) {
+    const value = this.get(path) || [];
+    const result = [];
+
+    for (let i = 0; i < value.length; i++) {
+      result.push(iteratee(i));
+    }
+
+    return result;
+  }
+
   mapIn(path, iteratee) {
     const value = this.get(path) || [];
 

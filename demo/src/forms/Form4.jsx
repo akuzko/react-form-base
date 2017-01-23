@@ -1,58 +1,56 @@
 import React from 'react';
 import dedent from 'dedent-js';
-import Form, { TextField } from '../form';
+import Form, { Select } from '../form';
 
 const SOURCE = [['Form4.jsx', `
-  import Form, { TextField } from 'form';
+  // read about those setup components at the beginning of examples
+  import Form, { Select } from 'form';
+
+  const items = [1, 2, 3].map(i => ({ value: i, label: \`Item \${i}\` }));
+  const amounts = [10, 50, 100];
 
   class Form4 extends Form {
-    $language(i, value) {
-      if (value) {
-        return this.set(\`favoriteLanguages.\${i}\`, value);
-      } else {
-        return this.spliceIn('favoriteLanguages', i);
-      }
+    $item(value) {
+      return this.set({
+        item: value,
+        amount: null
+      });
     }
 
     $render($) {
       return (
         <div>
-          <TextField {...$('fullName')} placeholder="Full Name" />
-          {this.mapExtraIn('favoriteLanguages', (_value, i) =>
-            <TextField key={i} {...$(\`favoriteLanguages.\${i}\`)(this.$language, i)} placeholder={ \`Language \${i + 1}\` } />
-          )}
+          <Select {...$('item')(this.$item)} options={items} includeBlank />
+          <Select {...$('amount')} options={amounts} includeBlank />
         </div>
       );
     }
   }
 `]];
 
+const items = [1, 2, 3].map(i => ({ value: i, label: `Item ${i}` }));
+const amounts = [10, 50, 100];
+
 export default class Form4 extends Form {
-  static title = 'Auto-add and auto-remove inputs on value change';
+  static title = 'Changing several fields at once';
   static description = dedent`
-    This form has a standard 'fullName' input for a person's name and a number
-    (at least one) of inputs for 'favoriteLanguages' values. Whenever new value
-    is entered, additional input will appear. Also, whenever value is erased,
-    it's input gets removed. To achieve this behavior two helper methods were
-    used: \`mapExtraIn\` when rendering, and \`spliceIn\` in onChange handler.
+    This form has two \`Select\` inputs for 'items' and 'amount' fields and custom
+    \`onChange\` handler that drops 'amount' value whenever 'item' value is changed
   `;
   static source = SOURCE;
 
-  $language(i, value) {
-    if (value) {
-      return this.set(`favoriteLanguages.${i}`, value);
-    } else {
-      return this.spliceIn('favoriteLanguages', i);
-    }
+  $item(value) {
+    return this.set({
+      item: value,
+      amount: null
+    });
   }
 
   $render($) {
     return (
       <div>
-        <TextField className='form-control mb-20' {...$('fullName')} placeholder="Full Name" />
-        {this.mapExtraIn('favoriteLanguages', (_value, i) =>
-          <TextField className='form-control mb-20' key={i} {...$(`favoriteLanguages.${i}`)(this.$language, i)} placeholder={ `Language ${i + 1}` } />
-        )}
+        <Select className='form-control mb-20' {...$('item')(this.$item)} options={items} includeBlank />
+        <Select className='form-control mb-20' {...$('amount')} options={amounts} includeBlank />
       </div>
     );
   }
