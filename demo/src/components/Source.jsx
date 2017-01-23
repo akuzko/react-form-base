@@ -1,6 +1,4 @@
 import React, { PropTypes, Component } from 'react';
-import SyntaxHighlighter from 'react-syntax-highlighter';
-import { docco } from 'react-syntax-highlighter/dist/styles';
 
 export default class Source extends Component {
   static propTypes = {
@@ -16,6 +14,12 @@ export default class Source extends Component {
     this.setState({ open: !this.state.open });
   };
 
+  componentDidUpdate() {
+    if (this.state.open) {
+      Prism.highlightElement(this.refs.prism);
+    }
+  }
+
   render() {
     const { title, children } = this.props;
 
@@ -26,14 +30,16 @@ export default class Source extends Component {
     );
 
     return (
-      <div className='source mb-20'>
-        <div className='source-panel horizontal-container center' onClick={this.toggle}>
-          <div className='flex-item'>{ title }</div>
+      <div className="source mb-20">
+        <div className="source-panel horizontal-container center" onClick={this.toggle}>
+          <div className="flex-item">{ title }</div>
           { codeIcon }
         </div>
-        <div className='source-code'>
+        <div className="source-code">
           {this.state.open &&
-            <SyntaxHighlighter language="javascript" style={docco}>{children}</SyntaxHighlighter>
+            <pre className="language-javascript" ref="prism">
+              <code className="language-javascript">{children}</code>
+            </pre>
           }
         </div>
       </div>
