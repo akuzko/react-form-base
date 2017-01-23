@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import InputPrerequisites from './components/InputPrerequisites';
 import * as Forms from './forms';
 
-export default class App extends Component {
+export default class App extends PureComponent {
   state = { forms: {} };
 
   formProps(name) {

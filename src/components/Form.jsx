@@ -1,4 +1,4 @@
-import React, { PropTypes, Component } from 'react';
+import React, { PropTypes, PureComponent } from 'react';
 
 import { nameToPath, buildFormValidator } from '../utils';
 import isPlainObject from 'lodash/isPlainObject';
@@ -7,7 +7,7 @@ import get from 'lodash/get';
 import set from 'lodash/set';
 import noop from 'lodash/noop';
 
-export default class Form extends Component {
+export default class Form extends PureComponent {
   static propTypes = {
     attrs: PropTypes.object.isRequired,
     onChange: PropTypes.func,

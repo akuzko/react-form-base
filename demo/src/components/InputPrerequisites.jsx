@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import marked from 'marked';
 import Source from './Source';
 
@@ -75,22 +75,20 @@ Select.defaultProps = {
 };
 `;
 
-export default class InputPrerequisites extends Component {
-  render() {
-    return (
-      <div className="pb-20 mb-20 border-bottom">
-        <div className="mb-10 bold-text">Input Prerequisites</div>
-        <div className="mb-20" dangerouslySetInnerHTML={{ __html: marked(content) }} />
+export default function InputPrerequisites() {
+  return (
+    <div className="pb-20 mb-20 border-bottom">
+      <div className="mb-10 bold-text">Input Prerequisites</div>
+      <div className="mb-20" dangerouslySetInnerHTML={{ __html: marked(content) }} />
 
-        <div className="horizontal-container">
-          <div className="flex-item mr-20">
-            <Source title="TextField.jsx">{textFieldSource}</Source>
-          </div>
-          <div className="flex-item">
-            <Source title="Select.jsx">{selectSource}</Source>
-          </div>
+      <div className="horizontal-container">
+        <div className="flex-item mr-20">
+          <Source title="TextField.jsx">{textFieldSource}</Source>
+        </div>
+        <div className="flex-item">
+          <Source title="Select.jsx">{selectSource}</Source>
         </div>
       </div>
-    );
-  }
+    </div>
+  );
 }
