@@ -63,8 +63,8 @@ export default class Form7 extends Form {
     In this example form validates it's inputs in following way:
     - \`firstName\` is always invalid
     - \`lastName\` is invalid in 50% of validations being run
-    - \`street\`, which is nested under \`'address'\` property is invalid if
-      it doesn't start with 'A'
+    - \`address.city\` should begin with capital letter
+    - \`address.streetLine\` should contain letters and end with digits
   `;
   static source = SOURCE;
 
@@ -77,8 +77,12 @@ export default class Form7 extends Form {
       errors['lastName'] = 'is invalid this time';
     }
 
-    if (!/^A/.test(this.get('address.street'))) {
-      errors['address.street'] = 'should begin with A';
+    if (!/^[A-Z]/.test(this.get('address.city'))) {
+      errors['address.city'] = 'should begin with capital letter';
+    }
+
+    if (!/^[\w\s]+\s\d+$/.test(this.get('address.streetLine'))) {
+      errors['address.streetLine'] = 'contain letters and end with digits';
     }
 
     return errors;
@@ -87,18 +91,21 @@ export default class Form7 extends Form {
   $render($) {
     return (
       <div>
-        <div className='mb-20'>
-          <TextField className='form-control' {...$('firstName')} placeholder="First Name" />
+        <div className="mb-20">
+          <TextField {...$('firstName')} className="form-control" placeholder="First Name" />
         </div>
-        <div className='mb-20'>
-          <TextField className='form-control' {...$('lastName')} placeholder="Last Name" />
+        <div className="mb-20">
+          <TextField {...$('lastName')} className="form-control" placeholder="Last Name" />
         </div>
-        <div className='mb-20'>
-          <TextField className='form-control' {...$('address.street')} placeholder="Street (nested field)" />
+        <div className="mb-20">
+          <TextField {...$('address.city')} className="form-control" placeholder="Address/City" />
+        </div>
+        <div className="mb-20">
+          <TextField {...$('address.streetLine')} className="form-control" placeholder="Address/Street" />
         </div>
 
-        <div className='text-right'>
-          <button className='btn green' onClick={this.performValidation.bind(this)}>Validate</button>
+        <div className="text-right">
+          <button className="btn green" onClick={this.performValidation.bind(this)}>Validate</button>
         </div>
       </div>
     );

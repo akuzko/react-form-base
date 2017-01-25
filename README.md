@@ -219,7 +219,7 @@ this variable that you find suitable.
   - `this.get('foos')       // => [{bar: 'baz'}, {bar: 'bak'}]`
   - `this.get('foos.1')     // => {bar: 'bak'}`
   - `this.get('foos.1.bar') // => 'bak'`
-  - `this.get() // return all form's attributes object`
+  - `this.get() // returns whole form's attributes object`
 - `set(name, value)` - sets a `value` for an input with a specified `name`;
 - `set(object)` - sets multiple values at once. Each key in the object
   corresponds to input name, and values are input values.

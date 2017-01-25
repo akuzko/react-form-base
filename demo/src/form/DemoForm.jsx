@@ -21,10 +21,12 @@ export default class DemoForm extends Form {
           </div>
           <div className="flex-item">
             <div>{super.render()}</div>
-            <pre>Attrs: {JSON.stringify(this.props.attrs)}</pre>
-            {showErrors &&
-              <pre>Errors: {JSON.stringify(this.state.errors)}</pre>
-            }
+            <div className="horizontal-container">
+              <pre className="flex-item">attrs: {JSON.stringify(this.props.attrs, null, '  ')}</pre>
+              {showErrors &&
+                <pre className="flex-item">errors: {JSON.stringify(this.state.errors, null, '  ')}</pre>
+              }
+            </div>
           </div>
         </div>
       </div>

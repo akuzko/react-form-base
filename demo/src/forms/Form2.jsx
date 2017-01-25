@@ -12,7 +12,11 @@ const SOURCE = [['Form2.jsx', `
         <div>
           <TextField {...$('email')} placeholder="Email" />
 
-          <Select {...$('address.country')} options={['Country 1', 'Country 2']} />
+          <Select
+            {...$('address.country')}
+            options={['Country 1', 'Country 2']}
+            includeBlank="Select Country..."
+          />
           <TextField {...$('address.city')} placeholder="City" />
           <TextField {...$('address.streetLine')} placeholder="Street Line" />
           <TextField {...$('address.zip')} placeholder="Zip" />
@@ -35,10 +39,12 @@ export default class Form2 extends Form {
       <div>
         <TextField {...$('email')} className="form-control mb-20" placeholder="Email" />
 
-        <Select {...$('address.country')} className="form-control mb-20" options={['Country 1', 'Country 2']} includeBlank="Select Country..." />
-        <TextField {...$('address.city')} className="form-control mb-20" placeholder="City" />
-        <TextField {...$('address.streetLine')} className="form-control mb-20" placeholder="Street Line" />
-        <TextField {...$('address.zip')} className="form-control mb-20" placeholder="Zip" />
+        <div className="bordered-form-item">
+          <Select {...$('address.country')} options={['Country 1', 'Country 2']} includeBlank="Select Country..." className="form-control mb-20" />
+          <TextField {...$('address.city')} className="form-control mb-20" placeholder="City" />
+          <TextField {...$('address.streetLine')} className="form-control mb-20" placeholder="Street Line" />
+          <TextField {...$('address.zip')} className="form-control mb-20" placeholder="Zip" />
+        </div>
       </div>
     );
   }

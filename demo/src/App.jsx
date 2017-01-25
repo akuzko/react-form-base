@@ -42,7 +42,7 @@ export default class App extends PureComponent {
             <div id="form6"><Forms.Form6 {...this.formProps('form6')} /></div>
             <div id="form7"><Forms.Form7 {...this.formProps('form7')} /></div>
             <div id="form8"><Forms.Form8 {...this.formProps('form8')} validateOnChange /></div>
-            <div id="form8"><Forms.Form9 {...this.formProps('form8')} validateOnChange /></div>
+            <div id="form8"><Forms.Form9 {...this.formProps('form9')} validateOnChange /></div>
           </div>
         </div>
       </div>

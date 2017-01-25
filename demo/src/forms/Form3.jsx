@@ -25,7 +25,7 @@ const SOURCE = [['Form3.jsx', `
 export default class Form3 extends Form {
   static title = 'Usage of custom onChange handler';
   static description = dedent`
-    This form uses custom onChange handler (named \`$lastName\`) for 'lastName'
+    This form uses custom onChange handler (named \`$lastName\`) for \`'lastName'\`
     field changes.
   `;
   static source = SOURCE;
@@ -37,8 +37,8 @@ export default class Form3 extends Form {
   $render($) {
     return (
       <div>
-        <TextField className='form-control mb-20' {...$('firstName')} placeholder="First Name" />
-        <TextField className='form-control mb-20' {...$('lastName')(this.$lastName)} placeholder="Last Name" />
+        <TextField {...$('firstName')} placeholder="First Name" className="form-control mb-20" />
+        <TextField {...$('lastName')(this.$lastName)} placeholder="Last Name" className="form-control mb-20" />
       </div>
     );
   }

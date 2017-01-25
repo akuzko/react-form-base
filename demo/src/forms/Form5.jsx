@@ -19,7 +19,11 @@ const SOURCE = [['Form5.jsx', `
         <div>
           <TextField {...$('fullName')} placeholder="Full Name" />
           {this.mapExtraIn('favoriteLanguages', (_value, i) =>
-            <TextField key={i} {...$(\`favoriteLanguages.\${i}\`)(this.$language, i)} placeholder={ \`Language \${i + 1}\` } />
+            <TextField
+              key={i}
+              {...$(\`favoriteLanguages.\${i}\`)(this.$language, i)}
+              placeholder={ \`Language \${i + 1}\` }
+            />
           )}
         </div>
       );
@@ -30,8 +34,8 @@ const SOURCE = [['Form5.jsx', `
 export default class Form5 extends Form {
   static title = 'Auto-add and auto-remove inputs on value change';
   static description = dedent`
-    This form has a standard 'fullName' input for a person's name and a number
-    (at least one) of inputs for 'favoriteLanguages' values. Whenever new value
+    This form has a standard \`'fullName'\` input for a person's name and a number
+    (at least one) of inputs for \`'favoriteLanguages'\` values. Whenever new value
     is entered, additional input will appear. Also, whenever value is erased,
     it's input gets removed. To achieve this behavior two helper methods were
     used: \`mapExtraIn\` when rendering, and \`spliceIn\` in onChange handler.
@@ -49,10 +53,13 @@ export default class Form5 extends Form {
   $render($) {
     return (
       <div>
-        <TextField className='form-control mb-20' {...$('fullName')} placeholder="Full Name" />
-        {this.mapExtraIn('favoriteLanguages', (_value, i) =>
-          <TextField className='form-control mb-20' key={i} {...$(`favoriteLanguages.${i}`)(this.$language, i)} placeholder={ `Language ${i + 1}` } />
-        )}
+        <TextField {...$('fullName')} className="form-control mb-20" placeholder="Full Name" />
+
+        <div className="bordered-form-item">
+          {this.mapExtraIn('favoriteLanguages', (_value, i) =>
+            <TextField key={i} {...$(`favoriteLanguages.${i}`)(this.$language, i)} className="form-control mb-20" placeholder={ `Language ${i + 1}` } />
+          )}
+        </div>
       </div>
     );
   }

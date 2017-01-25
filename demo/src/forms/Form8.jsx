@@ -19,7 +19,9 @@ const SOURCE = [['Form8.jsx', `
 
         if (!value) return null;
         if (isNaN(+value)) return 'should be a number';
-        if (typeof greaterThan != undefined && +value <= greaterThan) return \`should be greater than \${greaterThan}\`;
+        if (typeof greaterThan != undefined && +value <= greaterThan) {
+          return \`should be greater than \${greaterThan}\`;
+        }
       }
     };
 
@@ -62,20 +64,20 @@ const SOURCE = [['Form8.jsx', `
 
 export default class Form8 extends Form {
   static showErrors = true;
-  static title = 'Predefined Validation';
+  static title = 'Predefined Validation (Recommended)';
   static description = dedent`
-    In this example form defines simple validation rules as Form's static
-    'validatations' property which are used in instance-specific 'validations'
+    In this example form defines simple validation rules as Form's \`static
+    validatations\` property which are used in instance-specific \`validations\`
     property defined on form's prototype. Note that validation rules (static
     validations property) is intended to be defined only once in your top-level
     application form.
 
-    This example uses 'presence' and 'email' (defined very simply for demonstration
-    purposes) validations to validate it's 'email' input. Also, there is
-    numericality validation defined for 'amount' input. The later shows
+    This example uses \`'presence'\` and \`'email'\` (defined very simply for
+    demonstration purposes) validations to validate it's 'email' input. Also,
+    there is numericality validation defined for 'amount' input. The later shows
     how you can pass custom options to validation rules.
 
-    Also note that with predefined validations \`'validateOnChange'\` property may
+    Also note that with predefined validations \`validateOnChange\` property may
     take place, which is enabled for the form in this example.
   `;
   static source = SOURCE;
@@ -92,7 +94,9 @@ export default class Form8 extends Form {
 
       if (!value) return null;
       if (isNaN(+value)) return 'should be a number';
-      if (typeof greaterThan != undefined && +value <= greaterThan) return `should be greater than ${greaterThan}`;
+      if (typeof greaterThan != undefined && +value <= greaterThan) {
+        return `should be greater than ${greaterThan}`;
+      }
     }
   };
 
@@ -104,14 +108,14 @@ export default class Form8 extends Form {
   $render($) {
     return (
       <div>
-        <div className='mb-20'>
-          <TextField className='form-control' {...$('email')} placeholder="Email" />
+        <div className="mb-20">
+          <TextField {...$('email')} className="form-control" placeholder="Email" />
         </div>
-        <div className='mb-20'>
-          <TextField className='form-control' {...$('amount')} placeholder="Amount" />
+        <div className="mb-20">
+          <TextField {...$('amount')} className="form-control" placeholder="Amount" />
         </div>
-        <div className='text-right'>
-          <button className='btn green' onClick={this.performValidation.bind(this)}>Validate</button>
+        <div className="text-right">
+          <button className="btn green" onClick={this.performValidation.bind(this)}>Validate</button>
         </div>
       </div>
     );
