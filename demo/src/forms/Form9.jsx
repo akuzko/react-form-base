@@ -51,7 +51,7 @@ const SOURCE = [['BaseForm.jsx', `
       // ^- just for demostration, it would be better to define email validation
       //    on form level and simply call \`validate('email');\` here
 
-      this.eachIndexIn('items', (i) => {
+      this.each('items', (_item, i) => {
         validate(\`items.\${i}.name\`);
         // ^- uses wildcard defined in form
 
@@ -66,7 +66,7 @@ const SOURCE = [['BaseForm.jsx', `
         <div>
           <TextField {...this.input('email')} placeholder="Email" />
 
-          {this.mapExtraIn('items', (_item, i) =>
+          {this.mapExtra('items', (_item, i) =>
             <div key={i}>
               <TextField {...this.$(\`items.\${i}.name\`)} placeholder="Start typing Item Name" />
 
@@ -170,7 +170,7 @@ export default class Form9 extends BaseForm {
     // ^- just for demostration, it would be better to define email validation
     //    on form level and simply call `validate('email');` here
 
-    this.eachIndexIn('items', (i) => {
+    this.each('items', (_item, i) => {
       validate(`items.${i}.name`);
       // ^- uses wildcard defined in form
 
@@ -195,7 +195,7 @@ export default class Form9 extends BaseForm {
           <TextField {...$('email')} className="form-control" placeholder="Email" />
         </div>
 
-        {this.mapExtraIn('items', (_item, i) =>
+        {this.mapExtra('items', (_item, i) =>
           <div key={i}>
             <div className="mb-20">
               <TextField {...$(`items.${i}.name`)} className="form-control" placeholder="Start typing Item Name" />

@@ -27,14 +27,14 @@ const SOURCE = [['ItemForm.jsx', `
         <div>
           <TextField {...$('firstName')} placeholder="Full Name" />
 
-          {this.mapIn('items', (item, i) =>
+          {this.map('items', (_item, i) =>
             <div key={i}>
-              <ItemForm attrs={item} onChange={(form) => this.merge(\`items.\${i}\`, form)} />
-              <button onClick={() => this.spliceIn('items', i)}>X</button>
+              <ItemForm {...$.nested(\`items.\${i}\`)} />
+              <button onClick={() => this.remove('items', i)}>X</button>
             </div>
           )}
 
-          <button onClick={() => this.pushIn('items', {})}>Add Item</button>
+          <button onClick={() => this.push('items', {})}>Add Item</button>
         </div>
       );
     }
@@ -58,7 +58,7 @@ export default class Form6 extends Form {
     This example shows how top-level form can use nested forms to render and
     manipulate single set of attributes.
 
-    In this example, top-level form uses \`mapIn\`, \`pushIn\` and \`spliceIn\`
+    In this example, top-level form uses \`map\`, \`push\` and \`remove\`
     helper methods to iterate over it's items for rendering subforms, dynamically
     add and remove items.
 
@@ -81,18 +81,18 @@ export default class Form6 extends Form {
       <div>
         <TextField {...$('fullName')} className="form-control mb-20" placeholder="Full Name" />
 
-        {this.mapIndexIn('items', (i) =>
+        {this.map('items', (_item, i) =>
           <div key={i} className="horizontal-container center mb-20 bordered-form-item">
             <ItemForm {...$.nested(`items.${i}`)} />
 
-            <div className="pointer" onClick={() => this.spliceIn('items', i)}>
+            <div className="pointer" onClick={() => this.remove('items', i)}>
               {deleteIcon}
             </div>
           </div>
         )}
 
         <div className="text-right">
-          <button className="btn green mb-20" onClick={() => this.pushIn('items', {})}>Add Item</button>
+          <button className="btn green mb-20" onClick={() => this.push('items', {})}>Add Item</button>
         </div>
       </div>
     );

@@ -225,19 +225,15 @@ this variable that you find suitable.
   corresponds to input name, and values are input values.
 - `merge(name, value)` - merges given `value` object with value of input with
   a given `name`. Should be used when working with nested forms.
-- `pushIn(name, value)` - pushes a `value` to a input (which is treated as array)
+- `push(name, value)` - pushes a `value` to a input (which is treated as array)
   with a given `name`.
-- `spliceIn(name, index)` - removes an item of an input (which is treated as array)
+- `remove(name, index)` - removes an item of an input (which is treated as array)
   with a given `name` at index `index`.
-- `eachIndexIn(name, iteratee)` - iterates with `iteratee` over items in an
-  input with a given `name`, passing item index to `iteratee`.
-- `mapIndexIn(name, iteratee)` - maps over indices of array under `name` with
-  `iteratee` function. Use in cases when you need to render a set of nested
-  items, but you don't need item object themselves, but just indices to
-  generate names.
-- `mapIn(name, iteratee)` - maps with `iteratee` over items in an
+- `each(name, iteratee)` - iterates with `iteratee` over items in an
   input with a given `name`, passing item and index to `iteratee`.
-- `mapExtraIn(path, iteratee)` - maps with `iteratee` over items in an
+- `map(name, iteratee)` - maps with `iteratee` over items in an
+  input with a given `name`, passing item and index to `iteratee`.
+- `mapExtra(path, iteratee)` - maps with `iteratee` over items in an
   input with a given `name`, passing item and index to `iteratee`. Makes
   additional iteration that passes `null` and length of items to `iteratee`
 - `getValidationErrors()` - returns validation errors.

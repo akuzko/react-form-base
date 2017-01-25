@@ -10,7 +10,7 @@ const SOURCE = [['Form5.jsx', `
       if (value) {
         return this.set(\`favoriteLanguages.\${i}\`, value);
       } else {
-        return this.spliceIn('favoriteLanguages', i);
+        return this.remove('favoriteLanguages', i);
       }
     }
 
@@ -18,7 +18,7 @@ const SOURCE = [['Form5.jsx', `
       return (
         <div>
           <TextField {...$('fullName')} placeholder="Full Name" />
-          {this.mapExtraIn('favoriteLanguages', (_value, i) =>
+          {this.mapExtra('favoriteLanguages', (_value, i) =>
             <TextField
               key={i}
               {...$(\`favoriteLanguages.\${i}\`)(this.$language, i)}
@@ -38,7 +38,7 @@ export default class Form5 extends Form {
     (at least one) of inputs for \`'favoriteLanguages'\` values. Whenever new value
     is entered, additional input will appear. Also, whenever value is erased,
     it's input gets removed. To achieve this behavior two helper methods were
-    used: \`mapExtraIn\` when rendering, and \`spliceIn\` in onChange handler.
+    used: \`mapExtra\` when rendering, and \`remove\` in onChange handler.
   `;
   static source = SOURCE;
 
@@ -46,7 +46,7 @@ export default class Form5 extends Form {
     if (value) {
       return this.set(`favoriteLanguages.${i}`, value);
     } else {
-      return this.spliceIn('favoriteLanguages', i);
+      return this.remove('favoriteLanguages', i);
     }
   }
 
@@ -56,7 +56,7 @@ export default class Form5 extends Form {
         <TextField {...$('fullName')} className="form-control mb-20" placeholder="Full Name" />
 
         <div className="bordered-form-item">
-          {this.mapExtraIn('favoriteLanguages', (_value, i) =>
+          {this.mapExtra('favoriteLanguages', (_value, i) =>
             <TextField key={i} {...$(`favoriteLanguages.${i}`)(this.$language, i)} className="form-control mb-20" placeholder={ `Language ${i + 1}` } />
           )}
         </div>

@@ -141,44 +141,31 @@ export default class Form extends PureComponent {
     this.props.onChange(attrs);
   }
 
-  pushIn(name, value) {
+  push(name, value) {
     const ary = this.get(name) || [];
 
     return this.set(name, [...ary, value]);
   }
 
-  spliceIn(name, i) {
+  remove(name, i) {
     const ary = this.get(name);
 
     return this.set(name, [...ary.slice(0, i), ...ary.slice(i + 1)]);
   }
 
-  eachIndexIn(path, iteratee) {
+  each(path, iteratee) {
     const value = this.get(path) || [];
 
-    for (let i = 0; i < value.length; i++) {
-      iteratee(i);
-    }
+    return value.forEach(iteratee);
   }
 
-  mapIndexIn(path, iteratee) {
-    const value = this.get(path) || [];
-    const result = [];
-
-    for (let i = 0; i < value.length; i++) {
-      result.push(iteratee(i));
-    }
-
-    return result;
-  }
-
-  mapIn(path, iteratee) {
+  map(path, iteratee) {
     const value = this.get(path) || [];
 
     return value.map(iteratee);
   }
 
-  mapExtraIn(path, iteratee) {
+  mapExtra(path, iteratee) {
     const value = this.get(path) || [];
 
     return [...value, null].map(iteratee);
