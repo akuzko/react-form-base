@@ -22,7 +22,7 @@ const SOURCE = [['Form5.jsx', `
             <TextField
               key={i}
               {...$(\`favoriteLanguages.\${i}\`)(this.$language, i)}
-              placeholder={ \`Language \${i + 1}\` }
+              placeholder={\`Language \${i + 1}\`}
             />
           )}
         </div>
@@ -57,7 +57,12 @@ export default class Form5 extends Form {
 
         <div className="bordered-form-item">
           {this.mapExtra('favoriteLanguages', (_value, i) =>
-            <TextField key={i} {...$(`favoriteLanguages.${i}`)(this.$language, i)} className="form-control mb-20" placeholder={ `Language ${i + 1}` } />
+            <TextField
+              key={i}
+              {...$(`favoriteLanguages.${i}`)(this.$language, i)}
+              className="form-control mb-20"
+              placeholder={`Language ${i + 1}`}
+            />
           )}
         </div>
       </div>

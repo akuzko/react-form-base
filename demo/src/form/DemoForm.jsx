@@ -24,7 +24,7 @@ export default class DemoForm extends Form {
             <div className="horizontal-container">
               <pre className="flex-item">attrs: {JSON.stringify(this.props.attrs, null, '  ')}</pre>
               {showErrors &&
-                <pre className="flex-item">errors: {JSON.stringify(this.state.errors, null, '  ')}</pre>
+                <pre className="flex-item">errors: {JSON.stringify(this.getErr(), null, '  ')}</pre>
               }
             </div>
           </div>

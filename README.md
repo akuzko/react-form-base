@@ -267,7 +267,7 @@ import MyForm from 'my-form';
 class Page extends Component {
   state = { item: {} };
 
-  saveItem: (item, form) => {
+  saveItem = (item, form) => {
     // stubbed AJAX request code (with axios-like error)
     post('/items', { item })
       .then(() => this.setState({ item: {} }))

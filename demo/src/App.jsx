@@ -16,6 +16,23 @@ export default class App extends PureComponent {
     };
   }
 
+  saveForm11 = (attrs, form) => {
+    form.ifValid(() => {
+      // simulated AJAX request
+      return new Promise((resolve, reject) => {
+        form.setState({ saving: true, success: false });
+        setTimeout(() => {
+          if (['foo', 'bar', 'baz'].includes(attrs.account)) {
+            reject({ account: 'has already been taken' });
+          } else {
+            resolve({ status: 200 });
+          }
+        }, 3000);
+      }).then(() => form.setState({ saving: false, success: true }))
+        .catch(errors => form.setState({ errors, saving: false }));
+    });
+  };
+
   render() {
     return (
       <div className="container mt-20 mb-20">
@@ -30,7 +47,9 @@ export default class App extends PureComponent {
             <a href="#form6">{Forms.Form6.title}</a>
             <a href="#form7">{Forms.Form7.title}</a>
             <a href="#form8">{Forms.Form8.title}</a>
-            <a href="#form8">{Forms.Form9.title}</a>
+            <a href="#form9">{Forms.Form9.title}</a>
+            <a href="#form10">{Forms.Form10.title}</a>
+            <a href="#form11">{Forms.Form11.title}</a>
           </div>
           <div className="content paper flex-item p-20">
             <div id="inputs"><InputPrerequisites /></div>
@@ -42,7 +61,9 @@ export default class App extends PureComponent {
             <div id="form6"><Forms.Form6 {...this.formProps('form6')} /></div>
             <div id="form7"><Forms.Form7 {...this.formProps('form7')} /></div>
             <div id="form8"><Forms.Form8 {...this.formProps('form8')} validateOnChange /></div>
-            <div id="form8"><Forms.Form9 {...this.formProps('form9')} validateOnChange /></div>
+            <div id="form9"><Forms.Form9 {...this.formProps('form9')} validateOnChange /></div>
+            <div id="form10"><Forms.Form10 {...this.formProps('form10')} validateOnChange /></div>
+            <div id="form11"><Forms.Form11 {...this.formProps('form11')} onRequestSave={this.saveForm11} validateOnChange /></div>
           </div>
         </div>
       </div>

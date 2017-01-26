@@ -7,3 +7,5 @@ export Form6 from './Form6';
 export Form7 from './Form7';
 export Form8 from './Form8';
 export Form9 from './Form9';
+export Form10 from './Form10';
+export Form11 from './Form11';

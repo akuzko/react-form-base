@@ -27,6 +27,13 @@ export default class Form extends PureComponent {
   validations = {};
   validator = buildFormValidator(this);
 
+  componentWillReceiveProps() {
+    if (this._nextErrors) {
+      this.setState({ errors: this._nextErrors });
+      this._nextErrors = null;
+    }
+  }
+
   save() {
     return this.props.onRequestSave(this.get(), this);
   }
@@ -51,6 +58,8 @@ export default class Form extends PureComponent {
   }
 
   get(name) {
+    if (name === undefined) return this.props.attrs;
+
     return get(this.props.attrs, nameToPath(name), '');
   }
 
@@ -89,19 +98,20 @@ export default class Form extends PureComponent {
   _set(updater) {
     const { attrs, onChange } = this.props;
     const newAttrs = cloneDeep(attrs);
-    const newErrors = { ...this.state.errors };
+    const newErrors = { ...this.getErr() };
 
     updater(newAttrs, newErrors);
 
-    return this.setState({ errors: newErrors }, () => onChange(newAttrs));
+    this._nextErrors = newErrors;
+    onChange(newAttrs);
   }
 
   _shouldClearError(name) {
-    return this.props.clearErrorsOnChange && this.state.errors[name];
+    return this.props.clearErrorsOnChange && this.getErr(name);
   }
 
   _shouldValidateOnChange() {
-    return this.props.validateOnChange && this.state.hadErrors;
+    return this.props.validateOnChange && this.state && this.state.hadErrors;
   }
 
   ifValid(callback) {
@@ -150,7 +160,10 @@ export default class Form extends PureComponent {
   remove(name, i) {
     const ary = this.get(name);
 
-    return this.set(name, [...ary.slice(0, i), ...ary.slice(i + 1)]);
+    return this._set((attrs, errors) => {
+      set(attrs, nameToPath(name), [...ary.slice(0, i), ...ary.slice(i + 1)]);
+      this._updateErrors(errors, `${name}.${i}`, null);
+    });
   }
 
   each(path, iteratee) {
@@ -172,15 +185,17 @@ export default class Form extends PureComponent {
   }
 
   getErr(name) {
-    if (name === undefined) return this.state.errors;
+    const errors = this.state.errors || {};
 
-    return this.state.errors[name];
+    if (name === undefined) return errors;
+
+    return errors[name];
   }
 
-  setErrors(errors) {
+  setErrors(errors, callback) {
     const hadErrors = Object.getOwnPropertyNames(errors).length > 0;
 
-    this.setState({ hadErrors, errors });
+    this.setState({ hadErrors, errors }, callback);
   }
 
   render() {

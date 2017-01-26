@@ -99,7 +99,7 @@ export function buildFormValidator(form) {
     nested(ref) {
       const errors = form.refs[ref].performValidation();
 
-      if (Object.getOwnPropertyNames(errors).length === 0) {
+      if (Object.getOwnPropertyNames(errors).length > 0) {
         this.addError(ref, 'invalid');
       }
     }

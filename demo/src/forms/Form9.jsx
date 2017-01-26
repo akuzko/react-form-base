@@ -2,84 +2,55 @@ import React from 'react';
 import dedent from 'dedent-js';
 import Form, { TextField } from '../form';
 
-const SOURCE = [['BaseForm.jsx', `
-  import Form from 'react-form-base';
+const SOURCE = [['Form9.jsx', `
+  // read about those setup components at the beginning of examples
+  import Form, { TextField } from 'form';
 
-  class BaseForm extends Form {
+  class Form9 extends Form {
     static validations = {
-      presence(value) { if (!value) return 'cannot be blank'; },
-      email(value) {
-        if (value && !/^[\w\d\.]+@[\w\d]+\.[\w\d]{2,}$/.test(value)) {
-          return 'should be email';
+      presence: function(value) {
+        if (!value) return 'cannot be blank';
+      },
+      numericality: function(value) {
+        if (value && isNaN(parseFloat(value))) {
+          return 'should be a number';
         }
       }
     };
-  }
-`], ['ItemForm.jsx', `
-  // read about those setup components at the beginning of examples
-  import BaseForm, { TextField } from 'base-form';
 
-  class ItemForm extends BaseForm {
     validations = {
-      description: 'presence',
-      amount: ['presence', function(value) {
-        if (parseInt(value) % 5 != 0) return 'should be divisable by 5';
-      }]
+      'fullName': 'presence',
+      'numbers.*': 'numericality'
     };
 
-    $render($) {
-      return (
-        <div>
-          <TextField {...$('description')} placeholder="Description" />
-          <TextField {...$('amount')} placeholder="Amount" />
-        </div>
-      );
-    }
-  }
-`], ['Form9.jsx', `
-  // read about those setup components at the beginning of examples
-  import BaseForm, { TextField } from 'base-form';
-  import ItemForm from './ItemForm';
-
-  class Form9 extends Form {
-    validations = {
-      'items.*.name': 'presence'
-    };
-
-    validate(validate) {
-      validate('email', { with: 'email' });
-      // ^- just for demostration, it would be better to define email validation
-      //    on form level and simply call \`validate('email');\` here
-
-      this.each('items', (_item, i) => {
-        validate(\`items.\${i}.name\`);
-        // ^- uses wildcard defined in form
-
-        validate.nested(\`itemForm\${i}\`);
+    validate($v) {
+      $v('fullName');
+      this.each('numbers', (_n, i) => {
+        $v(\`numbers.\${i}\`);
       });
 
-      return validate.errors;
+      return $v.errors;
+    }
+
+    $number(i, value) {
+      if (value) {
+        return this.set(\`numbers.\${i}\`, value);
+      } else {
+        return this.remove('numbers', i);
+      }
     }
 
     $render($) {
       return (
         <div>
-          <TextField {...this.input('email')} placeholder="Email" />
+          <TextField {...$('fullName')} placeholder="Full Name" />
 
-          {this.mapExtra('items', (_item, i) =>
+          {this.mapExtra('numbers', (_value, i) =>
             <div key={i}>
-              <TextField {...this.$(\`items.\${i}.name\`)} placeholder="Start typing Item Name" />
-
-              {this.get(\`items.\${i}.name\`) &&
-                <div>
-                  <ItemForm
-                    ref={\`itemForm\${i}\`}
-                    {...$.nested(\`items.\${i}\`)}
-                    validateOnChange
-                  />
-                  <button onClick={() => this.spliceIn('items', i)}>X</button>
-                </div>
-              }
+              <TextField
+                {...$(\`numbers.\${i}\`)(this.$number, i)}
+                placeholder={\`Number \${i + 1}\`}
+              />
             </div>
           )}
 
@@ -110,112 +81,84 @@ const SOURCE = [['BaseForm.jsx', `
 `]];
 
 const DESCRIPTION = dedent`
-  This example shows complex validation usage example which includes
-  special input validator function (described bellow), nested form validation,
-  usage of wildcards, special form handlers and case-specific validation that
-  is too case-specific to be defined as generic validation rule.
+  In this example Form has been set up in a way similar to [Form5](#form5), i.e.
+  it has auto-add and auto-remove items behavior. The difference is that each item
+  in the collection is supposed to be a string that represents a number.
 
-  Form's \`#validate\` method accepts a special input validator function
-  that can be used to iterate over arbitrary amount of inputs and
-  validate them according to validation rules. It's first argument is a
-  full name of the input being validated. The second optional argument
-  should be an object that has a \`'with'\` property with a value of validation
-  rule (string, function or array). This function has an \`'errors'\` property
-  whish should be a return value of your \`#validate\` method.
+  For validating item in a collection, wildcard validation key is used:
+  \`'numbers.*': 'numericality'\`. During validation process, form iterates over
+  it's items and calls input validation upon each item. Thus, inputs with names
+  like \`'numbers.0'\`, \`'numbers.1'\` and so on will be validated with rules
+  defined for \`'numbers.*'\`.
+
+  **NOTE:** wildcard validation is not limited to a string values. Your form
+  may have a collection of nested _objects_ any you may want to define property
+  validation for each of them with something like
+
+  \`\`\`js
+    validations = {
+      'email': 'presence',
+      'items.*.name: 'presence',
+      'items.*.amount': 'numericality'
+    };
+  \`\`\`
 `;
 
-class BaseForm extends Form {
-  static validations = {
-    presence(value) { if (!value) return 'cannot be blank'; },
-    email(value) {
-      if (value && !/^[\w\d\.]+@[\w\d]+\.[\w\d]{2,}$/.test(value)) {
-        return 'should be email';
-      }
-    }
-  };
-}
-
-class ItemForm extends BaseForm {
-  validations = {
-    description: 'presence',
-    amount: ['presence', function(value) {
-      if (parseInt(value) % 5 != 0) return 'should be divisable by 5';
-    }]
-  };
-
-  $render($) {
-    return (
-      <div className="flex-item mr-20">
-        <div className="mb-20">
-          <TextField {...$('description')} className="form-control" placeholder="Description" />
-        </div>
-        <TextField {...$('amount')} className="form-control" placeholder="Amount" />
-      </div>
-    );
-  }
-}
-
-export default class Form9 extends BaseForm {
+export default class Form9 extends Form {
   static showErrors = true;
-  static title = 'Complex Validation Example';
+  static title = 'Validating collection items using Wildcards';
   static description = DESCRIPTION;
   static source = SOURCE;
 
-  validations = {
-    'items.*.name': 'presence'
+  static validations = {
+    presence: function(value) {
+      if (!value) return 'cannot be blank';
+    },
+    numericality: function(value) {
+      if (value && isNaN(parseFloat(value))) {
+        return 'should be a number';
+      }
+    }
   };
 
-  validate(validate) {
-    validate('email', { with: 'email' });
-    // ^- just for demostration, it would be better to define email validation
-    //    on form level and simply call `validate('email');` here
+  validations = {
+    'fullName': 'presence',
+    'numbers.*': 'numericality'
+  };
 
-    this.each('items', (_item, i) => {
-      validate(`items.${i}.name`);
-      // ^- uses wildcard defined in form
-
-      validate.nested(`itemForm${i}`);
+  validate($v) {
+    $v('fullName');
+    this.each('numbers', (_n, i) => {
+      $v(`numbers.${i}`);
     });
 
-    return validate.errors;
+    return $v.errors;
+  }
+
+  $number(i, value) {
+    if (value) {
+      return this.set(`numbers.${i}`, value);
+    } else {
+      return this.remove('numbers', i);
+    }
   }
 
   $render($) {
-    const deleteIcon = (
-      <svg className="delete-icon" viewBox="0 0 44.2 44.2">
-        <path d="M15.5 29.5c-0.2 0-0.4-0.1-0.5-0.2 -0.3-0.3-0.3-0.8 0-1.1l13.2-13.2c0.3-0.3 0.8-0.3 1.1 0s0.3 0.8 0 1.1L16.1 29.2C15.9 29.4 15.7 29.5 15.5 29.5z" />
-        <path d="M28.7 29.5c-0.2 0-0.4-0.1-0.5-0.2L15 16.1c-0.3-0.3-0.3-0.8 0-1.1s0.8-0.3 1.1 0l13.2 13.2c0.3 0.3 0.3 0.8 0 1.1C29.1 29.4 28.9 29.5 28.7 29.5z" />
-        <path d="M22.1 44.2C9.9 44.2 0 34.3 0 22.1 0 9.9 9.9 0 22.1 0S44.2 9.9 44.2 22.1 34.3 44.2 22.1 44.2zM22.1 1.5C10.8 1.5 1.5 10.8 1.5 22.1s9.3 20.6 20.6 20.6 20.6-9.2 20.6-20.6S33.5 1.5 22.1 1.5z" />
-      </svg>
-    );
-
     return (
       <div>
         <div className="mb-20">
-          <TextField {...$('email')} className="form-control" placeholder="Email" />
+          <TextField {...$('fullName')} className="form-control" placeholder="Full Name" />
         </div>
 
-        {this.mapExtra('items', (_item, i) =>
-          <div key={i}>
-            <div className="mb-20">
-              <TextField {...$(`items.${i}.name`)} className="form-control" placeholder="Start typing Item Name" />
-            </div>
-
-            {this.get(`items.${i}.name`) &&
-              <div className="horizontal-container center bordered-form-item mb-20">
-                <ItemForm
-                  ref={`itemForm${i}`}
-                  {...$.nested(`items.${i}`)}
-                  validateOnChange
-                />
-                <div className="pointer" onClick={() => this.spliceIn('items', i)}>
-                  {deleteIcon}
-                </div>
-              </div>
-            }
+        {this.mapExtra('numbers', (_value, i) =>
+          <div key={i} className="mb-20">
+            <TextField
+              {...$(`numbers.${i}`)(this.$number, i)}
+              className="form-control"
+              placeholder={`Number ${i + 1}`}
+            />
           </div>
         )}
-
         <div className="text-right">
           <button className="btn green" onClick={this.performValidation.bind(this)}>Validate</button>
         </div>

@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import Form from '../../src';
-import { mount } from 'enzyme';
-import expect from 'expect';
+import { mount, shallow } from 'enzyme';
+import expect, { createSpy } from 'expect';
 import range from 'lodash/range';
 import without from 'lodash/without';
 
@@ -64,26 +64,26 @@ describe('<Form />', function() {
         }
       };
 
-      this.wrapper = mount(<Container />);
+      this.currentTest.wrapper = mount(<Container />);
     });
 
     it('renders form', function() {
-      expect(this.wrapper.find('input.foo').length).toEqual(1);
+      expect(this.test.wrapper.find('input.foo').length).toEqual(1);
     });
 
     it('handles change event with default handler', function() {
-      this.wrapper.find('.foo').simulate('change', { target: { value: 'new value' } });
-      expect(this.wrapper.state('form').foo).toEqual('new value');
+      this.test.wrapper.find('.foo').simulate('change', { target: { value: 'new value' } });
+      expect(this.test.wrapper.state('form').foo).toEqual('new value');
     });
 
     it('handles change event with explicit handler', function() {
-      this.wrapper.find('.bar').simulate('change', { target: { value: 'new value' } });
-      expect(this.wrapper.state('form').bar).toEqual('NEW VALUE');
+      this.test.wrapper.find('.bar').simulate('change', { target: { value: 'new value' } });
+      expect(this.test.wrapper.state('form').bar).toEqual('NEW VALUE');
     });
 
     it('renders errors', function() {
-      this.wrapper.instance().refs.form.setState({ errors: { foo: 'cannot be blank' } });
-      expect(this.wrapper.find('.error').get(0).innerHTML).toEqual('cannot be blank');
+      this.test.wrapper.instance().refs.form.setState({ errors: { foo: 'cannot be blank' } });
+      expect(this.test.wrapper.find('.error').get(0).innerHTML).toEqual('cannot be blank');
     });
   });
 
@@ -108,17 +108,17 @@ describe('<Form />', function() {
         }
       };
 
-      this.wrapper = mount(<Container />);
+      this.currentTest.wrapper = mount(<Container />);
     });
 
     it('handles change with default handler', function() {
-      this.wrapper.find('.item-foo-1').simulate('change', { target: { value: 'item foo' } });
-      expect(this.wrapper.state('form').items).toMatch([, { foo: 'item foo' }]);
+      this.test.wrapper.find('.item-foo-1').simulate('change', { target: { value: 'item foo' } });
+      expect(this.test.wrapper.state('form').items).toMatch([, { foo: 'item foo' }]);
     });
 
     it('handles change with explicit handler', function() {
-      this.wrapper.find('.item-bar-1').simulate('change', { target: { value: 'item bar' } });
-      expect(this.wrapper.state('form').items).toMatch([, { bar: 'ITEM BAR' }]);
+      this.test.wrapper.find('.item-bar-1').simulate('change', { target: { value: 'item bar' } });
+      expect(this.test.wrapper.state('form').items).toMatch([, { bar: 'ITEM BAR' }]);
     });
   });
 
@@ -146,17 +146,17 @@ describe('<Form />', function() {
         }
       };
 
-      this.wrapper = mount(<Container />);
+      this.currentTest.wrapper = mount(<Container />);
     });
 
     it('still handles own attrs', function() {
-      this.wrapper.find('.own').simulate('change', { target: { value: 'own value' } });
-      expect(this.wrapper.state('form').own).toEqual('own value');
+      this.test.wrapper.find('.own').simulate('change', { target: { value: 'own value' } });
+      expect(this.test.wrapper.state('form').own).toEqual('own value');
     });
 
     it('changes in nested form propagated up', function() {
-      this.wrapper.find('.foo').simulate('change', { target: { value: 'foo value' } });
-      expect(this.wrapper.state('form').nested).toEqual({ foo: 'foo value' });
+      this.test.wrapper.find('.foo').simulate('change', { target: { value: 'foo value' } });
+      expect(this.test.wrapper.state('form').nested).toEqual({ foo: 'foo value' });
     });
   });
 
@@ -202,35 +202,35 @@ describe('<Form />', function() {
         }
       };
 
-      this.wrapper = mount(<Container />);
+      this.currentTest.wrapper = mount(<Container />);
     });
 
     it('initially has only one input for name', function() {
-      expect(this.wrapper.find('.item-name-0').length).toEqual(1);
-      expect(this.wrapper.find('.item-description-0').length).toEqual(0);
+      expect(this.test.wrapper.find('.item-name-0').length).toEqual(1);
+      expect(this.test.wrapper.find('.item-description-0').length).toEqual(0);
     });
 
     context('when name is changed', function() {
       it('renders form for item and new empty name field for new item', function() {
-        this.wrapper.find('.item-name-0').simulate('change', { target: { value: 'item 1' } });
-        expect(this.wrapper.state('form')).toMatch({ items: [{ name: 'item 1' }] });
-        expect(this.wrapper.find('.item-description-0').length).toEqual(1);
-        expect(this.wrapper.find('.item-name-1').length).toEqual(1);
-        expect(this.wrapper.find('.item-description-1').length).toEqual(0);
+        this.test.wrapper.find('.item-name-0').simulate('change', { target: { value: 'item 1' } });
+        expect(this.test.wrapper.state('form')).toMatch({ items: [{ name: 'item 1' }] });
+        expect(this.test.wrapper.find('.item-description-0').length).toEqual(1);
+        expect(this.test.wrapper.find('.item-name-1').length).toEqual(1);
+        expect(this.test.wrapper.find('.item-description-1').length).toEqual(0);
       });
 
       it('handles nested input changes from nested form', function() {
-        this.wrapper.find('.item-name-0').simulate('change', { target: { value: 'item 1' } });
-        this.wrapper.find('.item-description-0').simulate('change', { target: { value: 'item 1 description' } });
-        expect(this.wrapper.state('form')).toMatch({ items: [{ name: 'item 1', description: 'item 1 description' }] });
+        this.test.wrapper.find('.item-name-0').simulate('change', { target: { value: 'item 1' } });
+        this.test.wrapper.find('.item-description-0').simulate('change', { target: { value: 'item 1 description' } });
+        expect(this.test.wrapper.state('form')).toMatch({ items: [{ name: 'item 1', description: 'item 1 description' }] });
       });
 
       it('removes item when name is erased', function() {
-        this.wrapper.find('.item-name-0').simulate('change', { target: { value: 'item 1' } });
-        this.wrapper.find('.item-description-0').simulate('change', { target: { value: 'item 1 description' } });
-        this.wrapper.find('.item-name-1').simulate('change', { target: { value: 'item 2' } });
-        this.wrapper.find('.item-name-0').simulate('change', { target: { value: '' } });
-        expect(this.wrapper.state('form')).toMatch({ items: [{ name: 'item 2' }] });
+        this.test.wrapper.find('.item-name-0').simulate('change', { target: { value: 'item 1' } });
+        this.test.wrapper.find('.item-description-0').simulate('change', { target: { value: 'item 1 description' } });
+        this.test.wrapper.find('.item-name-1').simulate('change', { target: { value: 'item 2' } });
+        this.test.wrapper.find('.item-name-0').simulate('change', { target: { value: '' } });
+        expect(this.test.wrapper.state('form')).toMatch({ items: [{ name: 'item 2' }] });
       });
     });
   });
@@ -254,13 +254,13 @@ describe('<Form />', function() {
           }
         };
 
-        this.wrapper = mount(<Container />);
+        this.currentTest.wrapper = mount(<Container />);
       });
 
       it('performs validation according to validations property', function() {
-        this.wrapper.instance().refs.form.performValidation();
+        this.test.wrapper.instance().refs.form.performValidation();
 
-        expect(this.wrapper.instance().refs.form.state.errors).toMatch({
+        expect(this.test.wrapper.instance().refs.form.state.errors).toMatch({
           'foo': 'cannot be blank'
         });
       });
@@ -300,13 +300,13 @@ describe('<Form />', function() {
           }
         };
 
-        this.wrapper = mount(<Container />);
+        this.currentTest.wrapper = mount(<Container />);
       });
 
       it('performs validation according to validations property', function() {
-        this.wrapper.instance().refs.form.performValidation();
+        this.test.wrapper.instance().refs.form.performValidation();
 
-        expect(this.wrapper.instance().refs.form.state.errors).toMatch({
+        expect(this.test.wrapper.instance().refs.form.state.errors).toMatch({
           'foo': 'cannot be blank',
           'items.0.bar': 'should be numeric',
           'items.1.bar': 'should be numeric'
@@ -360,15 +360,15 @@ describe('<Form />', function() {
           }
         };
 
-        this.wrapper = mount(<Container />);
+        this.currentTest.wrapper = mount(<Container />);
       });
 
       it('performs validation according to specified logic', function() {
-        this.wrapper.find('.bar').simulate('change', { target: { value: '4' } });
+        this.test.wrapper.find('.bar').simulate('change', { target: { value: '4' } });
 
-        this.wrapper.instance().refs.form.performValidation();
+        this.test.wrapper.instance().refs.form.performValidation();
 
-        expect(this.wrapper.instance().refs.form.state.errors).toMatch({
+        expect(this.test.wrapper.instance().refs.form.state.errors).toMatch({
           'foo': 'cannot be blank',
           'bar': 'should be greater than 5',
           'baz': 'invalid',
@@ -399,7 +399,7 @@ describe('<Form />', function() {
           }
         };
 
-        this.wrapper = mount(<Container />);
+        this.currentTest.wrapper = mount(<Container />);
       });
 
       describe('clearErrorsOnChange', function() {
@@ -410,15 +410,15 @@ describe('<Form />', function() {
         });
 
         it('clears error when input value changes', function() {
-          this.wrapper.instance().refs.form.performValidation();
+          this.test.wrapper.instance().refs.form.performValidation();
 
-          expect(this.wrapper.instance().refs.form.state.errors).toMatch({
+          expect(this.test.wrapper.instance().refs.form.state.errors).toMatch({
             'foo': 'cannot be blank'
           });
 
-          this.wrapper.find('.foo').simulate('change', { target: { value: 'foo' } });
+          this.test.wrapper.find('.foo').simulate('change', { target: { value: 'foo' } });
 
-          expect(this.wrapper.instance().refs.form.state.errors).toMatch({
+          expect(this.test.wrapper.instance().refs.form.state.errors).toMatch({
             'foo': null
           });
         });
@@ -433,31 +433,71 @@ describe('<Form />', function() {
 
         context('when was not validated before', function() {
           it('does not trigger onChange validation', function() {
-            this.wrapper.find('.foo').simulate('change', { target: { value: 'foo' } });
-            expect(this.wrapper.instance().refs.form.state.errors).toMatch({});
+            this.test.wrapper.find('.foo').simulate('change', { target: { value: 'foo' } });
+            expect(this.test.wrapper.instance().refs.form.state.errors).toMatch({});
 
-            this.wrapper.find('.foo').simulate('change', { target: { value: '' } });
-            expect(this.wrapper.instance().refs.form.state.errors).toMatch({});
+            this.test.wrapper.find('.foo').simulate('change', { target: { value: '' } });
+            expect(this.test.wrapper.instance().refs.form.state.errors).toMatch({});
           });
         });
 
         context('after first error-resulted validation', function() {
           it('validates input when its value changes', function() {
-            this.wrapper.instance().refs.form.performValidation();
-            expect(this.wrapper.instance().refs.form.state.errors).toMatch({
+            this.test.wrapper.instance().refs.form.performValidation();
+            expect(this.test.wrapper.instance().refs.form.state.errors).toMatch({
               'foo': 'cannot be blank'
             });
 
-            this.wrapper.find('.foo').simulate('change', { target: { value: 'foo' } });
-            expect(this.wrapper.instance().refs.form.state.errors).toMatch({
+            this.test.wrapper.find('.foo').simulate('change', { target: { value: 'foo' } });
+            expect(this.test.wrapper.instance().refs.form.state.errors).toMatch({
               'foo': null
             });
 
-            this.wrapper.find('.foo').simulate('change', { target: { value: '' } });
-            expect(this.wrapper.instance().refs.form.state.errors).toMatch({
+            this.test.wrapper.find('.foo').simulate('change', { target: { value: '' } });
+            expect(this.test.wrapper.instance().refs.form.state.errors).toMatch({
               'foo': 'cannot be blank'
             });
           });
+        });
+      });
+    });
+
+    describe('ifValid helper method', function() {
+      function mount(){
+        class TestForm extends Form {
+          validations = {
+            'foo': function(value) {
+              if (!value) return 'cannot be blank';
+            }
+          };
+        }
+
+        this.currentTest.wrapper = shallow(<TestForm attrs={ this.currentTest.attrs} />);
+      }
+
+      context('when form is valid', function() {
+        beforeEach(function() {
+          this.currentTest.attrs = {foo: 'bar'};
+          mount.call(this);
+        });
+
+        it('triggers callback', function() {
+          const spy = createSpy();
+          this.test.wrapper.instance().ifValid(spy);
+          expect(spy).toHaveBeenCalled();
+        });
+      });
+
+      context('when form is invalid', function() {
+        beforeEach(function() {
+          this.currentTest.attrs = {};
+          mount.call(this);
+        });
+
+        it('does not trigger callback', function() {
+          const spy = createSpy();
+          this.test.wrapper.instance().ifValid(spy);
+          expect(spy).toNotHaveBeenCalled();
         });
       });
     });
@@ -471,12 +511,12 @@ describe('<Form />', function() {
         }
       };
 
-      this.wrapper = mount(<Container />);
+      this.currentTest.wrapper = mount(<Container />);
     });
 
     it('works just like usual rendering', function() {
-      this.wrapper.find('.foo').simulate('change', { target: { value: 'new value' } });
-      expect(this.wrapper.state('form').foo).toEqual('new value');
+      this.test.wrapper.find('.foo').simulate('change', { target: { value: 'new value' } });
+      expect(this.test.wrapper.state('form').foo).toEqual('new value');
     });
   });
 });

@@ -2,11 +2,10 @@ import React from 'react';
 import dedent from 'dedent-js';
 import Form, { TextField } from '../form';
 
-const SOURCE = [['Form8.jsx', `
-  // read about those setup components at the beginning of examples
-  import Form, { TextField } from 'form';
+const SOURCE = [['BaseForm.jsx', `
+  import Form from 'react-form-base';
 
-  class Form8 extends Form {
+  class BaseForm extends Form {
     static validations = {
       presence(value) { if (!value) return 'cannot be blank'; },
       email(value) {
@@ -24,7 +23,12 @@ const SOURCE = [['Form8.jsx', `
         }
       }
     };
+  }
+`], ['Form8.jsx', `
+  // read about those setup components at the beginning of examples
+  import BaseForm, { TextField } from 'base-form';
 
+  class Form8 extends BaseForm {
     validations = {
       email: ['presence', 'email'],
       amount: { presence: true, numericality: { greaterThan: 10 } }
