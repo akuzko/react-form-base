@@ -73,7 +73,7 @@ class MyForm extends Form {
 
 ```js
 import Form from 'react-form-base';
-import { TextField } from 'your-inputs'; // read on inputs in the beginning of README
+import { TextField, Select } from 'your-inputs'; // read on inputs in the beginning of README
 import countries from 'utils/countries'; // it's just a stub
 
 class MyForm extends Form {

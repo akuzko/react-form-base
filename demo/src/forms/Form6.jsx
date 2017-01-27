@@ -25,7 +25,7 @@ const SOURCE = [['ItemForm.jsx', `
     $render($) {
       return (
         <div>
-          <TextField {...$('firstName')} placeholder="Full Name" />
+          <TextField {...$('fullName')} placeholder="Full Name" />
 
           {this.map('items', (_item, i) =>
             <div key={i}>

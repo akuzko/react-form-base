@@ -13,11 +13,15 @@ const SOURCE = [['Form7.jsx', `
       };
 
       if (Math.random() < 0.5) {
-        errors.lastName = 'is invalid this time';
+        errors['lastName'] = 'is invalid this time';
       }
 
-      if (!/^A/.test(this.get('address.street'))) {
-        errors['address.street'] = 'should begin with A';
+      if (!/^[A-Z]/.test(this.get('address.city'))) {
+        errors['address.city'] = 'should begin with capital letter';
+      }
+
+      if (!/^[\w\s]+\s\d+$/.test(this.get('address.streetLine'))) {
+        errors['address.streetLine'] = 'contain letters and end with digits';
       }
 
       return errors;

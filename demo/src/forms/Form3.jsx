@@ -14,8 +14,8 @@ const SOURCE = [['Form3.jsx', `
     $render($) {
       return (
         <div>
-          <TextField {...$('firstName')} />
-          <TextField {...$('lastName')(this.$lastName)} />
+          <TextField {...$('firstName')} placeholder="First Name" />
+          <TextField {...$('lastName')(this.$lastName)} placeholder="Last Name" />
         </div>
       );
     }

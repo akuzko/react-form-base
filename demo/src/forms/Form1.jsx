@@ -9,8 +9,8 @@ const SOURCE = [['Form1.jsx', `
     $render($) {
       return (
         <div>
-          <TextField {...$('firstName')} />
-          <TextField {...$('lastName')} />
+          <TextField {...$('firstName')} placeholder="First Name" />
+          <TextField {...$('lastName')} placeholder="Last Name" />
           <Select
             {...$('role')}
             options={['admin', 'employee']}
