@@ -4,6 +4,8 @@ var gulp = require('gulp'),
   browserify = require('browserify'),
   babelify = require('babelify'),
   source = require('vinyl-source-stream'),
+  buffer = require('vinyl-buffer'),
+  uglify = require('gulp-uglify'),
   notify = require('gulp-notify'),
   connect = require('gulp-connect'),
   prettyHrtime = require('pretty-hrtime'),
@@ -76,6 +78,17 @@ gulp.task('css', function() {
     .pipe(connect.reload());
 });
 
+gulp.task('bundle', function() {
+  return browserify({ entries: './src/demo.jsx', dest: './dist', extensions: ['.js', '.jsx'] })
+    .transform('babelify', { presets: ['es2015', 'react', 'stage-1'] })
+    .bundle()
+    .pipe(source('demo.js'))
+    .pipe(buffer())
+    .pipe(uglify())
+    .pipe(gulp.dest('./dist'));
+});
+
+gulp.task('build', ['css', 'bundle'])
 gulp.task('default', ['css', 'browserify', 'server']);
 gulp.watch('./src/styles/*.css', ['css']);
 
