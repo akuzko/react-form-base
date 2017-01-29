@@ -43,8 +43,8 @@ TextField.propTypes = {
 
 ### Form Usage
 
-Most of form use-cases with examples are revealed in **Demo Application** (currently
-_IN PROGRESS_). Details on how to run it locally are at the end of README.
+Most of form use-cases with examples are revealed in [**Demo Application**](https://akuzko.github.io/react-form-base/).
+Details on how to run it locally are at the end of README.
 
 Bellow you can take a glance on main aspects of form usage: general API,
 custom on-change handlers, validation and `$render` helper function.
