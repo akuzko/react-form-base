@@ -5,7 +5,6 @@ import Form, { TextField } from '../form';
 const SOURCE = [['Form11.jsx', `
   // read about those setup components at the beginning of examples
   import BaseForm, { TextField } from 'base-form';
-  import ItemForm from './ItemForm';
 
   class Form11 extends Form {
     static validations = {

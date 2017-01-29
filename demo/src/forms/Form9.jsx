@@ -46,12 +46,11 @@ const SOURCE = [['Form9.jsx', `
           <TextField {...$('fullName')} placeholder="Full Name" />
 
           {this.mapExtra('numbers', (_value, i) =>
-            <div key={i}>
-              <TextField
-                {...$(\`numbers.\${i}\`)(this.$number, i)}
-                placeholder={\`Number \${i + 1}\`}
-              />
-            </div>
+            <TextField
+              key={i}
+              {...$(\`numbers.\${i}\`)(this.$number, i)}
+              placeholder={\`Number \${i + 1}\`}
+            />
           )}
 
           <button onClick={this.performValidation.bind(this)}>Validate</button>

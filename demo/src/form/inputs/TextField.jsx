@@ -18,3 +18,7 @@ TextField.propTypes = {
   error: PropTypes.string,
   onChange: PropTypes.func
 };
+
+TextField.defaultProps = {
+  value: ''
+};

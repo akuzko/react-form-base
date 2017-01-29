@@ -5,7 +5,7 @@ export default function Select(props) {
 
   return (
     <div>
-      <select value={value || ''} onChange={(e) => onChange(e.target.value)} {...rest}>
+      <select value={value} onChange={(e) => onChange(e.target.value)} {...rest}>
         {includeBlank &&
           <option value="">{typeof includeBlank === 'string' ? includeBlank : 'None'}</option>
         }
@@ -37,5 +37,6 @@ Select.propTypes = {
 };
 
 Select.defaultProps = {
+  value: '',
   includeBlank: false
 };
