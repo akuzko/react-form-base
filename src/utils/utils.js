@@ -7,10 +7,6 @@ export function fullPath(path) {
   return path.map((part, i) => isNumber(part) ? `[${part}]` : (i > 0 ? '.' : '') + part).join('');
 }
 
-export function fullName(path) {
-  return path.join('.');
-}
-
 export function pathToName(path) {
   return path.replace(/\[(\d+)\]/g, (_match, i) => `.${i}`);
 }
@@ -24,15 +20,9 @@ function wildcard(name) {
 }
 
 export function buildFormValidator(form) {
-  function validate(...args) {
-    let options = {};
-    if (isObject(args[args.length - 1])) {
-      options = args.pop();
-    }
-    const { with: validateWith, value: validateValue } = options;
-    const name = fullName(args);
-    const value = typeof validateValue !== 'undefined' ? validateValue : form.get(...args);
-    const validator = validateWith || form.validations[name] || form.validations[wildcard(name)];
+  function validate(name, options = {}) {
+    const value = options.hasOwnProperty('value') ? options.value : form.get(name);
+    const validator = options['with'] || form.validations[name] || form.validations[wildcard(name)];
 
     if (!validator) return null;
 

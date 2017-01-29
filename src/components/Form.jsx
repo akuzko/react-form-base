@@ -60,7 +60,7 @@ export default class Form extends PureComponent {
   get(name) {
     if (name === undefined) return this.props.attrs;
 
-    return get(this.props.attrs, nameToPath(name), '');
+    return get(this.props.attrs, nameToPath(name));
   }
 
   set(name, value) {

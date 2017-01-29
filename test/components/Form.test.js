@@ -280,7 +280,7 @@ describe('<Form />', function() {
 
           validate(validate) {
             validate('foo');
-            range(2).forEach(i => validate('items', i, 'bar'));
+            range(2).forEach(i => validate(`items.${i}.bar`));
 
             return validate.errors;
           }
@@ -292,7 +292,7 @@ describe('<Form />', function() {
 
                 {range(2).map(i =>
                   <div key={i}>
-                    <Input {...this.$('items', i, 'bar')} className={`item-bar-${i}`} />
+                    <Input {...this.$(`items.${i}.bar`)} className={`item-bar-${i}`} />
                   </div>
                 )}
               </div>
@@ -335,7 +335,7 @@ describe('<Form />', function() {
             validate('bar');
             validate('baz', { with: function(){ return 'invalid'; } });
             range(2).forEach(i =>
-              validate('items', i, 'bar', { with: 'presence' })
+              validate(`items.${i}.bar`, { with: 'presence' })
             );
             validate.addError('bak', 'another invalid');
 
@@ -352,7 +352,7 @@ describe('<Form />', function() {
 
                 {range(2).map(i =>
                   <div key={i}>
-                    <Input {...this.$('items', i, 'bar')} className={`item-bar-${i}`} />
+                    <Input {...this.$(`items.${i}.bar`)} className={`item-bar-${i}`} />
                   </div>
                 )}
               </div>
@@ -501,6 +501,26 @@ describe('<Form />', function() {
         });
       });
     });
+  });
+
+  describe('helper methods', function() {
+    beforeEach(function() {
+      this.currentTest.wrapper = shallow(<Form attrs={{ foo: 'bar' }} />);
+    });
+
+    describe('get', function() {
+      it('returns value when it is defined', function() {
+        expect(this.test.wrapper.instance().get('foo')).toEqual('bar');
+      });
+
+      it('returns undefined when value is not defined', function() {
+        expect(this.test.wrapper.instance().get('bar')).toEqual(undefined);
+      });
+
+      it('returns whole attrs object when name is not passed', function() {
+        expect(this.test.wrapper.instance().get()).toMatch({ foo: 'bar' });
+      });
+    })
   });
 
   describe('$render', function() {
