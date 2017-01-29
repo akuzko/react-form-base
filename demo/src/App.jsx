@@ -1,30 +1,33 @@
 import React, { PureComponent } from 'react';
 import InputPrerequisites from './components/InputPrerequisites';
-import isInViewport from './utils/isInViewport';
 import * as Forms from './forms';
 
+const sections = [
+  'inputs', 'form01', 'form02', 'form03', 'form04',
+  'form05', 'form06', 'form07', 'form08', 'form09', 'form10'
+].reverse();
+
 export default class App extends PureComponent {
-  state = { forms: {}, active: ['inputs', 'form01'] };
+  state = { forms: {}, section: 'inputs' };
 
   componentDidMount() {
-    window.addEventListener('scroll', this.setVisibleActivity.bind(this));
+    window.addEventListener('scroll', this.setActiveSection);
   }
 
-  setVisibleActivity() {
-    const active = [
-      'inputs', 'form01', 'form02', 'form03', 'form04', 'form05',
-      'form06', 'form07', 'form08', 'form09', 'form10', 'form11'
-    ].filter(id => {
-      const div = document.querySelector(`#${id}`);
+  setActiveSection = () => {
+    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+      return this.setState({ section: 'form11' });
+    }
 
-      return isInViewport(div);
-    });
+    const section = sections.find(id =>
+      document.querySelector(`#${id}`).offsetTop - 10 < window.pageYOffset
+    ) || 'inputs';
 
-    this.setState({ active });
+    this.setState({ section });
   }
 
   isActive(section) {
-    return this.state.active.includes(section) && 'active';
+    return this.state.section === section ? 'active' : '';
   }
 
   formProps(name) {

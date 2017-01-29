@@ -81,7 +81,7 @@ const SOURCE = [['Form9.jsx', `
 `]];
 
 const DESCRIPTION = dedent`
-  In this example Form has been set up in a way similar to [Form5](#form5), i.e.
+  In this example Form has been set up in a way similar to [Form5](#form05), i.e.
   it has auto-add and auto-remove items behavior. The difference is that each item
   in the collection is supposed to be a string that represents a number.
 
