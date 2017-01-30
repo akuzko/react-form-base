@@ -39,11 +39,11 @@ export default class Form2 extends Form {
       <div>
         <TextField {...$('email')} className="form-control mb-20" placeholder="Email" />
 
-        <div className="bordered-form-item">
+        <div className="bordered-form-item mb-20">
           <Select {...$('address.country')} options={['Country 1', 'Country 2']} includeBlank="Select Country..." className="form-control mb-20" />
           <TextField {...$('address.city')} className="form-control mb-20" placeholder="City" />
           <TextField {...$('address.streetLine')} className="form-control mb-20" placeholder="Street Line" />
-          <TextField {...$('address.zip')} className="form-control mb-20" placeholder="Zip" />
+          <TextField {...$('address.zip')} className="form-control" placeholder="Zip" />
         </div>
       </div>
     );

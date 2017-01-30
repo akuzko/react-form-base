@@ -6,10 +6,21 @@
 
 body {
   background-color: #ececec;
-  color: #000;
+  color: rgba(0,0,0,.8);
   font-family: 'Lato', sans-serif;
   font-size: 16px;
-  line-height: 1.4;
+  line-height: 1.5;
+}
+
+a, a:hover, a:focus {
+  color: #3a539b;
+  text-decoration: none;
+}
+
+h5 {
+  font-size: 24px;
+  font-weight: normal;
+  color: #000;
 }
 
 ul {
@@ -23,7 +34,7 @@ p {
     font-family: monospace;
     color: #db05ab;
     background: #e4f1fe;
-    padding: 2px 4px;
+    padding: 1px 4px;
   }
 }
 
@@ -37,6 +48,14 @@ p {
 
 .text-right {
   text-align: right;
+}
+
+.font-14 {
+  font-size: 14px;
+}
+
+.horizontal-scroll {
+  overflow-x: auto;
 }
 
 .paper {
@@ -114,6 +133,11 @@ p {
 .source-code {
   max-height: 400px;
   overflow: auto;
+
+  pre[class*="language-"] {
+    margin: 0;
+    border-left: 4px solid #3a539b;
+  }
 }
 
 .delete-icon {

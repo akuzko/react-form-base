@@ -78,7 +78,7 @@ Select.defaultProps = {
 export default function InputPrerequisites() {
   return (
     <div className="pb-20 mb-20 border-bottom">
-      <div className="mb-10 bold-text">Input Prerequisites</div>
+      <h5 className="mb-20"><span>&sect;</span> Input Prerequisites</h5>
       <div className="mb-20" dangerouslySetInnerHTML={{ __html: marked(content) }} />
 
       <div className="horizontal-container">

@@ -20,7 +20,7 @@ export default class App extends PureComponent {
     }
 
     const section = sections.find(id =>
-      document.querySelector(`#${id}`).offsetTop - 10 < window.pageYOffset
+      document.querySelector(`#${id}`).offsetTop - 30 < window.pageYOffset
     ) || 'inputs';
 
     this.setState({ section });

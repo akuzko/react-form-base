@@ -55,12 +55,12 @@ export default class Form5 extends Form {
       <div>
         <TextField {...$('fullName')} className="form-control mb-20" placeholder="Full Name" />
 
-        <div className="bordered-form-item">
+        <div className="bordered-form-item mb-20">
           {this.mapExtra('favoriteLanguages', (_value, i) =>
             <TextField
               key={i}
               {...$(`favoriteLanguages.${i}`)(this.$language, i)}
-              className="form-control mb-20"
+              className="form-control"
               placeholder={`Language ${i + 1}`}
             />
           )}
