@@ -16,30 +16,9 @@ npm install --save react-form-base
 `react-form-base` provides a `Form` base class which expects to work together
 with **Input** components. An **Input** is any component that consumes three
 properties: `value`, `error` and `onChange`. It also has to provide it's
-`value` as first argument to `onChange` function supplied in props.
-
-The most strait-forward Input component may look like so:
-
-```js
-function TextField(props) {
-  const { value, error, onChange, ...rest } = props;
-
-  return (
-    <div>
-      <input value={value} onChange={(e) => onChange(e.target.value)} {...rest} />
-      {error &&
-        <div className="error">{error}</div>
-      }
-    </div>
-  );
-}
-
-TextField.propTypes = {
-  value: PropTypes.string,
-  error: PropTypes.string,
-  onChange: PropTypes.func
-};
-```
+`value` as first argument to `onChange` function supplied in props. For
+existing ready-for-use input bindings take a look on [react-form-js](https://github.com/akuzko/react-form-js)
+and [react-form-material-ui](https://github.com/akuzko/react-form-material-ui).
 
 ### Form Usage
 
@@ -212,7 +191,7 @@ this variable that you find suitable.
 
 - `$(name)`, `input(name)` - returns a set of properties for input with a given
   name. `name` is a dot-separated string, i.e. `'foo.bar'` (for `bar` property
-  nested in object under `foo`), or `'foos.1'` (string at index 1 of `foos` array),
+  nested in object under `foo`), or `'foos.1'` (value at index 1 of `foos` array),
   or `'foos.2.bar'` (`bar` property of object at index 2 of `foos` array)
 - `get(name)` - returns a value for a given name. For example, if you have an
   attributes like `{foos: [{bar: 'baz'}, {bar: 'bak'}]}`, you might have:
@@ -225,7 +204,7 @@ this variable that you find suitable.
   corresponds to input name, and values are input values.
 - `merge(name, value)` - merges given `value` object with value of input with
   a given `name`. Should be used when working with nested forms.
-- `push(name, value)` - pushes a `value` to a input (which is treated as array)
+- `push(name, value)` - pushes a `value` to an input (which is treated as array)
   with a given `name`.
 - `remove(name, index)` - removes an item of an input (which is treated as array)
   with a given `name` at index `index`.
