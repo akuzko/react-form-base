@@ -24,7 +24,7 @@ const SOURCE = [['BaseForm.jsx', `
       name: 'presence',
       description: 'presence',
       amount: ['presence', function(value) {
-        if (parseInt(value) % 5 != 0) return 'should be divisable by 5';
+        if (+value % 5 != 0) return 'should be divisable by 5';
       }]
     };
 
@@ -68,8 +68,8 @@ const SOURCE = [['BaseForm.jsx', `
         <div>
           <TextField {...$('email')} placeholder="Email" />
 
-          {this.getErr('items') &&
-            <div className="error">{this.getErr('items')}</div>
+          {this.getError('items') &&
+            <div className="error">{this.getError('items')}</div>
           }
 
           {this.map('items', (_item, i) =>
@@ -134,7 +134,7 @@ class ItemForm extends BaseForm {
     name: 'presence',
     description: 'presence',
     amount: ['presence', function(value) {
-      if (parseInt(value) % 5 != 0) return 'should be divisable by 5';
+      if (+value % 5 != 0) return 'should be divisable by 5';
     }]
   };
 
@@ -193,8 +193,8 @@ export default class Form10 extends BaseForm {
           <TextField {...$('email')} className="form-control" placeholder="Email" />
         </div>
 
-        {this.getErr('items') &&
-          <div className="error">{this.getErr('items')}</div>
+        {this.getError('items') &&
+          <div className="error">{this.getError('items')}</div>
         }
 
         {this.map('items', (_item, i) =>

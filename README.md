@@ -240,7 +240,8 @@ this variable that you find suitable.
 - `performValidation()` - runs validation routines and sets errors.
 - `ifValid(callback)` - runs validation routines, sets errors, and executes
   `callback` if there were no errors.
-- `getErr(name)` - returns an error for an input with a given `name`.
+- `getErrors()` - returns an errors object.
+- `getError(name)` - returns an error for an input with a given `name`.
 - `setErrors(errors)` - sets `errors` (object) as form's errors.
 - `save()` - calls `this.props.onRequestSave(this.get(), this);`
 

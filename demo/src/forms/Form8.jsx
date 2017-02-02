@@ -18,7 +18,7 @@ const SOURCE = [['BaseForm.jsx', `
 
         if (!value) return null;
         if (isNaN(+value)) return 'should be a number';
-        if (typeof greaterThan != undefined && +value <= greaterThan) {
+        if (typeof greaterThan != 'undefined' && +value <= greaterThan) {
           return \`should be greater than \${greaterThan}\`;
         }
       }
@@ -72,8 +72,8 @@ export default class Form8 extends Form {
   static description = dedent`
     In this example form defines simple validation rules as Form's \`static
     validatations\` property which are used in instance-specific \`validations\`
-    property defined on form's prototype. Note that validation rules (static
-    validations property) is intended to be defined only once in your top-level
+    property defined on form instance. Note that validation rules (static
+    validations property) are intended to be defined only once in your top-level
     application form.
 
     This example uses \`'presence'\` and \`'email'\` (defined very simply for
@@ -98,7 +98,7 @@ export default class Form8 extends Form {
 
       if (!value) return null;
       if (isNaN(+value)) return 'should be a number';
-      if (typeof greaterThan != undefined && +value <= greaterThan) {
+      if (typeof greaterThan != 'undefined' && +value <= greaterThan) {
         return `should be greater than ${greaterThan}`;
       }
     }

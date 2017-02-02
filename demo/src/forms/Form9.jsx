@@ -12,7 +12,7 @@ const SOURCE = [['Form9.jsx', `
         if (!value) return 'cannot be blank';
       },
       numericality: function(value) {
-        if (value && isNaN(parseFloat(value))) {
+        if (value && isNaN(+value)) {
           return 'should be a number';
         }
       }
@@ -91,7 +91,7 @@ const DESCRIPTION = dedent`
   defined for \`'numbers.*'\`.
 
   **NOTE:** wildcard validation is not limited to a string values. Your form
-  may have a collection of nested _objects_ any you may want to define property
+  may have a collection of nested _objects_ and you may want to define property
   validation for each of them with something like
 
   \`\`\`js
@@ -114,7 +114,7 @@ export default class Form9 extends Form {
       if (!value) return 'cannot be blank';
     },
     numericality: function(value) {
-      if (value && isNaN(parseFloat(value))) {
+      if (value && isNaN(+value)) {
         return 'should be a number';
       }
     }

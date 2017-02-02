@@ -47,7 +47,7 @@ export default class Form extends PureComponent {
     Object.assign(wrapper, {
       value: this.get(name),
       onChange: this.set.bind(this, name),
-      error: this.getErr(name)
+      error: this.getError(name)
     });
 
     return wrapper;
@@ -98,7 +98,7 @@ export default class Form extends PureComponent {
   _set(updater) {
     const { attrs, onChange } = this.props;
     const newAttrs = cloneDeep(attrs);
-    const newErrors = { ...this.getErr() };
+    const newErrors = { ...this.getErrors() };
 
     updater(newAttrs, newErrors);
 
@@ -107,11 +107,11 @@ export default class Form extends PureComponent {
   }
 
   _shouldClearError(name) {
-    return this.props.clearErrorsOnChange && this.getErr(name);
+    return this.props.clearErrorsOnChange && this.getError(name);
   }
 
   _shouldValidateOnChange() {
-    return this.props.validateOnChange && this.state && this.state.hadErrors;
+    return this.props.validateOnChange && this.state.hadErrors;
   }
 
   ifValid(callback) {
@@ -184,12 +184,12 @@ export default class Form extends PureComponent {
     return [...value, null].map(iteratee);
   }
 
-  getErr(name) {
-    const errors = this.state.errors || {};
+  getErrors() {
+    return this.state.errors || {};
+  }
 
-    if (name === undefined) return errors;
-
-    return errors[name];
+  getError(name) {
+    return this.getErrors()[name];
   }
 
   setErrors(errors, callback) {
