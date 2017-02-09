@@ -53,7 +53,7 @@ const SOURCE = [['Form9.jsx', `
             />
           )}
 
-          <button onClick={this.performValidation.bind(this)}>Validate</button>
+          <button onClick={() = this.performValidation()}>Validate</button>
         </div>
       );
     }
@@ -159,7 +159,7 @@ export default class Form9 extends Form {
           </div>
         )}
         <div className="text-right">
-          <button className="btn green" onClick={this.performValidation.bind(this)}>Validate</button>
+          <button className="btn green" onClick={() => this.performValidation()}>Validate</button>
         </div>
       </div>
     );

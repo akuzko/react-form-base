@@ -40,7 +40,7 @@ const SOURCE = [['BaseForm.jsx', `
           <TextField {...$('email')} placeholder="Email" />
           <TextField {...$('amount')} placeholder="Amount" />
 
-          <button onClick={this.performValidation.bind(this)}>Validate</button>
+          <button onClick={() => this.performValidation()}>Validate</button>
         </div>
       );
     }
@@ -119,7 +119,7 @@ export default class Form8 extends Form {
           <TextField {...$('amount')} className="form-control" placeholder="Amount" />
         </div>
         <div className="text-right">
-          <button className="btn green" onClick={this.performValidation.bind(this)}>Validate</button>
+          <button className="btn green" onClick={() => this.performValidation()}>Validate</button>
         </div>
       </div>
     );

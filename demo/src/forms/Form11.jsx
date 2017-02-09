@@ -33,7 +33,7 @@ const SOURCE = [['Form11.jsx', `
             {success && 'Data has been successfully saved'}
           </div>
 
-          <button onClick={this.save.bind(this)}>Save</button>
+          <button onClick={() => this.save()}>Save</button>
         </div>
       );
     }
@@ -69,7 +69,7 @@ const SOURCE = [['Form11.jsx', `
         <Form9
           attrs={this.state.form}
           onChange={(form) => this.setState({ form })}
-          onRequestSave=(this.saveForm.bind(this))
+          onRequestSave={() => this.saveForm()}
           validateOnChange
         />
       );
@@ -129,7 +129,7 @@ export default class Form11 extends Form {
         </div>
 
         <div className="text-right">
-          <button className="btn green" onClick={this.save.bind(this)}>Save</button>
+          <button className="btn green" onClick={() => this.save()}>Save</button>
         </div>
       </div>
     );

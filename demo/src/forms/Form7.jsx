@@ -32,9 +32,10 @@ const SOURCE = [['Form7.jsx', `
         <div>
           <TextField {...$('firstName')} placeholder="First Name" />
           <TextField {...$('lastName')} placeholder="Last Name" />
-          <TextField {...$('address.street')} placeholder="Street (nested field)" />
+          <TextField {...$('address.city')} placeholder="Address/City" />
+          <TextField {...$('address.streetLine')} placeholder="Address/Street" />
 
-          <button onClick={this.performValidation.bind(this)}>Validate</button>
+          <button onClick={() => this.performValidation()}>Validate</button>
         </div>
       );
     }
@@ -109,7 +110,7 @@ export default class Form7 extends Form {
         </div>
 
         <div className="text-right">
-          <button className="btn green" onClick={this.performValidation.bind(this)}>Validate</button>
+          <button className="btn green" onClick={() => this.performValidation()}>Validate</button>
         </div>
       </div>
     );

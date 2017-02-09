@@ -84,7 +84,7 @@ const SOURCE = [['BaseForm.jsx', `
           )}
 
           <button onClick={() => this.push('items', {})}>Add Item</button>
-          <button onClick={this.performValidation.bind(this)}>Validate</button>
+          <button onClick={() => this.performValidation()}>Validate</button>
         </div>
       );
     }
@@ -212,7 +212,7 @@ export default class Form10 extends BaseForm {
 
         <div className="text-right">
           <button className="btn green mr-20" onClick={() => this.push('items', {})}>Add Item</button>
-          <button className="btn green" onClick={this.performValidation.bind(this)}>Validate</button>
+          <button className="btn green" onClick={() => this.performValidation()}>Validate</button>
         </div>
       </div>
     );
