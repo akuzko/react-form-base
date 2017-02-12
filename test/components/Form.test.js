@@ -520,7 +520,7 @@ describe('<Form />', function() {
       it('returns whole attrs object when name is not passed', function() {
         expect(this.test.wrapper.instance().get()).toMatch({ foo: 'bar' });
       });
-    })
+    });
   });
 
   describe('$render', function() {
