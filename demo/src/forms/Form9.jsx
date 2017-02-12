@@ -90,9 +90,9 @@ const DESCRIPTION = dedent`
   like \`'numbers.0'\`, \`'numbers.1'\` and so on will be validated with rules
   defined for \`'numbers.*'\`.
 
-  **NOTE:** wildcard validation is not limited to a string values. Your form
-  may have a collection of nested _objects_ and you may want to define property
-  validation for each of them with something like
+  **NOTE:** wildcard validation is not limited to validating collection of strings.
+  Your form may have a collection of nested _objects_ and you may want to define
+  their property validation for each of them with something like
 
   \`\`\`js
     validations = {

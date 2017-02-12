@@ -56,10 +56,10 @@ const SOURCE = [['Form11.jsx', `
             if (['foo', 'bar', 'baz'].includes(data.account)) {
               reject({ account: 'has already been taken' });
             } else {
-              resolve({ status: 200 });
+              resolve(true);
             }
           }, 3000);
-        }).then(() => form.setState({ saving: false, success: true }))
+        }).then(success => form.setState({ success, saving: false }))
           .catch(errors => form.setState({ errors, saving: false }));
       });
     }

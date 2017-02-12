@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import InputPrerequisites from './components/InputPrerequisites';
+import { Intro, InputPrerequisites } from './components';
 import * as Forms from './forms';
 
 const sections = [
@@ -50,10 +50,10 @@ export default class App extends PureComponent {
           if (['foo', 'bar', 'baz'].includes(attrs.account)) {
             reject({ account: 'has already been taken' });
           } else {
-            resolve({ status: 200 });
+            resolve(true);
           }
         }, 3000);
-      }).then(() => form.setState({ saving: false, success: true }))
+      }).then(success => form.setState({ success, saving: false }))
         .catch(errors => form.setState({ errors, saving: false }));
     });
   };
@@ -77,6 +77,7 @@ export default class App extends PureComponent {
             <a href="#form11" className={ this.isActive('form11') }>{Forms.Form11.title}</a>
           </div>
           <div className="content paper flex-item p-20">
+            <Intro />
             <div id="inputs"><InputPrerequisites /></div>
             <div id="form01"><Forms.Form1 {...this.formProps('form1')} /></div>
             <div id="form02"><Forms.Form2 {...this.formProps('form2')} /></div>

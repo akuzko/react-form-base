@@ -199,7 +199,7 @@ this variable that you find suitable.
   - `this.get('foos.1')     // => {bar: 'bak'}`
   - `this.get('foos.1.bar') // => 'bak'`
   - `this.get() // returns whole form's attributes object`
-- `set(name, value)` - sets a `value` for an input with a specified `name`;
+- `set(name, value)` - sets a `value` for an input with a specified `name`.
 - `set(object)` - sets multiple values at once. Each key in the object
   corresponds to input name, and values are input values.
 - `merge(name, value)` - merges given `value` object with value of input with
@@ -266,6 +266,11 @@ class Page extends Component {
   }
 }
 ```
+
+## Credits
+
+Hugs and thanks to [ogrechishkina](https://github.com/ogrechishkina) for her
+support and building all of the CSS for demo application.
 
 ## Running Demo locally
 
