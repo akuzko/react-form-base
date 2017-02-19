@@ -9,7 +9,7 @@ const SOURCE = [['BaseForm.jsx', `
     static validations = {
       presence(value) { if (!value) return 'cannot be blank'; },
       email(value) {
-        if (value && !/^[\w\d\.]+@[\w\d]+\.[\w\d]{2,}$/.test(value)) {
+        if (value && !/^[\\w\\d\.]+@[\\w\\d]+\.[\\w\\d]{2,}$/.test(value)) {
           return 'should be email';
         }
       },

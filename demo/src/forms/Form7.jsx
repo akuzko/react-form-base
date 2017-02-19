@@ -20,7 +20,7 @@ const SOURCE = [['Form7.jsx', `
         errors['address.city'] = 'should begin with capital letter';
       }
 
-      if (!/^[\w\s]+\s\d+$/.test(this.get('address.streetLine'))) {
+      if (!/^[\\w\\s]+\\s\\d+$/.test(this.get('address.streetLine'))) {
         errors['address.streetLine'] = 'contain letters and end with digits';
       }
 

@@ -40,14 +40,14 @@ const SOURCE = [['Form11.jsx', `
   }
 `], ['Page.jsx', `
   import React, { Component } from 'react';
-  import Form9 from './Form9';
+  import Form11 from './Form11';
 
   class Page extends Component {
     state = {
       form: {}
     };
 
-    saveForm(data, form) {
+    saveForm = (data, form) => {
       form.ifValid(() => {
         // simulated AJAX request
         return new Promise((resolve, reject) => {
@@ -62,14 +62,14 @@ const SOURCE = [['Form11.jsx', `
         }).then(success => form.setState({ success, saving: false }))
           .catch(errors => form.setState({ errors, saving: false }));
       });
-    }
+    };
 
     render() {
       return (
         <Form9
           attrs={this.state.form}
           onChange={(form) => this.setState({ form })}
-          onRequestSave={() => this.saveForm()}
+          onRequestSave={this.saveForm}
           validateOnChange
         />
       );
