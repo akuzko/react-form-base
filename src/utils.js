@@ -4,7 +4,7 @@ import isPlainObject from 'lodash/isPlainObject';
 export function bindState(component, key = 'form') {
   return {
     attrs: (component.state && component.state[key]) || {},
-    onChange: function(attrs) { return component.setState({ [key]: attrs }) }
+    onChange: function(attrs) { return component.setState({ [key]: attrs }); }
   };
 }
 

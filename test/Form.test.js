@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import Form from '../../src';
+import Form from '../src';
 import { mount, shallow } from 'enzyme';
 import expect, { createSpy } from 'expect';
 import range from 'lodash/range';
@@ -12,6 +12,7 @@ describe('<Form />', function() {
   class Input extends Component {
     static propTypes = {
       onChange: PropTypes.func,
+      value: PropTypes.string,
       error: PropTypes.string
     };
 

@@ -1,2 +1,2 @@
-export default from './components/Form';
-export bindState from './utils';
+export default from './Form';
+export { bindState } from './utils';

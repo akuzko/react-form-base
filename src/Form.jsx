@@ -1,6 +1,6 @@
 import React, { PropTypes, PureComponent } from 'react';
 
-import { nameToPath, buildFormValidator } from '../utils';
+import { nameToPath, buildFormValidator } from './utils';
 import isPlainObject from 'lodash/isPlainObject';
 import cloneDeep from 'lodash/cloneDeep';
 import get from 'lodash/get';

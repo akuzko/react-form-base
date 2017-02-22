@@ -1,5 +1,7 @@
 === master
 
+Reduce complexity of code organization, fixes (akuzko)
+
 Add bindState helper method, improve Form props (akuzko)
 
 Fix rendering flaws in Demo forms, add CHANGELOG (akuzko)

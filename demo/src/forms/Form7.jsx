@@ -42,6 +42,7 @@ const SOURCE = [['Form7.jsx', `
   }
 `], ['Page.jsx', `
   import React, { Component } from 'react';
+  import { bindState } from 'react-form-base';
   import Form7 from './Form7';
 
   class Page extends Component {

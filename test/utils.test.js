@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import Form from '../../src/Form';
-import { nameToPath, bindState } from '../../src/utils';
+import Form from '../src/Form';
+import { nameToPath, bindState } from '../src/utils';
 import { shallow } from 'enzyme';
 import expect from 'expect';
 

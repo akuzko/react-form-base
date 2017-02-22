@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { Intro, InputPrerequisites } from './components';
 import * as Forms from './forms';
+import { bindState } from '../../src';
 
 const sections = [
   'inputs', 'form01', 'form02', 'form03', 'form04',
@@ -8,7 +9,7 @@ const sections = [
 ].reverse();
 
 export default class App extends PureComponent {
-  state = { forms: {}, section: 'inputs' };
+  state = { section: 'inputs' };
 
   componentDidMount() {
     window.addEventListener('scroll', this.setActiveSection);
@@ -28,17 +29,6 @@ export default class App extends PureComponent {
 
   isActive(section) {
     return this.state.section === section ? 'active' : '';
-  }
-
-  formProps(name) {
-    const props = this.state.forms[name] || {};
-
-    return {
-      attrs: props.attrs || {},
-      onChange: (attrs, errors) => this.setState({
-        forms: { ...this.state.forms, [name]: { attrs, errors } }
-      })
-    };
   }
 
   saveForm11 = (attrs, form) => {
@@ -77,17 +67,17 @@ export default class App extends PureComponent {
           <div className="content paper flex-item p-20">
             <Intro />
             <div id="inputs"><InputPrerequisites /></div>
-            <div id="form01"><Forms.Form1 {...this.formProps('form1')} /></div>
-            <div id="form02"><Forms.Form2 {...this.formProps('form2')} /></div>
-            <div id="form03"><Forms.Form3 {...this.formProps('form3')} /></div>
-            <div id="form04"><Forms.Form4 {...this.formProps('form4')} /></div>
-            <div id="form05"><Forms.Form5 {...this.formProps('form5')} /></div>
-            <div id="form06"><Forms.Form6 {...this.formProps('form6')} /></div>
-            <div id="form07"><Forms.Form7 {...this.formProps('form7')} /></div>
-            <div id="form08"><Forms.Form8 {...this.formProps('form8')} /></div>
-            <div id="form09"><Forms.Form9 {...this.formProps('form9')} /></div>
-            <div id="form10"><Forms.Form10 {...this.formProps('form10')} /></div>
-            <div id="form11"><Forms.Form11 {...this.formProps('form11')} onRequestSave={this.saveForm11} /></div>
+            <div id="form01"><Forms.Form1  {...bindState(this, 'form1')} /></div>
+            <div id="form02"><Forms.Form2  {...bindState(this, 'form2')} /></div>
+            <div id="form03"><Forms.Form3  {...bindState(this, 'form3')} /></div>
+            <div id="form04"><Forms.Form4  {...bindState(this, 'form4')} /></div>
+            <div id="form05"><Forms.Form5  {...bindState(this, 'form5')} /></div>
+            <div id="form06"><Forms.Form6  {...bindState(this, 'form6')} /></div>
+            <div id="form07"><Forms.Form7  {...bindState(this, 'form7')} /></div>
+            <div id="form08"><Forms.Form8  {...bindState(this, 'form8')} /></div>
+            <div id="form09"><Forms.Form9  {...bindState(this, 'form9')} /></div>
+            <div id="form10"><Forms.Form10 {...bindState(this, 'form10')} /></div>
+            <div id="form11"><Forms.Form11 {...bindState(this, 'form11')} onRequestSave={this.saveForm11} /></div>
           </div>
         </div>
       </div>
