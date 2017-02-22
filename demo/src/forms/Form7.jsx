@@ -45,14 +45,8 @@ const SOURCE = [['Form7.jsx', `
   import Form7 from './Form7';
 
   class Page extends Component {
-    state = {
-      form: {}
-    };
-
     render() {
-      return (
-        <Form7 attrs={this.state.form} onChange={(form) => this.setState({ form })} />
-      );
+      return <Form7 {...bindState(this)} />;
     }
   }
 `]];

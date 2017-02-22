@@ -47,21 +47,12 @@ const SOURCE = [['BaseForm.jsx', `
   }
 `], ['Page.jsx', `
   import React, { Component } from 'react';
+  import { bindState } from 'react-form-base';
   import Form8 from './Form8';
 
   class Page extends Component {
-    state = {
-      form: {}
-    };
-
     render() {
-      return (
-        <Form8
-          attrs={this.state.form}
-          onChange={(form) => this.setState({ form })}
-          validateOnChange
-        />
-      );
+      return <Form8 {...bindState(this)} />;
     }
   }
 `]];
@@ -82,7 +73,8 @@ export default class Form8 extends Form {
     how you can pass custom options to validation rules.
 
     Also note that with predefined validations \`validateOnChange\` property may
-    take place, which is enabled for the form in this example.
+    take place, which is enabled by default, but can be disabled by passing
+    \`false\` value in props.
   `;
   static source = SOURCE;
 

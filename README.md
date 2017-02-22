@@ -179,7 +179,7 @@ nested forms, since it has a special `nested` method that will generate
 onChange handler for nested form for you:
 
 ```js
-{this.mapIndexIn('items', (i) =>
+{this.map('items', (_item, i) =>
   <ItemForm key={i} {...$.nested(`items.${i}`)} />
 )}
 ```
@@ -222,7 +222,10 @@ this variable that you find suitable.
 - `getErrors()` - returns an errors object.
 - `getError(name)` - returns an error for an input with a given `name`.
 - `setErrors(errors)` - sets `errors` (object) as form's errors.
-- `save()` - calls `this.props.onRequestSave(this.get(), this);`
+- `save()` - if `this.props.validateOnSave` is `true` (which is default value),
+  performs validation and calls `this.props.onRequestSave(this.get(), this);` if
+  there were no errors. if `validateOnSave` property is `false`, calls
+  `this.props.onRequestSave(this.get(), this);` immediately.
 
 #### Form's props
 
@@ -231,7 +234,8 @@ this variable that you find suitable.
 | `attrs`               | `PropTypes.object.isRequired`         | Form's attributes - the values of form's inputs |
 | `onChange`            | `PropTypes.func`                      | A callback that is called whenever form's input changes it's value. Form's `attrs` are passed to it. Typically has a form of `(formAttrs) => this.setState({ formAttrs })` |
 | `clearErrorsOnChange` | `PropTypes.bool`, defaults to `true`  | If input has an error on it and this property is enabled, error will be cleared when input changes its value |
-| `validateOnChange`    | `PropTypes.bool`, defaults to `false` | If form has input validations defined, and validation routines were called with unsuccessful result, enabling this property will re-validate input when its value changes |
+| `validateOnChange`    | `PropTypes.bool`, defaults to `true`  | If form has input validations defined, and validation routines were called with unsuccessful result, enabling this property will re-validate input when its value changes |
+| `validateOnSave`      | `PropTypes.bool`, defaults to `true`  | If `true`, on `save` method call form will run validations first and execute `onRequestSave` callback only if there were no errors |
 | `onRequestSave`       | `PropTypes.func`                      | This callback is called in `Form#save` method, passing form's `attrs` and form object itself to it |
 
 ### Form Container
@@ -260,9 +264,30 @@ class Page extends Component {
         attrs={this.state.item}
         onChange={(item) => this.setState({ item })}
         onRequestSave={this.saveItem}
-        validateOnChange
       />
     );
+  }
+}
+```
+
+#### `bindState` helper method
+
+`react-form-base` also ships `bindState(component, key = 'form')` helper method
+that will generate `{ attrs, onChange }` props object for a given component.
+For instance, form from example above using this helper will look like so:
+
+```js
+import React, { Component } from 'react';
+import { bindState } from 'react-form-base';
+import MyForm from 'my-form';
+
+class Page extends Component {
+  saveItem = (item, form) => {
+    // ...
+  };
+
+  render() {
+    return <MyForm {...bindState(this, 'item')} onRequestSave={this.saveItem} />;
   }
 }
 ```

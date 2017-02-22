@@ -13,13 +13,15 @@ export default class Form extends PureComponent {
     onChange: PropTypes.func,
     clearErrorsOnChange: PropTypes.bool,
     validateOnChange: PropTypes.bool,
+    validateOnSave: PropTypes.bool,
     onRequestSave: PropTypes.func
   };
 
   static defaultProps = {
     onChange: noop,
     clearErrorsOnChange: true,
-    validateOnChange: false,
+    validateOnChange: true,
+    validateOnSave: true,
     onRequestSave: noop
   };
 
@@ -35,6 +37,13 @@ export default class Form extends PureComponent {
   }
 
   save() {
+    if (this.props.validateOnSave) {
+      return this.ifValid(() => this._save());
+    }
+    return this._save();
+  }
+
+  _save() {
     return this.props.onRequestSave(this.get(), this);
   }
 

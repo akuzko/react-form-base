@@ -20,10 +20,10 @@ describe('<Form />', function() {
     };
 
     render() {
-      const { error, ...rest } = this.props;
+      const { error, value, ...rest } = this.props;
       return (
         <div>
-          <input {...rest} onChange={this.handleChange} />
+          <input {...rest} value={value || ''} onChange={this.handleChange} />
           {error &&
             <div className="error">{error}</div>
           }

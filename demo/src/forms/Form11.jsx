@@ -40,48 +40,35 @@ const SOURCE = [['Form11.jsx', `
   }
 `], ['Page.jsx', `
   import React, { Component } from 'react';
+  import { bindState } from 'react-form-base';
   import Form11 from './Form11';
 
   class Page extends Component {
-    state = {
-      form: {}
-    };
-
     saveForm = (data, form) => {
-      form.ifValid(() => {
-        // simulated AJAX request
-        return new Promise((resolve, reject) => {
-          form.setState({ saving: true, success: false });
-          setTimeout(() => {
-            if (['foo', 'bar', 'baz'].includes(data.account)) {
-              reject({ account: 'has already been taken' });
-            } else {
-              resolve(true);
-            }
-          }, 3000);
-        }).then(success => form.setState({ success, saving: false }))
-          .catch(errors => form.setState({ errors, saving: false }));
-      });
+      // simulated AJAX request
+      return new Promise((resolve, reject) => {
+        form.setState({ saving: true, success: false });
+        setTimeout(() => {
+          if (['foo', 'bar', 'baz'].includes(data.account)) {
+            reject({ account: 'has already been taken' });
+          } else {
+            resolve(true);
+          }
+        }, 3000);
+      }).then(success => form.setState({ success, saving: false }))
+        .catch(errors => form.setState({ errors, saving: false }));
     };
 
     render() {
-      return (
-        <Form9
-          attrs={this.state.form}
-          onChange={(form) => this.setState({ form })}
-          onRequestSave={this.saveForm}
-          validateOnChange
-        />
-      );
+      return <Form9 {...bindState(this)} onRequestSave={this.saveForm} />;
     }
   }
 `]];
 
 const DESCRIPTION = dedent`
   In this example \`Form\` has **client-side** presence validation for \`'account'\`
-  and \`'fullName'\` attributes. Then, when 'Save' button is clicked, Form container,
-  \`Page\`, uses form's \`ifValid\` helper to validate a form and execute a callback
-  if the form is valid. In this callback, AJAX request is mocked by wrapping
+  and \`'fullName'\` attributes. Then, when 'Save' button is clicked, Form container's
+  \`saveForm\` callback is executed. In this callback, AJAX request is mocked by wrapping
   timeouted function in a Promise. If account name is in \`['foo', 'bar', 'baz']\`
   promise will be rejected with \`{ account: 'has already been taken' }\` error.
   All other data is considered to be valid.

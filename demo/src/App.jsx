@@ -42,20 +42,18 @@ export default class App extends PureComponent {
   }
 
   saveForm11 = (attrs, form) => {
-    form.ifValid(() => {
-      // simulated AJAX request
-      return new Promise((resolve, reject) => {
-        form.setState({ saving: true, success: false });
-        setTimeout(() => {
-          if (['foo', 'bar', 'baz'].includes(attrs.account)) {
-            reject({ account: 'has already been taken' });
-          } else {
-            resolve(true);
-          }
-        }, 3000);
-      }).then(success => form.setState({ success, saving: false }))
-        .catch(errors => form.setState({ errors, saving: false }));
-    });
+    // simulated AJAX request
+    return new Promise((resolve, reject) => {
+      form.setState({ saving: true, success: false });
+      setTimeout(() => {
+        if (['foo', 'bar', 'baz'].includes(attrs.account)) {
+          reject({ account: 'has already been taken' });
+        } else {
+          resolve(true);
+        }
+      }, 3000);
+    }).then(success => form.setState({ success, saving: false }))
+      .catch(errors => form.setState({ errors, saving: false }));
   };
 
   render() {
@@ -86,10 +84,10 @@ export default class App extends PureComponent {
             <div id="form05"><Forms.Form5 {...this.formProps('form5')} /></div>
             <div id="form06"><Forms.Form6 {...this.formProps('form6')} /></div>
             <div id="form07"><Forms.Form7 {...this.formProps('form7')} /></div>
-            <div id="form08"><Forms.Form8 {...this.formProps('form8')} validateOnChange /></div>
-            <div id="form09"><Forms.Form9 {...this.formProps('form9')} validateOnChange /></div>
-            <div id="form10"><Forms.Form10 {...this.formProps('form10')} validateOnChange /></div>
-            <div id="form11"><Forms.Form11 {...this.formProps('form11')} onRequestSave={this.saveForm11} validateOnChange /></div>
+            <div id="form08"><Forms.Form8 {...this.formProps('form8')} /></div>
+            <div id="form09"><Forms.Form9 {...this.formProps('form9')} /></div>
+            <div id="form10"><Forms.Form10 {...this.formProps('form10')} /></div>
+            <div id="form11"><Forms.Form11 {...this.formProps('form11')} onRequestSave={this.saveForm11} /></div>
           </div>
         </div>
       </div>

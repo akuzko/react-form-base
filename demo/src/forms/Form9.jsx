@@ -60,21 +60,12 @@ const SOURCE = [['Form9.jsx', `
   }
 `], ['Page.jsx', `
   import React, { Component } from 'react';
+  import { bindState } from 'react-form-base';
   import Form9 from './Form9';
 
   class Page extends Component {
-    state = {
-      form: {}
-    };
-
     render() {
-      return (
-        <Form9
-          attrs={this.state.form}
-          onChange={(form) => this.setState({ form })}
-          validateOnChange
-        />
-      );
+      return <Form9 {...bindState(this)} />;
     }
   }
 `]];
