@@ -504,23 +504,42 @@ describe('<Form />', function() {
     });
   });
 
-  describe('helper methods', function() {
+  describe('get', function() {
     beforeEach(function() {
       this.currentTest.wrapper = shallow(<Form attrs={{ foo: 'bar' }} />);
     });
 
-    describe('get', function() {
-      it('returns value when it is defined', function() {
-        expect(this.test.wrapper.instance().get('foo')).toEqual('bar');
-      });
+    it('returns value when it is defined', function() {
+      expect(this.test.wrapper.instance().get('foo')).toEqual('bar');
+    });
 
-      it('returns undefined when value is not defined', function() {
-        expect(this.test.wrapper.instance().get('bar')).toEqual(undefined);
-      });
+    it('returns undefined when value is not defined', function() {
+      expect(this.test.wrapper.instance().get('bar')).toEqual(undefined);
+    });
 
-      it('returns whole attrs object when name is not passed', function() {
-        expect(this.test.wrapper.instance().get()).toMatch({ foo: 'bar' });
-      });
+    it('returns whole attrs object when name is not passed', function() {
+      expect(this.test.wrapper.instance().get()).toMatch({ foo: 'bar' });
+    });
+  });
+
+  describe('reset', function() {
+    beforeEach(function() {
+      TestForm = class extends Form {
+        $render($) {
+          return <Input {...$('foo')} className="foo" />;
+        }
+      };
+
+      this.currentTest.wrapper = mount(<Container />);
+    });
+
+    it('drops input values and clears errors', function() {
+      this.test.wrapper.setState({ form: { foo: 'foo' } });
+      this.test.wrapper.instance().refs.form.setErrors({ foo: 'invalid' });
+      this.test.wrapper.instance().refs.form.reset();
+
+      expect(this.test.wrapper.state('form')).toEqual({});
+      expect(this.test.wrapper.instance().refs.form.state.errors).toEqual({});
     });
   });
 

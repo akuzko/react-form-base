@@ -226,6 +226,7 @@ this variable that you find suitable.
   performs validation and calls `this.props.onRequestSave(this.get(), this);` if
   there were no errors. if `validateOnSave` property is `false`, calls
   `this.props.onRequestSave(this.get(), this);` immediately.
+- `reset(attrs = {})` - calls `this.props.onChange(attrs)` and clears errors.
 
 #### Form's props
 
@@ -301,7 +302,9 @@ support and building all of the CSS for demo application.
 
 ```
 $ git clone git@github.com:akuzko/react-form-base.git
-$ cd react-form-base/demo
+$ cd react-form-base
+$ npm i
+$ cd demo
 $ npm i
 $ gulp
 ```
