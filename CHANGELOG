@@ -1,11 +1,13 @@
 === master
 
+Add Form#reset method and other improvements
+
 === 1.1.0
 
-Reduce complexity of code organization, fixes (akuzko)
+Reduce complexity of code organization, fixes
 
-Add bindState helper method, improve Form props (akuzko)
+Add bindState helper method, improve Form props
 
-Fix rendering flaws in Demo forms, add CHANGELOG (akuzko)
+Fix rendering flaws in Demo forms, add CHANGELOG
 
 === 1.0.0

@@ -3,6 +3,16 @@ React Form Base
 
 Base Form component for building convenient forms for [React](https://facebook.github.io/react/).
 
+[![build status](https://img.shields.io/travis/akuzko/react-form-base/master.svg?style=flat-square)](https://travis-ci.org/akuzko/react-form-base)
+[![npm version](https://img.shields.io/npm/v/react-form-base.svg?style=flat-square)](https://www.npmjs.com/package/react-form-base)
+
+## Features Overview
+
+- Controlled Form, i.e. it works with input values passed in props as JS object.
+- Simple API that handles deeply nested values and collections.
+- Flexible and conventient validation that allows to validate inputs as user types.
+- Allows to easily turn any existing component into a Form Input component.
+
 ## Installation
 
 ```
@@ -271,9 +281,9 @@ class Page extends Component {
 }
 ```
 
-#### `bindState` helper method
+#### `bindState` helper function
 
-`react-form-base` also ships `bindState(component, key = 'form')` helper method
+`react-form-base` also ships `bindState(component, key = 'form')` helper function
 that will generate `{ attrs, onChange }` props object for a given component.
 For instance, form from example above using this helper will look like so:
 
