@@ -8,9 +8,9 @@ Base Form component for building convenient forms for [React](https://facebook.g
 
 ## Features Overview
 
-- Controlled Form, i.e. it works with input values passed in props as JS object.
+- Controlled Form, i.e. it accepts input values as a JSON object.
 - Simple API that handles deeply nested values and collections.
-- Flexible and conventient validation that allows to validate inputs as user types.
+- Flexible and convenient validation that allows to validate inputs as user types.
 - Allows to easily turn any existing component into a Form Input component.
 
 ## Installation
@@ -26,176 +26,68 @@ npm install --save react-form-base
 `react-form-base` provides a `Form` base class which expects to work together
 with **Input** components. An **Input** is any component that consumes three
 properties: `value`, `error` and `onChange`. It also has to provide it's
-`value` as first argument to `onChange` function supplied in props. For
-existing ready-for-use input bindings take a look on [react-form-js](https://github.com/akuzko/react-form-js)
-and [react-form-material-ui](https://github.com/akuzko/react-form-material-ui).
+`value` as first argument to `onChange` function supplied in props.
+*For existing ready-for-use input bindings take a look on:*
+- [react-form-js](https://github.com/akuzko/react-form-js)
+- [react-form-material-ui](https://github.com/akuzko/react-form-material-ui)
 
 ### Form Usage
 
 Most of form use-cases with examples are revealed in [**Demo Application**](https://akuzko.github.io/react-form-base/).
 Details on how to run it locally are at the end of README.
 
-Bellow you can take a glance on main aspects of form usage: general API,
-custom on-change handlers, validation and `$render` helper function.
+#### Dedicated Forms
 
-#### Basic example
-
-```js
-import Form from 'react-form-base';
-import { TextField } from 'your-inputs'; // read on inputs in the beginning of README
-
-class MyForm extends Form {
-  render() {
-    return (
-      <div>
-        <TextField {...this.$('firstName')} />
-        <TextField {...this.$('lastName')} />
-
-        <button onClick={this.save.bind(this)}>Save</button>
-      </div>
-    );
-  }
-}
-```
-
-#### Nested fields example
+Most of forms developers deal with are quite complicated and encapsulate
+vast amount of validation and rendering logic. After some basic setup described
+in the [Wiki](https://github.com/akuzko/react-form-base/wiki) your form may
+look like following:
 
 ```js
-import Form from 'react-form-base';
-import { TextField, Select } from 'your-inputs'; // read on inputs in the beginning of README
-import countries from 'utils/countries'; // it's just a stub
-
-class MyForm extends Form {
-  render() {
-    return (
-      <div>
-        <TextField {...this.$('email')} />
-
-        <Select {...this.$('address.country')} options={countries} />
-        <TextField {...this.$('address.city')} />
-        <TextField {...this.$('address.streetLine')} />
-
-        <button onClick={this.save.bind(this)}>Save</button>
-      </div>
-    );
-  }
-}
-```
-
-#### Custom on-change handler
-
-```js
-import Form from 'react-form-base';
-import { Select } from 'your-inputs'; // read on inputs in the beginning of README
-
-class MyForm extends Form {
-  changeItem(value) {
-    this.set({
-      item: value,
-      amount: null
-    });
-  }
-
-  render() {
-    return (
-      <div>
-        <Select {...this.$('item')(this.changeItem)} options={['Item 1', 'Item 2']} />
-        <Select {...this.$('amount')} options={['10', '50', '100']} />
-
-        <button onClick={this.save.bind(this)}>Save</button>
-      </div>
-    );
-  }
-}
-```
-
-#### Validation
-
-```js
-import Form from 'react-form-base';
-import { TextField } from 'your-inputs'; // read on inputs in the beginning of README
-
-class MyForm extends Form {
-  // static validations are common validation rules. it's best to define them
-  // in your top-level application form that is a base class for other forms.
-  static validations = {
-    presence: function(value) {
-      if (!value) return 'cannot be blank';
-    },
-    numericality: function(value, options) {
-      const { greaterThan } = options;
-      const fValue = parseFloat(value);
-
-      if (isNaN(fValue)) return 'should be a number';
-      if (greaterThan != undefined && fValue <= greaterThan) {
-        return `should be greater than ${greaterThan}`;
-      }
-    }
-  };
-
-  // per-form input validations
+class UserForm extends Form {
   validations = {
-    // firstName: 'presence' from static validation rules
-    firstName: 'presence',
-    // email: 'presence' validation from rules and custom regexp validation
-    // for this specific form
-    email: ['presence', function(value) {
-      if (!/^[\w\d\.]+@[\w\d]+\.[\w\d]{2,}$/.test(value)) {
-        return 'should be an email';
-      }
-    }],
-    // validation with options
-    amount: { presence: true, numericality: { greaterThan: 10 } }
+    'email': ['presence', 'email'],
+    'fullName': 'presence',
+    'address.city': 'presence',
+    'address.line': { presence: true, format: /^[\w\s\d\.,]+$/ }
   };
 
-  render() {
-    return (
-      <div>
-        <TextField {...this.$('firstName')} />
-        <TextField {...this.$('email')} />
-        <TextField {...this.$('amount')} />
-
-        <button onClick={this.performValidation.bind(this)}>Validate</button>
-      </div>
-    );
-  }
-}
-```
-
-#### $render($) method
-
-If you don't have extra logic based on render method (such as implementing
-rendering in base form and calling `super.render(someContent)` from child
-forms), and you want to make things a little bit more DRY, you may declare
-your form's rendering using `$render` method that accepts input-generation
-function as argument. Thus, removing the `this.` prefix in inputs:
-
-```js
-class MyForm extends Form {
   $render($) {
     return (
       <div>
-        <TextField {...$('firstName')} />
-        <TextField {...$('lastName')} />
-        <TextField {...$('email')} />
+        <TextField {...$('email')} label="Email" />
+        <TextField {...$('fullName')} label="Full Name" />
+
+        <Select {...$('address.countryId') options={countryOptions} label="Country" />
+        <TextField {...$('address.city')} label="City" />
+        <TextField {...$('address.line')} label="Address" />
+
+        <button onClick={this.save.bind(this)}>Submit</button>
       </div>
     );
   }
 }
 ```
 
-This form of rendering declaration is also very useful when working with
-nested forms, since it has a special `nested` method that will generate
-onChange handler for nested form for you:
+#### Inline Forms
+
+If your form is small enough, you might want to render it inline instead of
+defining separate form component. In this case you may pass renderer function
+as only form's child. This function takes form's `$` function as argument for
+convenience. Note that you still need to define static `validation` rules
+for the Form to be able to use validations.
 
 ```js
-{this.map('items', (_item, i) =>
-  <ItemForm key={i} {...$.nested(`items.${i}`)} />
-)}
+<Form {...bindState(this)} validations={{ email: ['presence', 'email'], fullName: 'presence' }}>
+  {$ => (
+    <div>
+      <TextField {...$('email')} label="Email" />
+      <TextField {...$('fullName')} label="FullName" />
+      <button onClick={this.registerUser}>Register</button>
+    </div>
+  )}
+</Form>
 ```
-
-Of course, since `$` is argument in this method, you may use any name for
-this variable that you find suitable.
 
 #### API and helper methods
 

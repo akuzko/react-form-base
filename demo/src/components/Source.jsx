@@ -1,3 +1,4 @@
+/* global Prism */
 import React, { PropTypes, PureComponent } from 'react';
 
 export default class Source extends PureComponent {

@@ -1,3 +1,4 @@
+/* global Promise */
 import React, { PureComponent } from 'react';
 import { Intro, InputPrerequisites } from './components';
 import * as Forms from './forms';

@@ -14,7 +14,9 @@ export default class Form extends PureComponent {
     clearErrorsOnChange: PropTypes.bool,
     validateOnChange: PropTypes.bool,
     validateOnSave: PropTypes.bool,
-    onRequestSave: PropTypes.func
+    onRequestSave: PropTypes.func,
+    validations: PropTypes.object,
+    children: PropTypes.func
   };
 
   static defaultProps = {
@@ -128,6 +130,10 @@ export default class Form extends PureComponent {
     return this.props.validateOnChange && this.state.hadErrors;
   }
 
+  get _validations() {
+    return this.props.validations || this.validations;
+  }
+
   ifValid(callback) {
     const errors = this.getValidationErrors();
 
@@ -150,7 +156,7 @@ export default class Form extends PureComponent {
   }
 
   validate(validate) {
-    for (const name in this.validations) {
+    for (const name in this._validations) {
       validate(name);
     }
 
@@ -213,6 +219,17 @@ export default class Form extends PureComponent {
   }
 
   render() {
+    const $bound = this._bind$();
+    const { children: renderer } = this.props;
+
+    if (typeof renderer === 'function') {
+      return renderer($bound);
+    }
+
+    return this.$render($bound);
+  }
+
+  _bind$() {
     const $bound = this.$.bind(this);
 
     Object.defineProperty($bound, 'nested', {
@@ -226,7 +243,7 @@ export default class Form extends PureComponent {
       enumerable: false
     });
 
-    return this.$render($bound);
+    return $bound;
   }
 
   $render() {

@@ -559,4 +559,17 @@ describe('<Form />', function() {
       expect(this.test.wrapper.state('form').foo).toEqual('new value');
     });
   });
+
+  describe('render', function() {
+    context('when function is passed', function() {
+      it('uses it as renderer function', function() {
+        const wrapper = shallow(
+          <Form attrs={{ foo: 'bar' }}>
+            {$ => <Input {...$('foo')} className="bar" />}
+          </Form>
+        );
+        expect(wrapper.containsMatchingElement(<Input name="foo" value="bar" className="bar" />)).toEqual(true);
+      });
+    });
+  });
 });

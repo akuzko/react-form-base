@@ -19,7 +19,7 @@ function wildcard(name) {
 export function buildFormValidator(form) {
   function validate(name, options = {}) {
     const value = options.hasOwnProperty('value') ? options.value : form.get(name);
-    const validator = options['with'] || form.validations[name] || form.validations[wildcard(name)];
+    const validator = options['with'] || form._validations[name] || form._validations[wildcard(name)];
 
     if (!validator) return null;
 
