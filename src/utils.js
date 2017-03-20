@@ -1,5 +1,6 @@
-import isArray from 'lodash/isArray';
-import isPlainObject from 'lodash/isPlainObject';
+import set from 'lodash.set';
+
+export function noop(){}
 
 export function bindState(component, key = 'form') {
   return {
@@ -8,8 +9,31 @@ export function bindState(component, key = 'form') {
   };
 }
 
-export function nameToPath(name) {
-  return name.replace(/\.(\d+)(\.)?/g, (_match, i, dot) => `[${i}]` + (dot ? '.' : ''));
+export function update(obj, name, value) {
+  _update(obj, name, value);
+  
+  return obj;
+}
+
+export function updated(obj, name, value) {
+  const current = { ...obj };
+
+  return update(current, name, value);
+}
+
+function _update(current, name, value) {
+  const match = name.match(/^([\w\d]+)\.?(.+)?$/);
+  const { 1: key, 2: rest } = match;
+
+  if (current[key] === undefined) {
+    return set(current, name.split('.'), value);
+  }
+  if (!rest) {
+    return current[key] = value;
+  }
+
+  current[key] = Array.isArray(current[key]) ? [...current[key]] : { ...current[key] };
+  _update(current[key], rest, value);
 }
 
 function wildcard(name) {
@@ -32,10 +56,7 @@ export function buildFormValidator(form) {
     return null;
 
     function callValidator(validator) {
-      if (isPlainObject(validator)) {
-        return callObjectValidator(validator);
-      }
-      if (isArray(validator)) {
+      if (Array.isArray(validator)) {
         return callArrayValidator(validator);
       }
       if (typeof validator === 'string') {
@@ -43,6 +64,9 @@ export function buildFormValidator(form) {
       }
       if (typeof validator === 'function') {
         return validator.call(form, value);
+      }
+      if (validator && (typeof validator === 'object')) {
+        return callObjectValidator(validator);
       }
       throw new Error(`unable to use '${validator}' as validator function`);
     }

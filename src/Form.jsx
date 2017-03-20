@@ -1,13 +1,9 @@
-import React, { PropTypes, PureComponent } from 'react';
+import { PropTypes, PureComponent, Component } from 'react';
 
-import { nameToPath, buildFormValidator } from './utils';
-import isPlainObject from 'lodash/isPlainObject';
-import cloneDeep from 'lodash/cloneDeep';
-import get from 'lodash/get';
-import set from 'lodash/set';
-import noop from 'lodash/noop';
+import { update, buildFormValidator, noop } from './utils';
+import get from 'lodash.get';
 
-export default class Form extends PureComponent {
+export default class Form extends (PureComponent || Component) {
   static propTypes = {
     attrs: PropTypes.object.isRequired,
     onChange: PropTypes.func,
@@ -76,11 +72,11 @@ export default class Form extends PureComponent {
   get(name) {
     if (name === undefined) return this.props.attrs;
 
-    return get(this.props.attrs, nameToPath(name));
+    return get(this.props.attrs, name.split('.'));
   }
 
   set(name, value) {
-    if (isPlainObject(name)) return this._setObject(name);
+    if (name && (typeof name === 'object') && (name.constructor === Object)) return this._setObject(name);
 
     return this._setAttr(name, value);
   }
@@ -88,7 +84,7 @@ export default class Form extends PureComponent {
   _setObject(obj) {
     return this._set((attrs, errors) => {
       for (const name in obj) {
-        set(attrs, nameToPath(name), obj[name]);
+        update(attrs, name, obj[name], false);
         this._updateErrors(errors, name, obj[name]);
       }
     });
@@ -96,7 +92,7 @@ export default class Form extends PureComponent {
 
   _setAttr(name, value) {
     return this._set((attrs, errors) => {
-      set(attrs, nameToPath(name), value);
+      update(attrs, name, value, false);
       this._updateErrors(errors, name, value);
     });
   }
@@ -113,13 +109,12 @@ export default class Form extends PureComponent {
 
   _set(updater) {
     const { attrs, onChange } = this.props;
-    const newAttrs = cloneDeep(attrs);
-    const newErrors = { ...this.getErrors() };
+    const nextAttrs = { ...attrs };
+    const nextErrors = { ...this.getErrors() };
+    updater(nextAttrs, nextErrors);
 
-    updater(newAttrs, newErrors);
-
-    this._nextErrors = newErrors;
-    onChange(newAttrs);
+    this._nextErrors = nextErrors;
+    onChange(nextAttrs);
   }
 
   _shouldClearError(name) {
@@ -165,10 +160,8 @@ export default class Form extends PureComponent {
 
   merge(name, value) {
     const current = this.get(name) || {};
-    const attrs = cloneDeep(this.props.attrs);
 
-    set(attrs, name, { ...current, ...value });
-    this.props.onChange(attrs);
+    return this.set(name, { ...current, ...value });
   }
 
   push(name, value) {
@@ -181,7 +174,7 @@ export default class Form extends PureComponent {
     const ary = this.get(name);
 
     return this._set((attrs, errors) => {
-      set(attrs, nameToPath(name), [...ary.slice(0, i), ...ary.slice(i + 1)]);
+      update(attrs, name, [...ary.slice(0, i), ...ary.slice(i + 1)]);
       this._updateErrors(errors, `${name}.${i}`, null);
     });
   }

@@ -31,6 +31,6 @@
     "react/jsx-equals-spacing": [1, "never"],
     "react/jsx-indent-props": [1, 2],
     "react/jsx-indent": [1, 2],
-    "react/jsx-no-duplicate-props": 2,
+    "react/jsx-no-duplicate-props": 2
   }
 }

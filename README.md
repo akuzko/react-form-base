@@ -41,7 +41,8 @@ Details on how to run it locally are at the end of README.
 Most of forms developers deal with are quite complicated and encapsulate
 vast amount of validation and rendering logic. After some basic setup described
 in the [Wiki](https://github.com/akuzko/react-form-base/wiki) your form may
-look like following:
+look like following (please note that `$render` is a helper method and it is
+possible to use classic `render` method with a slightly more verbose result):
 
 ```js
 class UserForm extends Form {
