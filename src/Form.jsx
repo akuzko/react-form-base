@@ -1,6 +1,6 @@
 import { PropTypes, PureComponent, Component } from 'react';
 
-import { update, buildFormValidator, noop } from './utils';
+import { update, noop, buildFormValidator, buildHandlersCache } from './utils';
 import get from 'lodash.get';
 
 export default class Form extends (PureComponent || Component) {
@@ -26,6 +26,7 @@ export default class Form extends (PureComponent || Component) {
   state = { errors: {} };
   validations = {};
   validator = buildFormValidator(this);
+  cache = buildHandlersCache();
 
   componentWillReceiveProps() {
     if (this._nextErrors) {
@@ -46,14 +47,19 @@ export default class Form extends (PureComponent || Component) {
   }
 
   $(name) {
+    const handler = this.cache.fetch(name, () => this.set.bind(this, name));
+
     const wrapper = (handler, ...bindings) => {
-      wrapper.onChange = handler.hasOwnProperty('prototype') ? handler.bind(this, ...bindings) : handler;
+      wrapper.onChange = this.cache.fetch([name, handler, ...bindings], () => {
+        return handler.hasOwnProperty('prototype') ? handler.bind(this, ...bindings) : handler;
+      });
+
       return wrapper;
     };
     Object.defineProperty(wrapper, 'name', { value: name, enumerable: true });
     Object.assign(wrapper, {
       value: this.get(name),
-      onChange: this.set.bind(this, name),
+      onChange: handler,
       error: this.getError(name)
     });
 

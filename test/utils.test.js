@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Form from '../src/Form';
-import { bindState, updated } from '../src/utils';
+import { bindState, updated, buildHandlersCache } from '../src/utils';
 import { shallow } from 'enzyme';
 import expect from 'expect';
 
@@ -8,7 +8,7 @@ describe('updated', function() {
   it('carefully sets deeply nested item: deeply nested array', function() {
     const obj = { foo: { bar: { baz: [1, 2, 3] } }, bak: { big: 1 } };
     const upd = updated(obj, 'foo.bar.baz.1', 4);
-    
+
     expect(obj === upd).toBe(false, 'obj should not be updated in place');
     expect(obj.foo === upd.foo).toBe(false, 'obj.foo should not be updated in place');
     expect(obj.foo.bar === upd.foo.bar).toBe(false, 'obj.foo.bar should not be updated in place');
@@ -20,7 +20,7 @@ describe('updated', function() {
   it('carefully sets deeply nested item: deeply nested object', function() {
     const obj = { foo: { bar: [{ baz: 'baz1' }, { baz: 'baz2' }] }, bak: { big: 1 } };
     const upd = updated(obj, 'foo.bar.1.baz', 'baz3');
-    
+
     expect(obj === upd).toBe(false, 'obj should not be updated in place');
     expect(obj.foo === upd.foo).toBe(false, 'obj.foo should not be updated in place');
     expect(obj.foo.bar === upd.foo.bar).toBe(false, 'obj.foo.bar should not be updated in place');
@@ -32,7 +32,7 @@ describe('updated', function() {
   it('carefully sets deeply nested item, path collections are not defined', function() {
     const obj = { bak: { big: 1 } };
     const upd = updated(obj, 'foo.bar.baz.1', 4);
-    
+
     expect(obj.bak === upd.bak).toBe(true, 'obj.bak should not be cloned');
     expect(upd.foo.bar.baz).toMatch([undefined, 4], 'value under desired name should be updated');
   });
@@ -78,5 +78,27 @@ describe('bindState', function() {
     const wrapper = shallow(<Page />);
     wrapper.find(Form).prop('onChange')({ foo: 'bar' });
     expect(wrapper.state()).toEqual({ form: { foo: 'bar' } });
+  });
+});
+
+describe('buildHandlersCache', function() {
+  context('simple case', function() {
+    it('fetches result and caches it', function() {
+      const cache = buildHandlersCache();
+      const result = cache.fetch('foo', () => ({}));
+      expect(cache.fetch('foo', () => 'is not called') === result).toBe(true);
+    });
+  });
+
+  context('complex case', function() {
+    it('fetches result and caches it', function() {
+      const cache = buildHandlersCache();
+      const fn = function(){};
+      const obj = {};
+      const result = cache.fetch(['foo', fn, 1, obj, 5], () => fn);
+
+      expect(result).toBe(fn, 'sets result according to setter');
+      expect(cache.fetch(['foo', fn, 1, obj, 5], () => 'is not called') === result).toBe(true, 'returns cached value properly');
+    });
   });
 });

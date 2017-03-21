@@ -1,3 +1,4 @@
+/* global WeakMap */
 import set from 'lodash.set';
 
 export function noop(){}
@@ -11,7 +12,7 @@ export function bindState(component, key = 'form') {
 
 export function update(obj, name, value) {
   _update(obj, name, value);
-  
+
   return obj;
 }
 
@@ -117,4 +118,67 @@ export function buildFormValidator(form) {
   });
 
   return validate;
+}
+
+export function buildHandlersCache() {
+  return new Cache;
+}
+
+class Cache {
+  constructor() {
+    this.store = {};
+  }
+
+  fetch(key, setter) {
+    try {
+      if (Array.isArray(key)) {
+        return this.fetchComplex(key, setter);
+      } else {
+        return this.fetchSimple(key, setter);
+      }
+    } catch (_e) {
+      return setter();
+    }
+  }
+
+  fetchSimple(key, setter) {
+    if (this.store[key]) {
+      return this.store[key];
+    } else {
+      this.store[key] = setter();
+      return this.store[key];
+    }
+  }
+
+  fetchComplex([name, ...path], setter) {
+    name = `_${name}`;
+    let current = this.store[name] || (this.store[name] = new WeakMap);
+
+    for (let i = 0; i < path.length - 1; i++) {
+      if (typeof this.get(current, path[i]) == 'undefined') {
+        const nextKey = path[i + 1];
+        this.put(current, path[i], typeof nextKey === 'number' || typeof nextKey === 'string' || typeof nextKey === 'boolean' ? {} : new WeakMap);
+      }
+      current = this.get(current, path[i]);
+    }
+    const key = path[path.length - 1], cached = this.get(current, key);
+    return cached || this.put(current, key, setter());
+  }
+
+  get(store, key) {
+    if (store.constructor === WeakMap) {
+      return store.get(key);
+    } else {
+      return store[key];
+    }
+  }
+
+  put(store, key, value) {
+    if (store.constructor === WeakMap) {
+      store.set(key, value);
+    } else {
+      store[key] = value;
+    }
+    return value;
+  }
 }
