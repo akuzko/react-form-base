@@ -155,9 +155,14 @@ class Cache {
     let current = this.store[name] || (this.store[name] = new WeakMap);
 
     for (let i = 0; i < path.length - 1; i++) {
-      if (typeof this.get(current, path[i]) == 'undefined') {
+      if (typeof this.get(current, path[i]) === 'undefined') {
         const nextKey = path[i + 1];
-        this.put(current, path[i], typeof nextKey === 'number' || typeof nextKey === 'string' || typeof nextKey === 'boolean' ? {} : new WeakMap);
+        this.put(current, path[i],
+          typeof nextKey === 'number' ||
+          typeof nextKey === 'string' ||
+          typeof nextKey === 'boolean' ?
+          {} : new WeakMap
+        );
       }
       current = this.get(current, path[i]);
     }
@@ -174,7 +179,7 @@ class Cache {
   }
 
   put(store, key, value) {
-    if (store.constructor === WeakMap) {
+    if (store instanceof WeakMap) {
       store.set(key, value);
     } else {
       store[key] = value;
