@@ -13,7 +13,7 @@ const SOURCE = [['Form4.jsx', `
     $item(value) {
       return this.set({
         item: value,
-        amount: null
+        amount: ''
       });
     }
 
@@ -34,7 +34,7 @@ const amounts = [10, 50, 100];
 export default class Form4 extends Form {
   static title = 'Changing several fields at once';
   static description = dedent`
-    This form has two \`Select\` inputs for \`'items'\` and \`'amount'\` fields and custom
+    This form has two \`Select\` inputs for \`'item'\` and \`'amount'\` fields and custom
     onChange handler that drops \`'amount'\` value whenever \`'item'\` value is changed
   `;
   static source = SOURCE;
@@ -42,7 +42,7 @@ export default class Form4 extends Form {
   $item(value) {
     return this.set({
       item: value,
-      amount: null
+      amount: ''
     });
   }
 
