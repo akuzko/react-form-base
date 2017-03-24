@@ -13,7 +13,7 @@ const SOURCE = [['Form4.jsx', `
     $item(value) {
       return this.set({
         item: value,
-        amount: null
+        amount: ''
       });
     }
 
@@ -42,7 +42,7 @@ export default class Form4 extends Form {
   $item(value) {
     return this.set({
       item: value,
-      amount: null
+      amount: ''
     });
   }
 
