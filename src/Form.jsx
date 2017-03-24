@@ -26,7 +26,7 @@ export default class Form extends (PureComponent || Component) {
   state = { errors: {} };
   validations = {};
   validator = buildFormValidator(this);
-  cache = buildHandlersCache();
+  _handlersCache = buildHandlersCache();
 
   componentWillReceiveProps() {
     if (this._nextErrors) {
@@ -47,10 +47,10 @@ export default class Form extends (PureComponent || Component) {
   }
 
   $(name) {
-    const handler = this.cache.fetch(name, () => this.set.bind(this, name));
+    const handler = this._handlersCache.fetch(name, () => this.set.bind(this, name));
 
     const wrapper = (handler, ...bindings) => {
-      wrapper.onChange = this.cache.fetch([name, handler, ...bindings], () => {
+      wrapper.onChange = this._handlersCache.fetch([name, handler, ...bindings], () => {
         return handler.hasOwnProperty('prototype') ? handler.bind(this, ...bindings) : handler;
       });
 

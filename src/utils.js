@@ -142,12 +142,11 @@ class Cache {
   }
 
   fetchSimple(key, setter) {
-    if (this.store[key]) {
-      return this.store[key];
-    } else {
+    if (!(key in this.store)) {
       this.store[key] = setter();
-      return this.store[key];
     }
+
+    return this.store[key];
   }
 
   fetchComplex([name, ...path], setter) {
@@ -157,6 +156,7 @@ class Cache {
     for (let i = 0; i < path.length - 1; i++) {
       if (typeof this.get(current, path[i]) === 'undefined') {
         const nextKey = path[i + 1];
+
         this.put(current, path[i],
           typeof nextKey === 'number' ||
           typeof nextKey === 'string' ||
@@ -167,11 +167,12 @@ class Cache {
       current = this.get(current, path[i]);
     }
     const key = path[path.length - 1], cached = this.get(current, key);
+
     return cached || this.put(current, key, setter());
   }
 
   get(store, key) {
-    if (store.constructor === WeakMap) {
+    if (store instanceof WeakMap) {
       return store.get(key);
     } else {
       return store[key];
@@ -184,6 +185,7 @@ class Cache {
     } else {
       store[key] = value;
     }
+
     return value;
   }
 }
