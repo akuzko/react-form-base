@@ -59,7 +59,7 @@ class UserForm extends Form {
         <TextField {...$('email')} label="Email" />
         <TextField {...$('fullName')} label="Full Name" />
 
-        <Select {...$('address.countryId') options={countryOptions} label="Country" />
+        <Select {...$('address.countryId')} options={countryOptions} label="Country" />
         <TextField {...$('address.city')} label="City" />
         <TextField {...$('address.line')} label="Address" />
 
