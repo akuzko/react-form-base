@@ -1,5 +1,6 @@
 /* global Prism */
-import React, { PropTypes, PureComponent } from 'react';
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 
 export default class Source extends PureComponent {
   static propTypes = {

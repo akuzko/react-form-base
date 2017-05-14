@@ -1,4 +1,5 @@
-import { PropTypes, PureComponent, Component } from 'react';
+import { PureComponent, Component } from 'react';
+import PropTypes from 'prop-types';
 
 import { update, noop, buildFormValidator, buildHandlersCache } from './utils';
 import get from 'lodash.get';

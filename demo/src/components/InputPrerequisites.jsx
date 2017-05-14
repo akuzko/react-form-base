@@ -9,7 +9,8 @@ following \`TextField\` and \`Select\` components quickly built for demonstratio
 `;
 
 const textFieldSource = `
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 export default function TextField(props) {
   const { value, error, onChange, ...rest } = props;
@@ -32,7 +33,8 @@ TextField.propTypes = {
 `;
 
 const selectSource = `
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 export default function Select(props) {
   const { value, error, onChange, options, includeBlank, ...rest } = props;
