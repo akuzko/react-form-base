@@ -5,6 +5,7 @@
   "dependencies": {
     "dedent-js": "^1.0.1",
     "marked": "^0.3.6",
+    "prop-types": "^15.5.10",
     "react": "^15.3.2",
     "react-dom": "^15.4.1"
   },
