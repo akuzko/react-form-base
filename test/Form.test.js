@@ -266,6 +266,38 @@ describe('<Form />', function() {
           'foo': 'cannot be blank'
         });
       });
+
+      context('when validations property is a function', function() {
+        beforeEach(function() {
+          TestForm = class extends Form {
+            validations() {
+              return {
+                'foo'(value) {
+                  if (!value) return 'cannot be blank';
+                }
+              };
+            };
+
+            render() {
+              return (
+                <div>
+                  <Input {...this.$('foo')} className="foo" />
+                </div>
+              );
+            }
+          };
+
+          this.currentTest.wrapper = mount(<Container />);
+        });
+
+        it('calls validations function and performs validation according to result', function() {
+          this.test.wrapper.instance().refs.form.performValidation();
+
+          expect(this.test.wrapper.instance().refs.form.state.errors).toMatch({
+            'foo': 'cannot be blank'
+          });
+        });
+      });
     });
 
     context('common case with wildcards', function() {

@@ -1,6 +1,4 @@
 /* global WeakMap */
-import set from 'lodash.set';
-
 export function noop(){}
 
 export function bindState(component, key = 'form') {
@@ -8,33 +6,6 @@ export function bindState(component, key = 'form') {
     attrs: (component.state && component.state[key]) || {},
     onChange: function(attrs) { return component.setState({ [key]: attrs }); }
   };
-}
-
-export function update(obj, name, value) {
-  _update(obj, name, value);
-
-  return obj;
-}
-
-export function updated(obj, name, value) {
-  const current = { ...obj };
-
-  return update(current, name, value);
-}
-
-function _update(current, name, value) {
-  const match = name.match(/^([\w\d]+)\.?(.+)?$/);
-  const { 1: key, 2: rest } = match;
-
-  if (current[key] === undefined) {
-    return set(current, name.split('.'), value);
-  }
-  if (!rest) {
-    return current[key] = value;
-  }
-
-  current[key] = Array.isArray(current[key]) ? [...current[key]] : { ...current[key] };
-  _update(current[key], rest, value);
 }
 
 function wildcard(name) {
@@ -109,7 +80,8 @@ export function buildFormValidator(form) {
       return message;
     },
     nested(ref) {
-      const errors = form.refs[ref].performValidation();
+      const nestedForm = form[ref] || form.refs[ref];
+      const errors = nestedForm.performValidation();
 
       if (Object.getOwnPropertyNames(errors).length > 0) {
         this.addError(ref, 'invalid');

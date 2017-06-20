@@ -75,7 +75,7 @@ const SOURCE = [['BaseForm.jsx', `
           {this.map('items', (_item, i) =>
             <div key={i}>
               <ItemForm
-                ref={\`itemForm\${i}\`}
+                ref={form => this[\`itemForm\${i}\`] = form}
                 {...$.nested(\`items.\${i}\`)}
                 validateOnChange
               />
@@ -191,7 +191,7 @@ export default class Form10 extends BaseForm {
         {this.map('items', (_item, i) =>
           <div key={i} className="horizontal-container center bordered-form-item mb-20">
             <ItemForm
-              ref={`itemForm${i}`}
+              ref={form => this[`itemForm${i}`] = form}
               {...$.nested(`items.${i}`)}
               validateOnChange
             />

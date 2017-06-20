@@ -1,7 +1,8 @@
 import { PureComponent, Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { update, noop, buildFormValidator, buildHandlersCache } from './utils';
+import { noop, buildFormValidator, buildHandlersCache } from './utils';
+import update from 'update-js';
 import get from 'lodash.get';
 
 export default class Form extends (PureComponent || Component) {
@@ -25,7 +26,6 @@ export default class Form extends (PureComponent || Component) {
   };
 
   state = { errors: {} };
-  validations = {};
   validator = buildFormValidator(this);
   _handlersCache = buildHandlersCache();
 
@@ -91,7 +91,7 @@ export default class Form extends (PureComponent || Component) {
   _setObject(obj) {
     return this._set((attrs, errors) => {
       for (const name in obj) {
-        update(attrs, name, obj[name], false);
+        update.in(attrs, name, obj[name]);
         this._updateErrors(errors, name, obj[name]);
       }
     });
@@ -99,7 +99,7 @@ export default class Form extends (PureComponent || Component) {
 
   _setAttr(name, value) {
     return this._set((attrs, errors) => {
-      update(attrs, name, value, false);
+      update.in(attrs, name, value);
       this._updateErrors(errors, name, value);
     });
   }
@@ -133,7 +133,9 @@ export default class Form extends (PureComponent || Component) {
   }
 
   get _validations() {
-    return this.props.validations || this.validations;
+    const validationz = this.props.validations || this.validations || {};
+
+    return typeof validationz === 'function' ? validationz.call(this) : validationz;
   }
 
   ifValid(callback) {
@@ -181,7 +183,7 @@ export default class Form extends (PureComponent || Component) {
     const ary = this.get(name);
 
     return this._set((attrs, errors) => {
-      update(attrs, name, [...ary.slice(0, i), ...ary.slice(i + 1)]);
+      update.in(attrs, name, [...ary.slice(0, i), ...ary.slice(i + 1)]);
       this._updateErrors(errors, `${name}.${i}`, null);
     });
   }

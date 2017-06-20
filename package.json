@@ -7,7 +7,7 @@
     "build": "babel src --out-dir lib",
     "clear": "rimraf lib",
     "rebuild": "npm run clear && npm run build",
-    "test": "mocha --compilers js:babel-register --recursive --require ./test/setup.js",
+    "test": "mocha --compilers js:babel-register --require ./test/setup.js",
     "test:watch": "npm test -- --watch",
     "lint": "./node_modules/.bin/eslint src test demo/src --ext .js --ext .jsx"
   },
@@ -44,7 +44,7 @@
     "expect": "^1.20.2",
     "jsdom": "^9.8.0",
     "mocha": "^3.1.2",
-    "prop-types": "^15.5.10",
+    "prop-types": "^15.5.7",
     "react": "^15.3.2",
     "react-addons-test-utils": "^15.3.2",
     "react-dom": "^15.3.2",
@@ -52,9 +52,10 @@
   },
   "dependencies": {
     "lodash.get": "^4.4.2",
-    "lodash.set": "^4.3.2"
+    "update-js": "^1.0.0"
   },
   "peerDependencies": {
+    "prop-types": "^15.5.7",
     "react": "^0.14.8 || >=15.0.0",
     "react-dom": "^0.14.8 || >=15.0.0"
   }

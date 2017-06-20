@@ -3,4 +3,5 @@ lib
 demo/node_modules
 demo/dist
 
+.vscode
 .idea

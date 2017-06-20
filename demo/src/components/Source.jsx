@@ -18,7 +18,7 @@ export default class Source extends PureComponent {
 
   componentDidUpdate() {
     if (this.state.open) {
-      Prism.highlightElement(this.refs.prism);
+      Prism.highlightElement(this.prism);
     }
   }
 
@@ -39,7 +39,7 @@ export default class Source extends PureComponent {
         </div>
         <div className="source-code">
           {this.state.open &&
-            <pre className="language-javascript" ref="prism">
+            <pre className="language-javascript" ref={prism => this.prism = prism}>
               <code className="language-javascript">{children}</code>
             </pre>
           }
