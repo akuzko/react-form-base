@@ -1,4 +1,8 @@
 === master
+=== 1.4.0
+
+Functionality and usability improvements, code updates
+
 Migrate from React.PropTypes to prop-types (by @AleksandrZhukov)
 
 Fix flaw in readme code example (by @piton4eg)
