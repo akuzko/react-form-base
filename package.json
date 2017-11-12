@@ -1,6 +1,6 @@
 {
   "name": "react-form-base",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "React base Form component for flexible forms",
   "main": "./lib/index.js",
   "scripts": {
