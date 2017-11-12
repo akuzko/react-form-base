@@ -141,6 +141,7 @@ for the Form to be able to use validations.
 | `validateOnChange`    | `PropTypes.bool`, defaults to `true`  | If form has input validations defined, and validation routines were called with unsuccessful result, enabling this property will re-validate input when its value changes |
 | `validateOnSave`      | `PropTypes.bool`, defaults to `true`  | If `true`, on `save` method call form will run validations first and execute `onRequestSave` callback only if there were no errors |
 | `onRequestSave`       | `PropTypes.func`                      | This callback is called in `Form#save` method, passing form's `attrs` and form object itself to it |
+| `onValidationFailed`  | `PropTypes.func`                      | This callback is called if form's validation routines resulted in errors. Those `errors` and form object itself are passed to it |
 
 ### Form Container
 

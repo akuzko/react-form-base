@@ -6,6 +6,9 @@
   },
   "plugins": ["react"],
   "parser": "babel-eslint",
+  "globals": {
+    "Promise": true
+  },
   "rules": {
     "quotes": [1, "single", "avoid-escape"],
     "semi": [1, "always"],

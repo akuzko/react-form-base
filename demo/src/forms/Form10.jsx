@@ -53,14 +53,14 @@ const SOURCE = [['BaseForm.jsx', `
       }
     };
 
-    validate($v) {
-      $v('email');
-      $v('items');
+    validate(validator) {
+      validator('email');
+      validator('items');
       this.each('items', (_item, i) => {
-        $v.nested(\`itemForm\${i}\`);
+        validator.nested(\`itemForm\${i}\`);
       });
 
-      return $v.errors;
+      return validator.errors;
     }
 
     $render($) {
@@ -159,14 +159,14 @@ export default class Form10 extends BaseForm {
     }
   };
 
-  validate($v) {
-    $v('email');
-    $v('items');
+  validate(validator) {
+    validator('email');
+    validator('items');
     this.each('items', (_item, i) => {
-      $v.nested(`itemForm${i}`);
+      validator.nested(`itemForm${i}`);
     });
 
-    return $v.errors;
+    return validator.errors;
   }
 
   $render($) {

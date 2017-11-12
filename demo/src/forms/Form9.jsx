@@ -23,15 +23,6 @@ const SOURCE = [['Form9.jsx', `
       'numbers.*': 'numericality'
     };
 
-    validate($v) {
-      $v('fullName');
-      this.each('numbers', (_n, i) => {
-        $v(\`numbers.\${i}\`);
-      });
-
-      return $v.errors;
-    }
-
     $number(i, value) {
       if (value) {
         return this.set(\`numbers.\${i}\`, value);
@@ -115,15 +106,6 @@ export default class Form9 extends Form {
     'fullName': 'presence',
     'numbers.*': 'numericality'
   };
-
-  validate($v) {
-    $v('fullName');
-    this.each('numbers', (_n, i) => {
-      $v(`numbers.${i}`);
-    });
-
-    return $v.errors;
-  }
 
   $number(i, value) {
     if (value) {

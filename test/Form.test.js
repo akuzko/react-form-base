@@ -89,6 +89,27 @@ describe('<Form />', function() {
     });
   });
 
+  describe('set returning a Promise', function() {
+    beforeEach(function() {
+      this.currentTest.spy = createSpy();
+      TestForm = class extends Form {
+        render() {
+          return <div />;
+        }
+      };
+    });
+
+    afterEach(function() {
+      expect(this.currentTest.spy).toHaveBeenCalled();
+    });
+
+    it('calls callback', function(done) {
+      const wrapper = shallow(<TestForm attrs={{}} />);
+
+      wrapper.instance().set('foo', 'bar').then(this.test.spy).then(done);
+    });
+  });
+
   describe('composite fields', function() {
     beforeEach(function() {
       TestForm = class extends Form {
@@ -309,15 +330,11 @@ describe('<Form />', function() {
             },
             'items.*.bar'(value) {
               if (!value || isNaN(+value)) return 'should be numeric';
+            },
+            'items.*.nested.*'(value) {
+              if (!value) return 'cannot be blank';
             }
           };
-
-          validate(validate) {
-            validate('foo');
-            range(2).forEach(i => validate(`items.${i}.bar`));
-
-            return validate.errors;
-          }
 
           render() {
             return (
@@ -338,12 +355,14 @@ describe('<Form />', function() {
       });
 
       it('performs validation according to validations property', function() {
+        this.test.wrapper.setState({ form: { items: [{}, { nested: [''] }] } });
         this.test.wrapper.instance().refs.form.performValidation();
 
         expect(this.test.wrapper.instance().refs.form.state.errors).toMatch({
           'foo': 'cannot be blank',
           'items.0.bar': 'should be numeric',
-          'items.1.bar': 'should be numeric'
+          'items.1.bar': 'should be numeric',
+          'items.1.nested.0': 'cannot be blank'
         });
       });
     });
@@ -532,6 +551,48 @@ describe('<Form />', function() {
           const spy = createSpy();
           this.test.wrapper.instance().ifValid(spy);
           expect(spy).toNotHaveBeenCalled();
+        });
+      });
+    });
+
+    describe('onValidationFailed property', function() {
+      function mount(){
+        class TestForm extends Form {
+          validations = {
+            'foo': function(value) {
+              if (!value) return 'cannot be blank';
+            }
+          };
+        }
+
+        this.currentTest.spy = createSpy();
+        this.currentTest.wrapper = shallow(
+          <TestForm attrs={ this.currentTest.attrs} onValidationFailed={ this.currentTest.spy } />
+        );
+      }
+
+      context('when form is valid', function() {
+        beforeEach(function() {
+          this.currentTest.attrs = {foo: 'bar'};
+          mount.call(this);
+        });
+
+        it('does not trigger callback', function() {
+          this.test.wrapper.instance().performValidation();
+          expect(this.test.spy).toNotHaveBeenCalled();
+        });
+      });
+
+      context('when form is invalid', function() {
+        beforeEach(function() {
+          this.currentTest.attrs = {};
+          mount.call(this);
+        });
+
+        it('triggers callback', function() {
+          const form = this.test.wrapper.instance();
+          form.performValidation();
+          expect(this.test.spy).toHaveBeenCalledWith(form.getErrors(), form);
         });
       });
     });

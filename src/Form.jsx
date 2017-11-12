@@ -5,6 +5,8 @@ import { noop, buildFormValidator, buildHandlersCache } from './utils';
 import update from 'update-js';
 import get from 'lodash.get';
 
+const promiseSupported = typeof Promise === 'function';
+
 export default class Form extends (PureComponent || Component) {
   static propTypes = {
     attrs: PropTypes.object.isRequired,
@@ -13,6 +15,7 @@ export default class Form extends (PureComponent || Component) {
     validateOnChange: PropTypes.bool,
     validateOnSave: PropTypes.bool,
     onRequestSave: PropTypes.func,
+    onValidationFailed: PropTypes.func,
     validations: PropTypes.object,
     children: PropTypes.func
   };
@@ -121,6 +124,14 @@ export default class Form extends (PureComponent || Component) {
     updater(nextAttrs, nextErrors);
 
     this._nextErrors = nextErrors;
+
+    if (promiseSupported) {
+      return new Promise((resolve) => {
+        onChange(nextAttrs);
+        setTimeout(resolve, 0);
+      });
+    }
+
     onChange(nextAttrs);
   }
 
@@ -139,11 +150,18 @@ export default class Form extends (PureComponent || Component) {
   }
 
   ifValid(callback) {
+    const { onValidationFailed } = this.props;
     const errors = this.getValidationErrors();
 
     this.setErrors(errors, function() {
-      if (callback && Object.getOwnPropertyNames(errors).length === 0) {
+      const valid = Object.getOwnPropertyNames(errors).length === 0;
+
+      if (valid && callback) {
         callback();
+      }
+
+      if (!valid && onValidationFailed) {
+        onValidationFailed(errors, this);
       }
     });
 
@@ -159,12 +177,29 @@ export default class Form extends (PureComponent || Component) {
     return this.validate(this.validator);
   }
 
-  validate(validate) {
+  validate(validator) {
     for (const name in this._validations) {
-      validate(name);
+      this._validate(name);
     }
 
-    return validate.errors;
+    return validator.errors;
+  }
+
+  _validate(name) {
+    if (name.includes('*')) {
+      this._validateEach(name);
+    } else {
+      this.validator(name);
+    }
+  }
+
+  _validateEach(name) {
+    const match = name.match(/^([^*]+)\.\*(.+)?$/);
+    const [collectionName, rest = ''] = match.slice(1);
+
+    this.each(collectionName, (_item, i) => {
+      this._validate(`${collectionName}.${i}${rest}`);
+    });
   }
 
   merge(name, value) {
@@ -218,6 +253,14 @@ export default class Form extends (PureComponent || Component) {
     const hadErrors = Object.getOwnPropertyNames(errors).length > 0;
 
     this.setState({ hadErrors, errors }, callback);
+  }
+
+  updateErrors(errors, callback) {
+    return this.setErrors({ ...this.getErrors(), ...errors }, callback);
+  }
+
+  setError(name, error, callback) {
+    return this.updateErrors({ [name]: error }, callback);
   }
 
   render() {
