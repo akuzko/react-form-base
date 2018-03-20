@@ -102,9 +102,13 @@ for the Form to be able to use validations.
   - `this.get('foos.1')     // => {bar: 'bak'}`
   - `this.get('foos.1.bar') // => 'bak'`
   - `this.get() // returns whole form's attributes object`
-- `set(name, value)` - sets a `value` for an input with a specified `name`.
-- `set(object)` - sets multiple values at once. Each key in the object
-  corresponds to input name, and values are input values.
+- `set(name, value, meta)` - sets a `value` for an input with a specified `name`.
+  Optional `meta` argument will be passed to `props.onChange` function alongside
+  with new `attrs` as second argument.
+- `set(object, meta)` - sets multiple values at once. Each key in the object
+  corresponds to input name, and values are input values. Optional `meta` argument
+  will be passed to `props.onChange` function alongside with new `attrs` as second
+  argument.
 - `merge(name, value)` - merges given `value` object with value of input with
   a given `name`. Should be used when working with nested forms.
 - `push(name, value)` - pushes a `value` to an input (which is treated as array)
@@ -136,7 +140,7 @@ for the Form to be able to use validations.
 | Prop Name             | Spec                                  | Description |
 |-----------------------|---------------------------------------|-------------|
 | `attrs`               | `PropTypes.object.isRequired`         | Form's attributes - the values of form's inputs |
-| `onChange`            | `PropTypes.func`                      | A callback that is called whenever form's input changes it's value. Form's `attrs` are passed to it. Typically has a form of `(formAttrs) => this.setState({ formAttrs })` |
+| `onChange`            | `PropTypes.func`                      | A callback that is called whenever form's input changes it's value. Form's `attrs` and optional `meta` object (see `set` method description above) are passed to it. Typically has a form of `(formAttrs) => this.setState({ formAttrs })` |
 | `clearErrorsOnChange` | `PropTypes.bool`, defaults to `true`  | If input has an error on it and this property is enabled, error will be cleared when input changes its value |
 | `validateOnChange`    | `PropTypes.bool`, defaults to `true`  | If form has input validations defined, and validation routines were called with unsuccessful result, enabling this property will re-validate input when its value changes |
 | `validateOnSave`      | `PropTypes.bool`, defaults to `true`  | If `true`, on `save` method call form will run validations first and execute `onRequestSave` callback only if there were no errors |

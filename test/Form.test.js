@@ -110,6 +110,25 @@ describe('<Form />', function() {
     });
   });
 
+  describe('set with a meta data', function() {
+    beforeEach(function() {
+      TestForm = class extends Form {
+        render() {
+          return <div />;
+        }
+      };
+    });
+
+    it('passes meta to onChange prop', function() {
+      const spy = createSpy();
+      const wrapper = shallow(<TestForm attrs={{}} onChange={spy} />);
+
+      wrapper.instance().set('foo', 'bar', 'meta data');
+
+      expect(spy).toHaveBeenCalledWith({ foo: 'bar' }, 'meta data');
+    });
+  });
+
   describe('composite fields', function() {
     beforeEach(function() {
       TestForm = class extends Form {

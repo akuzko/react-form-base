@@ -85,26 +85,21 @@ export default class Form extends (PureComponent || Component) {
     return get(this.props.attrs, name.split('.'));
   }
 
-  set(name, value) {
-    if (name && (typeof name === 'object') && (name.constructor === Object)) return this._setObject(name);
+  set(name, value, meta) {
+    if (name && (typeof name === 'object') && (name.constructor === Object)) {
+      return this._setAttributes(name, value);
+    }
 
-    return this._setAttr(name, value);
+    return this.set({ [name]: value }, meta);
   }
 
-  _setObject(obj) {
+  _setAttributes(obj, meta) {
     return this._set((attrs, errors) => {
       for (const name in obj) {
         update.in(attrs, name, obj[name]);
         this._updateErrors(errors, name, obj[name]);
       }
-    });
-  }
-
-  _setAttr(name, value) {
-    return this._set((attrs, errors) => {
-      update.in(attrs, name, value);
-      this._updateErrors(errors, name, value);
-    });
+    }, meta);
   }
 
   _updateErrors(errors, name, value) {
@@ -117,7 +112,7 @@ export default class Form extends (PureComponent || Component) {
     }
   }
 
-  _set(updater) {
+  _set(updater, meta) {
     const { attrs, onChange } = this.props;
     const nextAttrs = { ...attrs };
     const nextErrors = { ...this.getErrors() };
@@ -127,12 +122,12 @@ export default class Form extends (PureComponent || Component) {
 
     if (promiseSupported) {
       return new Promise((resolve) => {
-        onChange(nextAttrs);
+        onChange(nextAttrs, meta);
         setTimeout(resolve, 0);
       });
     }
 
-    onChange(nextAttrs);
+    onChange(nextAttrs, meta);
   }
 
   _shouldClearError(name) {
