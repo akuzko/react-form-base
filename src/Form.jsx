@@ -144,19 +144,20 @@ export default class Form extends (PureComponent || Component) {
     return typeof validationz === 'function' ? validationz.call(this) : validationz;
   }
 
-  ifValid(callback) {
+  ifValid(successCallback, failureCallback) {
     const { onValidationFailed } = this.props;
     const errors = this.getValidationErrors();
+    failureCallback = failureCallback || onValidationFailed;
 
     this.setErrors(errors, function() {
       const valid = Object.getOwnPropertyNames(errors).length === 0;
 
-      if (valid && callback) {
-        callback();
+      if (valid && successCallback) {
+        successCallback();
       }
 
-      if (!valid && onValidationFailed) {
-        onValidationFailed(errors, this);
+      if (!valid && failureCallback) {
+        failureCallback(errors, this);
       }
     });
 

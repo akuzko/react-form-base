@@ -571,6 +571,14 @@ describe('<Form />', function() {
           this.test.wrapper.instance().ifValid(spy);
           expect(spy).toNotHaveBeenCalled();
         });
+
+        it('triggers failure callback if it was passed', function() {
+          const successSpy = createSpy();
+          const failureSpy = createSpy();
+          this.test.wrapper.instance().ifValid(successSpy, failureSpy);
+          expect(successSpy).toNotHaveBeenCalled();
+          expect(failureSpy).toHaveBeenCalled();
+        });
       });
     });
 

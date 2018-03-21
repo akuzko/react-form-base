@@ -124,8 +124,9 @@ for the Form to be able to use validations.
   additional iteration that passes `null` and length of items to `iteratee`
 - `getValidationErrors()` - returns validation errors.
 - `performValidation()` - runs validation routines and sets errors.
-- `ifValid(callback)` - runs validation routines, sets errors, and executes
-  `callback` if there were no errors.
+- `ifValid(successCallback, failureCallback)` - runs validation routines, sets errors,
+  and executes `successCallback` if there were no errors. Otherwise, executes
+  `failureCallback`, if is was passed, **or** `props.onValidationFailed`
 - `getErrors()` - returns an errors object.
 - `getError(name)` - returns an error for an input with a given `name`.
 - `setErrors(errors)` - sets `errors` (object) as form's errors.
