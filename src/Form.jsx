@@ -60,7 +60,9 @@ export default class Form extends (PureComponent || Component) {
 
       return wrapper;
     };
-    Object.defineProperty(wrapper, 'name', { value: name, enumerable: true });
+    if (Object.getOwnPropertyDescriptor(wrapper, 'name').configurable) {
+      Object.defineProperty(wrapper, 'name', { value: name, enumerable: true });
+    }
     Object.assign(wrapper, {
       value: this.get(name),
       onChange: handler,
