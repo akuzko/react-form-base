@@ -1,7 +1,8 @@
-import { PureComponent, Component } from 'react';
+import React, { PureComponent, Component } from 'react';
 import PropTypes from 'prop-types';
 
 import { noop, buildFormValidator, buildHandlersCache } from './utils';
+import { FormContext } from './context';
 import update from 'update-js';
 import get from 'lodash.get';
 
@@ -31,6 +32,13 @@ export default class Form extends (PureComponent || Component) {
   state = { errors: {} };
   validator = buildFormValidator(this);
   _handlersCache = buildHandlersCache();
+  contextValue = {
+    get: this.get,
+    set: this.set,
+    getError: this.getError,
+    getErrors: this.getErrors,
+    // ... and other "public" methods
+  };
 
   componentWillReceiveProps() {
     if (this._nextErrors) {
@@ -263,11 +271,11 @@ export default class Form extends (PureComponent || Component) {
     const $bound = this._bind$();
     const { children: renderer } = this.props;
 
-    if (typeof renderer === 'function') {
-      return renderer($bound);
-    }
-
-    return this.$render($bound);
+    return (
+      <FormContext.Provider value={this.contextValue}>
+        {typeof renderer === 'function' ? renderer($bound) : this.$render($bound)}
+      </FormContext.Provider>
+    );
   }
 
   _bind$() {
